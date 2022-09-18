@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_hit_times_app/homepage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
             centerTitle: true,
         ),
       ),
-      home: const MyHomePage(title: 'The HIT Times'),
+      home: MainPage(),
     );
   }
 }
