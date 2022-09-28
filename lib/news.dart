@@ -15,12 +15,12 @@ import 'models/postmodel.dart';
 class News extends StatefulWidget {
   @override
   NewsState createState() {
-    return new NewsState();
+    return NewsState();
   }
 }
 
 class NewsState extends State<News> {
-  final String url = "http://thehittimes.herokuapp.com/posts";
+  final String url = "https://tht-node-backend.herokuapp.com/api/posts";
   List data = List.empty();
   late PostList allPosts;
 
@@ -32,13 +32,13 @@ class NewsState extends State<News> {
       var resBody = json.decode(res.body);
       allPosts = PostList.fromJson(resBody);
       allPosts.posts.sort((a,b) => b.createdAt.compareTo(a.createdAt));
-      data = resBody;
+      data = allPosts.posts;
     });
-    //print(allPosts.posts.length);
-    //print(data);
-/*    for(var i=0; i<=55; i++){
+    print(allPosts.posts.length);
+    print(data);
+    for(var i=0; i<=allPosts.posts.length; i++){
       print(allPosts.posts[i].id);
-    }*/
+    }
     //print(data.sort());
     return "Success";
   }
@@ -57,16 +57,16 @@ class NewsState extends State<News> {
         // child : DisplayBody(author: "Ayab", body: "bidu",date: "today",)
         child: RefreshIndicator(
           onRefresh: getSWData,
-          child: data == null
+          child: data.isEmpty
               ? const Center(child: const CircularProgressIndicator())
               : data.length != 0
-                  ? new ListView.builder(
+                  ? ListView.builder(
                       itemCount: data == null ? 0 : data.length,
                       itemBuilder: (BuildContext context, int index) {
                         return InkWell(
                           onTap: () {
-                            Navigator.of(context).push(new MaterialPageRoute(
-                              builder: (BuildContext context) => new DisplayPost(
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) => DisplayPost(
                                     pIndex: index,
                                     /*title: data[data.length - index- 1]['title'],
                                     body: data[data.length - index- 1]['body'],
@@ -82,8 +82,8 @@ class NewsState extends State<News> {
                             ));
                           },
                           child: CusCard(
-                            imgUrl: data[data.length - index- 1]['link'],
-                            title: data[data.length - index- 1]['title'],
+                            imgUrl: allPosts.posts[index].link,
+                            title: allPosts.posts[index].title,
                             // author: allPosts.posts[index].link,
                             // date: allPosts.posts[index].title,
                             // body: url,
@@ -91,16 +91,16 @@ class NewsState extends State<News> {
                         );
                       },
                     )
-                  : new Center(
-                      child: new Column(
+                  : Center(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          new Icon(Icons.chrome_reader_mode,
+                          Icon(Icons.chrome_reader_mode,
                               color: Colors.grey, size: 60.0),
-                          new Text(
+                          Text(
                             "No articles found",
                             style:
-                                new TextStyle(fontSize: 24.0, color: Colors.grey),
+                                TextStyle(fontSize: 24.0, color: Colors.grey),
                           ),
                         ],
                       ),
@@ -218,7 +218,7 @@ class _ImageScrollState extends State<ImageScroll> {
             ) :
             Container(
               // color: Colors.amber
-              child: new PhotoView(
+              child: PhotoView(
                 imageProvider: CachedNetworkImageProvider(widget.imgUrl),
                 minScale: PhotoViewComputedScale.contained * 0.8,
                 maxScale: PhotoViewComputedScale.contained,
@@ -228,8 +228,8 @@ class _ImageScrollState extends State<ImageScroll> {
           widget.category != 03 ?
           GestureDetector(
             onVerticalDragEnd: (DragEndDetails details) {
-              Navigator.of(context).push(new MaterialPageRoute(
-                builder: (BuildContext context) => new DisplayBody(
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => DisplayBody(
                       body: widget.body,
                       date: widget.date, author: '',
                     ),
@@ -332,10 +332,10 @@ class DisplayBody extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              new Container(
+              Container(
                 alignment: Alignment.topLeft,
-                padding: new EdgeInsets.only(left: 10.0, right: 10.0),
-                child: new Padding(
+                padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
                     '',
@@ -348,8 +348,8 @@ class DisplayBody extends StatelessWidget {
               ),
               Container(
                 alignment: Alignment.bottomRight,
-                padding: new EdgeInsets.only(left: 10.0, right: 10.0),
-                child: new Padding(
+                padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
                     date,
@@ -363,13 +363,13 @@ class DisplayBody extends StatelessWidget {
               ),
             ],
           ),
-          new Container(
-            padding: new EdgeInsets.only(left:12.0,right:12.0,bottom: 12.0),
-            child: new Padding(
+          Container(
+            padding: EdgeInsets.only(left:12.0,right:12.0,bottom: 12.0),
+            child: Padding(
               padding: const EdgeInsets.all(1.0),
-              child: new Text(
+              child: Text(
                 body,
-                style: new TextStyle(
+                style: TextStyle(
                     color: Colors.black54,
                     fontSize: 22.0,
                     fontFamily: "Cambo"

@@ -14,7 +14,7 @@ class Weeklies extends StatefulWidget {
 
 class _WeekliesState extends State<Weeklies> {
 
-  final String url = "http://thehittimes.herokuapp.com/posts";
+  final String url = "https://tht-node-backend.herokuapp.com/api/posts";
   List data = List.empty();
   late PostList allPosts;
   int weekliesLength = 0;
@@ -32,6 +32,7 @@ class _WeekliesState extends State<Weeklies> {
       item.dropdown == '06' ||
           item.dropdown == '07' ||
           item.dropdown == '08');
+      data = allPosts.posts;    
       weekliesLength = allPosts.posts.length;
     });
 
@@ -60,16 +61,16 @@ class _WeekliesState extends State<Weeklies> {
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       Expanded(
-        child: data == null
+        child: data.isEmpty
             ? const Center(child: const CircularProgressIndicator())
             : weekliesLength != 0
-            ? new ListView.builder(
+            ? ListView.builder(
           itemCount: weekliesLength == 0 ? 0 : weekliesLength,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
               onTap: () {
-                Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => new DisplayPost(
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => DisplayPost(
                     pIndex: index,
                     title: allPosts.posts[index].title,
                     body: allPosts.posts[index].body,
@@ -80,8 +81,8 @@ class _WeekliesState extends State<Weeklies> {
                 ));
               },
               child: CusCard(
-                            imgUrl: data[data.length - index- 1]['link'],
-                            title: data[data.length - index- 1]['title'],
+                            imgUrl: allPosts.posts[index].link,
+                            title: allPosts.posts[index].title,
                             // author: allPosts.posts[index].link,
                             // date: allPosts.posts[index].title,
                             // body: url,
@@ -89,16 +90,16 @@ class _WeekliesState extends State<Weeklies> {
             );
           },
         )
-            : new Center(
-          child: new Column(
+            : Center(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              new Icon(Icons.chrome_reader_mode,
+              Icon(Icons.chrome_reader_mode,
                   color: Colors.grey, size: 60.0),
-              new Text(
+              Text(
                 "No articles found",
                 style:
-                new TextStyle(fontSize: 24.0, color: Colors.grey),
+                TextStyle(fontSize: 24.0, color: Colors.grey),
               ),
             ],
           ),
@@ -114,7 +115,7 @@ class AppX extends StatefulWidget {
 }
 
 class _AppXState extends State<AppX> {
-  final String url = "http://thehittimes.herokuapp.com/posts";
+  final String url = "https://tht-node-backend.herokuapp.com/api/posts";
   List data = List.empty();
   late PostList allPosts;
   int AppXLength = 0;
@@ -136,6 +137,7 @@ class _AppXState extends State<AppX> {
           item.dropdown == '02' ||
           item.dropdown == '01' ||
           item.dropdown == '00');
+      data = allPosts.posts;
       AppXLength = allPosts.posts.length;
     });
 
@@ -157,16 +159,16 @@ class _AppXState extends State<AppX> {
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       Expanded(
-        child: data == null
+        child: data.isEmpty
             ? const Center(child: const CircularProgressIndicator())
             : AppXLength != 0
-            ? new ListView.builder(
+            ? ListView.builder(
           itemCount: AppXLength == 0 ? 0 : AppXLength,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
               onTap: () {
-                Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => new DisplayPost(
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => DisplayPost(
                     pIndex: index,
                     title: allPosts.posts[index].title,
                     body: allPosts.posts[index].body,
@@ -177,8 +179,8 @@ class _AppXState extends State<AppX> {
                 ));
               },
               child: CusCard(
-                            imgUrl: data[data.length - index- 1]['link'],
-                            title: data[data.length - index- 1]['title'],
+                            imgUrl: allPosts.posts[index].link,
+                            title: allPosts.posts[index].title,
                             // author: allPosts.posts[index].link,
                             // date: allPosts.posts[index].title,
                             // body: url,
@@ -186,16 +188,16 @@ class _AppXState extends State<AppX> {
             );
           },
         )
-            : new Center(
-          child: new Column(
+            : Center(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              new Icon(Icons.chrome_reader_mode,
+              Icon(Icons.chrome_reader_mode,
                   color: Colors.grey, size: 60.0),
-              new Text(
+              Text(
                 "No articles found",
                 style:
-                new TextStyle(fontSize: 24.0, color: Colors.grey),
+                TextStyle(fontSize: 24.0, color: Colors.grey),
               ),
             ],
           ),

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:core';
 
 class PostModel {
-  int id;
+  String id;
   String title;
   String description;
   String body;
@@ -25,7 +25,7 @@ class PostModel {
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
-        id : json['id'],
+        id : json['_id'],
         title : json['title'],
         description : json['description'],
         body : json['body'],
@@ -39,7 +39,7 @@ class PostModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
+    data['_id'] = this.id;
     data['title'] = this.title;
     data['description'] = this.description;
     data['body'] = this.body;
