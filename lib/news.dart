@@ -20,7 +20,7 @@ class News extends StatefulWidget {
 }
 
 class NewsState extends State<News> {
-  final String url = "https://tht-node-backend.herokuapp.com/api/posts";
+  final String url = "https://the-hit-times-admin-production.up.railway.app/api/posts";
   List data = List.empty();
   late PostList allPosts;
 

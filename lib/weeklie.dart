@@ -14,7 +14,7 @@ class Weeklies extends StatefulWidget {
 
 class _WeekliesState extends State<Weeklies> {
 
-  final String url = "https://tht-node-backend.herokuapp.com/api/posts";
+  final String url = "https://the-hit-times-admin-production.up.railway.app/api/posts";
   List data = List.empty();
   late PostList allPosts;
   int weekliesLength = 0;
@@ -115,7 +115,7 @@ class AppX extends StatefulWidget {
 }
 
 class _AppXState extends State<AppX> {
-  final String url = "https://tht-node-backend.herokuapp.com/api/posts";
+  final String url = "https://the-hit-times-admin-production.up.railway.app/api/posts";
   List data = List.empty();
   late PostList allPosts;
   int AppXLength = 0;

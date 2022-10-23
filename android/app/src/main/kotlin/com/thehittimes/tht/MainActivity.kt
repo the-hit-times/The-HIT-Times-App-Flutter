@@ -1,4 +1,4 @@
-package com.example.the_hit_times_app
+package com.thehittimes.tht
 
 import io.flutter.embedding.android.FlutterActivity
 
