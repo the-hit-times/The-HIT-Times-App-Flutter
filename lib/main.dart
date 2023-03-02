@@ -1,8 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/homepage.dart';
 
-void main() {
+// Firebase Imports
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'firebase_options.dart';
+
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initializes Firebase for other services like cloud messaging.
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  registerForNotification();
   runApp(const MyApp());
+}
+
+/*
+*   Registers current devices for receiving notification for topics like
+*   1. Events
+* */
+void registerForNotification() async {
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  print(fcmToken);
+  print("FCM");
+  // await FirebaseMessaging.instance.subscribeToTopic("events_notification");
 }
 
 class MyApp extends StatelessWidget {
