@@ -23,7 +23,24 @@ void main() async {
 *   1. Events
 * */
 void registerForNotification() async {
-  final fcmToken = await FirebaseMessaging.instance.getToken();
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // Request notification permission for android 13 and iOS devices
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  print('User granted permission: ${settings.authorizationStatus}');
+
+
+  final fcmToken = await messaging.getToken();
   print(fcmToken);
   print("FCM");
   // await FirebaseMessaging.instance.subscribeToTopic("events_notification");
