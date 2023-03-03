@@ -7,7 +7,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'firebase_options.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initializes Firebase for other services like cloud messaging.
@@ -23,7 +22,6 @@ void main() async {
 *   1. Events
 * */
 void registerForNotification() async {
-
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   // Request notification permission for android 13 and iOS devices
@@ -39,11 +37,10 @@ void registerForNotification() async {
 
   print('User granted permission: ${settings.authorizationStatus}');
 
-
-  final fcmToken = await messaging.getToken();
-  print(fcmToken);
-  print("FCM");
-  // await FirebaseMessaging.instance.subscribeToTopic("events_notification");
+  // final fcmToken = await messaging.getToken();
+  // print(fcmToken);
+  // print("FCM");
+  final eventTopic = await FirebaseMessaging.instance.subscribeToTopic("events_notification");
 }
 
 class MyApp extends StatelessWidget {
@@ -67,9 +64,9 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.teal,
         appBarTheme: const AppBarTheme(
-            iconTheme: IconThemeData(color: Colors.white),
-            foregroundColor: Colors.white,
-            centerTitle: true,
+          iconTheme: IconThemeData(color: Colors.white),
+          foregroundColor: Colors.white,
+          centerTitle: true,
         ),
       ),
       home: MainPage(),
