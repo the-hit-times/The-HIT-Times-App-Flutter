@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1021864479606",
+    "project_id": "pushnotification-270d0",
+    "storage_bucket": "pushnotification-270d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021864479606:android:4d5bc6dbb13c6127fe0857",
+        "android_client_info": {
+          "package_name": "com.thehittimes.tht"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1021864479606-eft6773kqc3ulkt6j0ivp860lcg53ft4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACsufCM-02klVdLBtGgikF5pjG-HrTlhY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1021864479606-eft6773kqc3ulkt6j0ivp860lcg53ft4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
