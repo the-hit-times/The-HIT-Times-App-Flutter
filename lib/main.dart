@@ -40,7 +40,8 @@ void registerForNotification() async {
   // final fcmToken = await messaging.getToken();
   // print(fcmToken);
   // print("FCM");
-  final eventTopic = await FirebaseMessaging.instance.subscribeToTopic("events_notification");
+  await FirebaseMessaging.instance.subscribeToTopic("events_notification");
+  await FirebaseMessaging.instance.subscribeToTopic("posts_notification");
 }
 
 class MyApp extends StatelessWidget {
