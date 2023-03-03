@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/homepage.dart';
-import 'package:the_hit_times_app/models/notificationservice/ocal_notification_service.dart';
+import 'package:the_hit_times_app/notificationservice/ocal_notification_service.dart';
 Future<void> backgroundHandler(RemoteMessage message) async {
   print(message.data.toString());
   // print(message.notification!.title);
