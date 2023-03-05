@@ -31,8 +31,8 @@ class PostModel {
         body : json['body'],
         link : json['link'],
         dropdown : json['dropdown'],
-        createdAt : json['created_at'],
-        updatedAt : json['updated_at'],
+        createdAt : json['createdAt'],
+        updatedAt : json['updatedAt'],
         cImage : json['c_image'],
     );
   }
