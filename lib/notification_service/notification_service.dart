@@ -11,7 +11,7 @@ class NotificationService {
   void initialize() {
     const InitializationSettings initializationSettings =
         InitializationSettings(
-      android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+      android: AndroidInitializationSettings("@drawable/notification_icon"),
     );
 
     _notificationsPlugin.initialize(initializationSettings);
