@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "486918878604",
+    "project_id": "the-hit-times",
+    "storage_bucket": "the-hit-times.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:486918878604:android:f88857a47a3658e60e12a9",
+        "android_client_info": {
+          "package_name": "com.thehittimes.tht"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "486918878604-h7431u0vimrrbt38jm8gb8aghhu8cpu6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9gRznQApuNB2H36Rgm49cbs8mJOxQJnQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "486918878604-h7431u0vimrrbt38jm8gb8aghhu8cpu6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "486918878604-6tg9bgd4in4h7ppeaupeqkf2uv6ptp55.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.theHitTimesApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
