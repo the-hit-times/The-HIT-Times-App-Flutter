@@ -23,41 +23,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
   late List<NavigationIconView> _navigationViews;
   late PageController _pageController;
 
-  Future<void> _showMyDialog(RemoteMessage message) async {
-    String? title = message.notification?.title;
-    String? body = message.notification?.body;
-    String? imageUri = message.notification?.android?.imageUrl;
-    // String imageUri = "https://scontent-del1-1.cdninstagram.com/v/t51.2885-15/333940738_737738278003133_5896829832535104130_n.webp?stp=dst-jpg_e35_s480x480&_nc_ht=scontent-del1-1.cdninstagram.com&_nc_cat=105&_nc_ohc=kC3wbot7Q0UAX9I-zZs&edm=ACWDqb8BAAAA&ccb=7-5&ig_cache_key=MzA0OTcwODc5MDc2NjUzMzc3NA%3D%3D.2-ccb7-5&oh=00_AfC89wZFLcT9CQKRFipzWmAL9F3k7iLhAKmN4A2bhsu21w&oe=6407AFDA&_nc_sid=1527a3";
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title.toString()),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(5.0),
-                  child: Image.network(imageUri!),
-                ),
-                SizedBox(height: 4),
-                Text(body.toString()),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Got it!'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   void initState() {

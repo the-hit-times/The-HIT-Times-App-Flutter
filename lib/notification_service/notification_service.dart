@@ -8,6 +8,7 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
+  //  Initialise Flutter Local Notifications Plugin with AndroidInitializationSettings
   void initialize() {
     const InitializationSettings initializationSettings =
         InitializationSettings(
@@ -19,8 +20,8 @@ class NotificationService {
     _subscribeToTopics();
   }
 
+  // Request notification permission for android 13 and iOS devices
   void _requestNotificationPermission() async {
-    // Request notification permission for android 13 and iOS devices
     NotificationSettings settings = await _messaging.requestPermission(
       alert: true,
       announcement: false,
@@ -33,11 +34,15 @@ class NotificationService {
     print('User granted permission: ${settings.authorizationStatus}');
   }
 
+  // Subscribes to topics to receive notification
+  // when a notification is broadcast from backend.
   void _subscribeToTopics() async {
     await _messaging.subscribeToTopic("events_notification");
     await _messaging.subscribeToTopic("posts_notification");
   }
 
+  // Display a notification when app is in foreground
+  // with the help of Flutter Local Notification Plugin
   void show(RemoteMessage message) async {
     final http.Response response =
         await http.get(Uri.parse(message.notification!.android!.imageUrl!));
