@@ -48,7 +48,7 @@ app.*.map.json
 
 
 /android/key.properties
-/android/google-services.json
+/android/app/google-services.json
 
 # Firebase Configration file
 ./lib/firebase_options.dart
