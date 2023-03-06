@@ -1,6 +1,8 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/contact_us.dart';
 import 'package:the_hit_times_app/news.dart';
+import 'package:the_hit_times_app/notification_service/notification_service.dart';
 import 'package:the_hit_times_app/smenu.dart';
 // import 'notification.dart';
 import 'bottom_nav_gallery.dart';
@@ -21,9 +23,14 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
   late List<NavigationIconView> _navigationViews;
   late PageController _pageController;
 
+
   @override
   void initState() {
     super.initState();
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      NotificationService().show(message);
+    });
 
     _navigationViews = <NavigationIconView>[
       NavigationIconView(
