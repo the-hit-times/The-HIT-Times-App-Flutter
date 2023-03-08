@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
-import 'package:reading_time/reading_time.dart';
 
 class DisplayPost extends StatelessWidget {
   DisplayPost(
@@ -56,8 +55,11 @@ class SliverAppBarBldr extends StatelessWidget {
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(0),
         child: Container(
+          decoration: BoxDecoration(
+              color: Color.fromRGBO(37, 45, 59, 1),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20))),
           padding: EdgeInsets.all(10),
-          color: Color.fromRGBO(37, 45, 59, 1),
           width: double.maxFinite,
           child: Column(
             children: [
@@ -124,35 +126,16 @@ class SliverListBldr extends StatelessWidget {
             maxLines: 3,
           ),
           Container(
-            padding: EdgeInsets.all(12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  child: Text(
-                    '${readingTime(body).msg}',
-                    style: TextStyle(
-                      fontSize: 10.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                Container(
-                  child: Text(
-                    '${DateFormat('yyyy-MM-dd').format(DateTime.parse(date))}',
-                    style: TextStyle(
-                      fontSize: 10.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )
-              ],
+            margin: EdgeInsets.only(top: 10),
+            child: Text(
+              '${DateFormat('yyyy-MM-dd').format(DateTime.parse(date))}',
+              style: TextStyle(
+                fontSize: 12.0,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Container(
