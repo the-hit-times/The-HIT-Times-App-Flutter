@@ -82,7 +82,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         leading: Container(
           padding: EdgeInsets.all(5),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(5),
             child: Image.asset(
               "assets/images/logo.jpeg",
               fit: BoxFit.fill,
