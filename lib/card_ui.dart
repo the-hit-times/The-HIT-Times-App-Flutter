@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 
+import 'package:reading_time/reading_time.dart';
+
 class CusCard extends StatelessWidget {
   final String imgUrl;
   final String title;
@@ -74,6 +76,19 @@ class CusCard extends StatelessWidget {
                             body,
                             style: TextStyle(
                               fontSize: 15.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: Text(
+                            '${readingTime(body).msg}',
+                            style: TextStyle(
+                              fontSize: 10.0,
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
                             ),
