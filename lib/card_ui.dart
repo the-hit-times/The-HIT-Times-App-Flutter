@@ -79,7 +79,7 @@ class CusCard extends StatelessWidget {
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
                             ),
-                            maxLines: 3,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
