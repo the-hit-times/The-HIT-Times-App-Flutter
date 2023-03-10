@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:the_hit_times_app/models/note.dart';
+
+import '../database_helper.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
@@ -46,6 +49,18 @@ class NotificationService {
   void show(RemoteMessage message) async {
     final http.Response response =
         await http.get(Uri.parse(message.notification!.android!.imageUrl!));
+        
+        // DatabaseHelper helper = DatabaseHelper();
+        print(" Hoooooollllllaaaa  ${message.notification!.title}");
+                print(" Hoooooollllllaaaa1  ${message.notification!.body}");
+
+        print(" Hoooooollllllaaaa2  ${message.notification!.android!.imageUrl!}");
+
+        // int? result = await helper.insertNote(
+        //   Note(9, message.notification!.title, message.notification!.android!.imageUrl!, 1, message.notification!.body)
+        // );
+
+
     var bigPictureStyleInformation = BigPictureStyleInformation(
         ByteArrayAndroidBitmap.fromBase64String(
             base64Encode(response.bodyBytes)));
