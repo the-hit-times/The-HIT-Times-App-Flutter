@@ -58,7 +58,15 @@ class SliverAppBarBldr extends StatelessWidget {
           decoration: BoxDecoration(
               color: Color.fromRGBO(37, 45, 59, 1),
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                  boxShadow: [
+  BoxShadow(
+    color: Color.fromARGB(255, 64, 64, 64),
+    spreadRadius: 1,
+    blurRadius: 10,
+    offset: Offset(0,-12)
+  )
+]),
           padding: EdgeInsets.all(10),
           width: double.maxFinite,
           child: Column(
@@ -83,7 +91,7 @@ class SliverAppBarBldr extends StatelessWidget {
       pinned: true,
       centerTitle: false,
       stretch: true,
-      expandedHeight: MediaQuery.of(context).size.height / 2,
+      expandedHeight: MediaQuery.of(context).size.height / 1.5,
       flexibleSpace: FlexibleSpaceBar(
         stretchModes: [StretchMode.zoomBackground],
         background: Image(
