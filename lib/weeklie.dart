@@ -16,98 +16,140 @@ class Weeklies extends StatefulWidget {
 }
 
 class _WeekliesState extends State<Weeklies> {
-  final String url =
-      "https://the-hit-times-admin-production.up.railway.app/api/posts";
-  List data = List.empty();
+  List<PostModel> items = [];
+  int limit = 15;
+  int page = 1;
+  bool hasmore = true;
+  bool loading = false;
   late PostList allPosts;
-  int weekliesLength = 0;
-
-  Future<String> getSWData() async {
-    var res = await http.get(Uri.parse(Uri.encodeFull(url)),
-        headers: {"Accept": "application/json"});
-
-    setState(() {
-      var resBody = json.decode(res.body);
-      allPosts = PostList.fromJson(resBody);
-      allPosts.posts.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      data = resBody;
-      allPosts.posts.removeWhere((item) =>
-          item.dropdown == '06' ||
-          item.dropdown == '07' ||
-          item.dropdown == '08');
-      data = allPosts.posts;
-      weekliesLength = allPosts.posts.length;
-    });
-
-    print("------------------------------------------");
-    for (var i = 0; i <= 30; i++) {
-      print(allPosts.posts[i].id.toString() +
-          " -- " +
-          allPosts.posts[i].dropdown.toString());
-    }
-
-    print(data.length);
-    print("------------------------------------------");
-    print(weekliesLength);
-    print("------------------------------------------");
-    return "Success";
-  }
+  final controller = ScrollController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    this.getSWData();
+    getSWData();
+    controller.addListener(() {
+      if (controller.position.pixels == controller.position.maxScrollExtent) {
+        print("Bottom");
+
+        this.getSWData();
+      }
+    });
+  }
+
+  Future<String> getSWData() async {
+    if (!hasmore) return "";
+    if (loading) return "Loading";
+    loading = true;
+    final String url =
+        "https://the-hit-times-admin-production.up.railway.app/api/posts/weeklies?limit=$limit&page=$page";
+    print("Fetching... $url");
+    var res = await http.get(Uri.parse(Uri.encodeFull(url)),
+        headers: {"Accept": "application/json"});
+    setState(() {
+      page = page + 1;
+
+      var resBody = json.decode(res.body);
+      allPosts = PostList.fromJson(resBody);
+      allPosts.posts.map((e) => print(e.body));
+      if (resBody.length < limit) {
+        hasmore = false;
+      }
+      items.addAll(allPosts.posts);
+      loading = false;
+    });
+    return "Success";
+  }
+
+  Future<String> handelRefresh() async {
+    setState(() {
+      items = [];
+      limit = 15;
+      page = 1;
+      hasmore = true;
+      loading = false;
+    });
+    getSWData();
+    return "Success";
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       Expanded(
-        child: data.isEmpty
-            ? const Center(child: const CircularProgressIndicator())
-            : weekliesLength != 0
-                ? ListView.builder(
-                    itemCount: weekliesLength == 0 ? 0 : weekliesLength,
-                    itemBuilder: (BuildContext context, int index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => DisplayPost(
-                              pIndex: index,
-                              title: allPosts.posts[index].title,
-                              body: allPosts.posts[index].body,
-                              imgUrl: allPosts.posts[index].link,
-                              date: allPosts.posts[index].createdAt,
-                              category:
-                                  int.parse(allPosts.posts[index].dropdown),
-                              description: allPosts.posts[index].description,
-                            ),
-                          ));
-                        },
-                        child: CusCard(
-                          imgUrl: allPosts.posts[index].link,
-                          title: allPosts.posts[index].title,
-                          description: allPosts.posts[index].description,
-                          body: allPosts.posts[index].body,
-                          date: allPosts.posts[index].createdAt,
-                        ),
-                      );
-                    },
-                  )
-                : Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.chrome_reader_mode,
-                            color: Colors.grey, size: 60.0),
-                        Text(
-                          "No articles found",
-                          style: TextStyle(fontSize: 24.0, color: Colors.grey),
-                        ),
-                      ],
+        // child : DisplayBody(author: "Ayab", body: "bidu",date: "today",)
+        child: RefreshIndicator(
+          onRefresh: handelRefresh,
+          child: items.isEmpty
+              ? const Center(child: const CircularProgressIndicator())
+              : items.length != 0
+                  ? ListView.builder(
+                      itemCount: items.length + 1,
+                      controller: controller,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index < items.length) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        DisplayPost(
+                                  pIndex: index,
+                                  title: items[index].title,
+                                  body: items[index].body,
+                                  imgUrl: items[index].link,
+                                  description: items[index].description,
+                                  date: items[index].createdAt,
+                                  category: int.parse(items[index].dropdown),
+                                ),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  const begin = Offset(0.0, 1.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
+
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
+
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                              ));
+                            },
+                            child: CusCard(
+                                imgUrl: items[index].link,
+                                title: items[index].title,
+                                description: items[index].description,
+                                body: items[index].body,
+                                date: items[index].createdAt),
+                          );
+                        } else {
+                          return hasmore
+                              ? const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 30),
+                                  child: const Center(
+                                      child: CircularProgressIndicator()))
+                              : Container();
+                        }
+                      },
+                    )
+                  : Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.chrome_reader_mode,
+                              color: Colors.grey, size: 60.0),
+                          Text(
+                            "No articles found",
+                            style:
+                                TextStyle(fontSize: 24.0, color: Colors.grey),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+        ),
       ),
     ]);
   }
@@ -119,95 +161,140 @@ class AppX extends StatefulWidget {
 }
 
 class _AppXState extends State<AppX> {
-  final String url =
-      "https://the-hit-times-admin-production.up.railway.app/api/posts";
-  List data = List.empty();
+  List<PostModel> items = [];
+  int limit = 15;
+  int page = 1;
+  bool hasmore = true;
+  bool loading = false;
   late PostList allPosts;
-  int AppXLength = 0;
-
-  Future<String> getSWData() async {
-    List<nf.Notification> notes = await NotificationDatabase.instance.readAllNotifications();
-    print("notes.length");
-    print(notes.length);
-    var res = await http.get(Uri.parse(Uri.encodeFull(url)),
-        headers: {"Accept": "application/json"});
-
-    setState(() {
-      var resBody = json.decode(res.body);
-      allPosts = PostList.fromJson(resBody);
-      allPosts.posts.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      data = resBody;
-      allPosts.posts.removeWhere((item) =>
-          item.dropdown == '05' ||
-          item.dropdown == '04' ||
-          item.dropdown == '03' ||
-          item.dropdown == '02' ||
-          item.dropdown == '01' ||
-          item.dropdown == '00');
-      data = allPosts.posts;
-      AppXLength = allPosts.posts.length;
-    });
-
-    print("------------------------------------------");
-    //print(weeklies.length);
-    print("------------------------------------------");
-    print(allPosts.posts.length);
-    return "Success";
-  }
+  final controller = ScrollController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    this.getSWData();
+    getSWData();
+    controller.addListener(() {
+      if (controller.position.pixels == controller.position.maxScrollExtent) {
+        print("Bottom");
+
+        this.getSWData();
+      }
+    });
+  }
+
+  Future<String> getSWData() async {
+    if (!hasmore) return "";
+    if (loading) return "Loading";
+    loading = true;
+    final String url =
+        "https://the-hit-times-admin-production.up.railway.app/api/posts/appx?limit=$limit&page=$page";
+    print("Fetching... $url");
+    var res = await http.get(Uri.parse(Uri.encodeFull(url)),
+        headers: {"Accept": "application/json"});
+    setState(() {
+      page = page + 1;
+
+      var resBody = json.decode(res.body);
+      allPosts = PostList.fromJson(resBody);
+      allPosts.posts.map((e) => print(e.body));
+      if (resBody.length < limit) {
+        hasmore = false;
+      }
+      items.addAll(allPosts.posts);
+      loading = false;
+    });
+    return "Success";
+  }
+
+  Future<String> handelRefresh() async {
+    setState(() {
+      items = [];
+      limit = 15;
+      page = 1;
+      hasmore = true;
+      loading = false;
+    });
+    getSWData();
+    return "Success";
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       Expanded(
-        child: data.isEmpty
-            ? const Center(child: const CircularProgressIndicator())
-            : AppXLength != 0
-                ? ListView.builder(
-                    itemCount: AppXLength == 0 ? 0 : AppXLength,
-                    itemBuilder: (BuildContext context, int index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => DisplayPost(
-                                pIndex: index,
-                                title: allPosts.posts[index].title,
-                                body: allPosts.posts[index].body,
-                                imgUrl: allPosts.posts[index].link,
-                                date: allPosts.posts[index].createdAt,
-                                description: allPosts.posts[index].description,
-                                category: 0),
-                          ));
-                        },
-                        child: CusCard(
-                          imgUrl: allPosts.posts[index].link,
-                          title: allPosts.posts[index].title,
-                          description: allPosts.posts[index].description,
-                          body: allPosts.posts[index].body,
-                          date: allPosts.posts[index].createdAt,
-                        ),
-                      );
-                    },
-                  )
-                : Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.chrome_reader_mode,
-                            color: Colors.grey, size: 60.0),
-                        Text(
-                          "No articles found",
-                          style: TextStyle(fontSize: 24.0, color: Colors.grey),
-                        ),
-                      ],
+        // child : DisplayBody(author: "Ayab", body: "bidu",date: "today",)
+        child: RefreshIndicator(
+          onRefresh: handelRefresh,
+          child: items.isEmpty
+              ? const Center(child: const CircularProgressIndicator())
+              : items.length != 0
+                  ? ListView.builder(
+                      itemCount: items.length + 1,
+                      controller: controller,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index < items.length) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        DisplayPost(
+                                  pIndex: index,
+                                  title: items[index].title,
+                                  body: items[index].body,
+                                  imgUrl: items[index].link,
+                                  description: items[index].description,
+                                  date: items[index].createdAt,
+                                  category: int.parse(items[index].dropdown),
+                                ),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  const begin = Offset(0.0, 1.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
+
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
+
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                              ));
+                            },
+                            child: CusCard(
+                                imgUrl: items[index].link,
+                                title: items[index].title,
+                                description: items[index].description,
+                                body: items[index].body,
+                                date: items[index].createdAt),
+                          );
+                        } else {
+                          return hasmore
+                              ? const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 30),
+                                  child: const Center(
+                                      child: CircularProgressIndicator()))
+                              : Container();
+                        }
+                      },
+                    )
+                  : Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.chrome_reader_mode,
+                              color: Colors.grey, size: 60.0),
+                          Text(
+                            "No articles found",
+                            style:
+                                TextStyle(fontSize: 24.0, color: Colors.grey),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+        ),
       ),
     ]);
   }

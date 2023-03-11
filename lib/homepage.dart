@@ -68,6 +68,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       setState(() {
         if (_currentIndex < 2) {
           _currentIndex++;
+          FocusScope.of(context)?.unfocus();
         }
       });
     } else {
@@ -75,6 +76,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       print(_currentIndex);
       setState(() {
         if (_currentIndex > 0) _currentIndex--;
+        FocusScope.of(context)?.unfocus();
       });
     }
   }
@@ -166,11 +168,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         items: <Widget>[
           Icon(Icons.menu, size: 30, color: Colors.white),
           Icon(Icons.newspaper, size: 30, color: Colors.white),
-          Icon(Icons.info_outline, size: 30, color: Colors.white),
+          Icon(Icons.mail_outline, size: 30, color: Colors.white),
         ],
         onTap: (index) {
           setState(() {
             _currentIndex = index;
+            FocusScope.of(context)?.unfocus();
           });
         },
       ),
