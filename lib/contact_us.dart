@@ -26,6 +26,13 @@ class ContactUsState extends State<ContactUs> {
     return false;
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("contactus...");
+  }
+
   void submit() {
     if (_formkey.currentState!.validate()) {
       _formkey.currentState!.save();

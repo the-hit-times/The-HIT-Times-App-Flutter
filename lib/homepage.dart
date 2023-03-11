@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:the_hit_times_app/bookmark.dart';
 import 'package:the_hit_times_app/contact_us.dart';
 import 'package:the_hit_times_app/news.dart';
 import 'package:the_hit_times_app/smenu.dart';
 import 'package:the_hit_times_app/notification.dart';
 // import 'notification.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:the_hit_times_app/notification_service/notification_service.dart';
 
 import 'bottom_nav_gallery.dart';
 import 'globals.dart' as globals;
@@ -25,7 +28,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
     _pageController = PageController(initialPage: _currentIndex);
   }
 
@@ -93,17 +95,15 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications),
-            tooltip: 'Notifications',
-            onPressed: () {
+            visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
+            padding: EdgeInsets.zero,
+            icon: const Icon(Icons.bookmark),
+            tooltip: 'Bookmarks',
+            onPressed: () async {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => Container(
-                          // color: Colors.amber
-                          child: DispNoti(
-                        date: globals.noti_date,
-                        body: globals.noti_body,
-                        title: globals.noti_title,
-                      )) /*Placeholder()*/
+                      // color: Colors.amber
+                      child: BookMarkPage()) /*Placeholder()*/
                   ));
             },
           )
@@ -129,7 +129,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               offstage: _currentIndex != 1,
               child: TickerMode(
                 enabled: _currentIndex == 1,
-                child: Container(child: News()),
+                child: Container(
+                  child: News(),
+                ),
               ),
             ),
             Offstage(

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class ReadIssue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('The HIT Times'),
+        title: Text('Read Issue'),
         centerTitle: true,
         bottomOpacity: 0.0,
         iconTheme: IconThemeData(
@@ -84,7 +83,7 @@ class ReadIssue extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     launch(
-                        'https://drive.google.com/open?id=1qPU7EhsLIkcrddHgCr7X6habi_sENwr6',
+                      'https://drive.google.com/open?id=1qPU7EhsLIkcrddHgCr7X6habi_sENwr6',
                       //forceWebView: true,
                     );
                   },
@@ -169,7 +168,7 @@ class ReadIssue extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     launch(
-                        'https://drive.google.com/open?id=1B1hiOd2gHG9Fg0H_RVxENoKG1jdhiCMG',
+                      'https://drive.google.com/open?id=1B1hiOd2gHG9Fg0H_RVxENoKG1jdhiCMG',
                       //forceWebView: true,
                     );
                   },

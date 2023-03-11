@@ -3,20 +3,51 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 
 import 'package:reading_time/reading_time.dart';
+import 'package:the_hit_times_app/models/postmodel.dart';
+import 'package:the_hit_times_app/news.dart';
 
 class CusCard extends StatelessWidget {
-  final String imgUrl;
+  final String id;
   final String title;
   final String description;
   final String body;
-  final String date;
+  final String link;
+  final String dropdown;
+  final String createdAt;
+  final String updatedAt;
+  final String cImage;
+  final bool bookmarked;
+  final ValueChanged<PostModel> add;
+  final ValueChanged<PostModel> delete;
 
-  CusCard(
-      {required this.imgUrl,
-      required this.title,
-      required this.description,
-      required this.body,
-      required this.date});
+  CusCard({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.body,
+    required this.link,
+    required this.dropdown,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.cImage,
+    required this.bookmarked,
+    required this.add,
+    required this.delete,
+  });
+
+  void handelBookmark() {
+    final PostModel post = PostModel(
+        id: id,
+        title: title,
+        description: description,
+        body: body,
+        link: link,
+        dropdown: dropdown,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+        cImage: cImage);
+    bookmarked ? delete(post) : add(post);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +68,7 @@ class CusCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5.0),
                 child: Image(
-                  image: CachedNetworkImageProvider(imgUrl),
+                  image: CachedNetworkImageProvider(link),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -49,15 +80,34 @@ class CusCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          title,
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              flex: 4,
+                              child: Text(
+                                title,
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            Expanded(
+                              child: IconButton(
+                                color: Colors.white,
+                                icon: bookmarked
+                                    ? const Icon(Icons.bookmark)
+                                    : const Icon(Icons.bookmark_add_outlined),
+                                onPressed: () {
+                                  handelBookmark();
+                                },
+                              ),
+                            )
+                          ],
                         ),
                         Text(
                           description,

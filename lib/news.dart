@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'bookmark_service/bookmark_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -23,6 +24,7 @@ class News extends StatefulWidget {
 
 class NewsState extends State<News> {
   List<PostModel> items = [];
+  List<PostModel> localnews = BookMarkService.localnews;
   int limit = 15;
   int page = 1;
   bool hasmore = true;
@@ -34,6 +36,7 @@ class NewsState extends State<News> {
   void initState() {
     super.initState();
     getSWData();
+    getLocalNews();
     controller.addListener(() {
       if (controller.position.pixels == controller.position.maxScrollExtent) {
         print("Bottom");
@@ -41,6 +44,12 @@ class NewsState extends State<News> {
         this.getSWData();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   Future<String> getSWData() async {
@@ -67,6 +76,38 @@ class NewsState extends State<News> {
     return "Success";
   }
 
+  getLocalNews() async {
+    localnews = await BookMarkService().getLocalNews();
+    setState(() {});
+  }
+
+  addnews(PostModel data) {
+    BookMarkService().saveNews(data);
+    setState(() {
+      getLocalNews();
+    });
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Colors.green,
+      content: const Text('News is added to bookmark'),
+    ));
+  }
+
+  deletenews(PostModel data) {
+    BookMarkService().deleteNews(data);
+    setState(() {
+      getLocalNews();
+    });
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Colors.green,
+      content: const Text('News is removed from bookmark'),
+    ));
+  }
+
+  bool checkAdded(PostModel data) {
+    final ispresent = localnews.any((item) => item.id == data.id);
+    return ispresent;
+  }
+
   Future<String> handelRefresh() async {
     setState(() {
       items = [];
@@ -76,6 +117,7 @@ class NewsState extends State<News> {
       loading = false;
     });
     getSWData();
+    getLocalNews();
     return "Success";
   }
 
@@ -125,11 +167,19 @@ class NewsState extends State<News> {
                               ));
                             },
                             child: CusCard(
-                                imgUrl: items[index].link,
-                                title: items[index].title,
-                                description: items[index].description,
-                                body: items[index].body,
-                                date: items[index].createdAt),
+                              link: items[index].link,
+                              title: items[index].title,
+                              description: items[index].description,
+                              body: items[index].body,
+                              createdAt: items[index].createdAt,
+                              cImage: items[index].cImage,
+                              dropdown: items[index].dropdown,
+                              id: items[index].id,
+                              updatedAt: items[index].updatedAt,
+                              bookmarked: checkAdded(items[index]),
+                              add: addnews,
+                              delete: deletenews,
+                            ),
                           );
                         } else {
                           return hasmore
