@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/contact_us.dart';
 import 'package:the_hit_times_app/news.dart';
+import 'package:the_hit_times_app/notify.dart';
 import 'package:the_hit_times_app/smenu.dart';
-import 'package:the_hit_times_app/notification.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:the_hit_times_app/contact_us.dart';
+import 'package:the_hit_times_app/news.dart';
+import 'package:the_hit_times_app/notification_service/notification_service.dart';
 // import 'notification.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 import 'bottom_nav_gallery.dart';
 import 'globals.dart' as globals;
+import 'weeklie.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -27,6 +33,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     super.initState();
 
     _pageController = PageController(initialPage: _currentIndex);
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      NotificationService().show(message);
+    });
+
   }
 
   @override
@@ -97,11 +108,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => Container(
                           // color: Colors.amber
-                          child: DispNoti(
-                        date: globals.noti_date,
-                        body: globals.noti_body,
-                        title: globals.noti_title,
-                      )) /*Placeholder()*/
+                          child: DispNoti()) /*Placeholder()*/
                   ));
             },
           )

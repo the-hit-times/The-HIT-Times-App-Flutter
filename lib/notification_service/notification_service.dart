@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:the_hit_times_app/models/note.dart';
+import 'package:the_hit_times_app/database_helper.dart';
+import 'package:the_hit_times_app/models/notification.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:the_hit_times_app/notify.dart';
 
-import '../database_helper.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
@@ -49,17 +51,18 @@ class NotificationService {
   void show(RemoteMessage message) async {
     final http.Response response =
         await http.get(Uri.parse(message.notification!.android!.imageUrl!));
-        
-        // DatabaseHelper helper = DatabaseHelper();
-        print(" Hoooooollllllaaaa  ${message.notification!.title}");
-                print(" Hoooooollllllaaaa1  ${message.notification!.body}");
 
-        print(" Hoooooollllllaaaa2  ${message.notification!.android!.imageUrl!}");
+        print(" hi "+message.notification!.android!.imageUrl!);
+        print(" hi2 ${message.notification!.title}");
+        print(" hi3 ${message.notification!.body}");
 
-        // int? result = await helper.insertNote(
-        //   Note(9, message.notification!.title, message.notification!.android!.imageUrl!, 1, message.notification!.body)
-        // );
-
+        await NotificationDatabase.instance.create(
+          Notification(
+          imageUrl: message.notification!.android!.imageUrl!,
+          title: message.notification!.title!,
+          description: message.notification!.body!, 
+          createdTime:  DateTime.now(),)
+          );
 
     var bigPictureStyleInformation = BigPictureStyleInformation(
         ByteArrayAndroidBitmap.fromBase64String(
