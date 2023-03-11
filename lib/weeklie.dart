@@ -81,7 +81,7 @@ class _WeekliesState extends State<Weeklies> {
     });
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.green,
-      content: const Text('News is added to bookmark'),
+      content: const Text('News is added to favourite'),
     ));
   }
 
@@ -92,7 +92,7 @@ class _WeekliesState extends State<Weeklies> {
     });
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.green,
-      content: const Text('News is removed from bookmark'),
+      content: const Text('News is removed from favourite'),
     ));
   }
 
@@ -273,7 +273,7 @@ class _AppXState extends State<AppX> {
     });
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.green,
-      content: const Text('News is added to bookmark'),
+      content: const Text('News is added to favourite'),
     ));
   }
 
@@ -284,7 +284,7 @@ class _AppXState extends State<AppX> {
     });
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.green,
-      content: const Text('News is removed from bookmark'),
+      content: const Text('News is removed from favourite'),
     ));
   }
 

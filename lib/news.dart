@@ -14,7 +14,6 @@ import 'package:the_hit_times_app/display.dart';
 // import 'card_ui.dart';
 import 'models/postmodel.dart';
 
-
 //import 'package:zoomable_image/zoomable_image.dart';
 
 class News extends StatefulWidget {
@@ -37,6 +36,7 @@ class NewsState extends State<News> {
   @override
   void initState() {
     super.initState();
+    print("home");
     getSWData();
     getLocalNews();
     controller.addListener(() {
@@ -54,8 +54,13 @@ class NewsState extends State<News> {
     super.dispose();
   }
 
+  @override
+  void didUpdateWidget(News oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    getLocalNews();
+  }
+
   Future<String> getSWData() async {
-    
     if (!hasmore) return "";
     if (loading) return "Loading";
     loading = true;
@@ -91,7 +96,7 @@ class NewsState extends State<News> {
     });
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.green,
-      content: const Text('News is added to bookmark'),
+      content: const Text('News is added to favourite'),
     ));
   }
 
@@ -102,7 +107,7 @@ class NewsState extends State<News> {
     });
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.green,
-      content: const Text('News is removed from bookmark'),
+      content: const Text('News is removed from favourite'),
     ));
   }
 

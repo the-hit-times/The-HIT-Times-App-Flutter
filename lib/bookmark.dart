@@ -36,7 +36,7 @@ class _BookMarkPageState extends State<BookMarkPage> {
     });
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.green,
-      content: const Text('News is added to bookmark'),
+      content: const Text('News is added to favourite'),
     ));
   }
 
@@ -47,7 +47,7 @@ class _BookMarkPageState extends State<BookMarkPage> {
     });
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.green,
-      content: const Text('News is removed from bookmark'),
+      content: const Text('News is removed from favourite'),
     ));
   }
 
@@ -65,7 +65,7 @@ class _BookMarkPageState extends State<BookMarkPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('BookMark'),
+          title: Text('Favourite'),
           centerTitle: true,
           iconTheme: IconThemeData(
             color: Colors.white, //change your color here
@@ -127,10 +127,9 @@ class _BookMarkPageState extends State<BookMarkPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.chrome_reader_mode,
-                          color: Colors.grey, size: 60.0),
+                      Icon(Icons.favorite, color: Colors.grey, size: 60.0),
                       Text(
-                        "No Bookmarked News found",
+                        "No Favourite News found",
                         style: TextStyle(fontSize: 24.0, color: Colors.grey),
                       ),
                     ],

@@ -119,7 +119,7 @@ class fourGrid extends StatelessWidget {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) => Scaffold(
                             appBar: AppBar(
-                              title: Text("The HIT Times"),
+                              title: Text("Notifications"),
                               centerTitle: true,
                               iconTheme: IconThemeData(
                                 color: Colors.white, //change your color here

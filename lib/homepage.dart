@@ -105,16 +105,17 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         ),
         actions: [
           IconButton(
-            visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
             padding: EdgeInsets.zero,
-            icon: const Icon(Icons.bookmark),
-            tooltip: 'Bookmarks',
+            icon: const Icon(Icons.favorite),
+            tooltip: 'Favourites',
             onPressed: () async {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => Container(
-                      // color: Colors.amber
-                      child: BookMarkPage()) /*Placeholder()*/
-                  ));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(
+                      builder: (BuildContext context) => Container(
+                          // color: Colors.amber
+                          child: BookMarkPage()) /*Placeholder()*/
+                      ))
+                  .then((value) => {setState(() {})});
             },
           )
         ],
@@ -127,6 +128,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         onHorizontalDragEnd: (DragEndDetails details) =>
             _onHorizontalDrag(details),
         child: Stack(
+          // children: [
+          //   _currentIndex == 0 ? Container(child: SMenu()) : Container(),
+          //   _currentIndex == 1 ? Container(child: News()) : Container(),
+          //   _currentIndex == 2 ? Container(child: ContactUs()) : Container()
+          // ],
           children: <Widget>[
             Offstage(
               offstage: _currentIndex != 0,
@@ -149,15 +155,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               child: TickerMode(
                 enabled: _currentIndex == 2,
                 child: Container(
-                    /*decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: FractionalOffset.topCenter,
-                        end: FractionalOffset.bottomCenter,
-                        colors: [const Color(0xFFddd6f3), const Color(0xFFffffff), const Color(0xFF9bc5c3)], // whitish to gray
-                        stops: [0.0,0.3,1.0],
-                        tileMode: TileMode.mirror, // repeats the gradient over the canvas
-                      ),
-                    ),*/
                     height: MediaQuery.of(context).size.height,
                     child: ContactUs()),
               ),
