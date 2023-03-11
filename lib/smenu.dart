@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_hit_times_app/notification.dart';
+import 'package:the_hit_times_app/notify.dart';
 import 'package:the_hit_times_app/read_issue.dart';
 import 'weeklie.dart';
 import 'about_us.dart';
@@ -117,14 +117,16 @@ class fourGrid extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => Container(
-                              // color: Colors.amber
-                              child: DispNoti(
-                            date: globals.noti_date,
-                            body: globals.noti_body,
-                            title: globals.noti_title,
-                          )) /*Placeholder()*/
-                      ));
+                      builder: (BuildContext context) => Scaffold(
+                            appBar: AppBar(
+                              title: Text("The HIT Times"),
+                              centerTitle: true,
+                              iconTheme: IconThemeData(
+                                color: Colors.white, //change your color here
+                              ),
+                            ),
+                            body: DispNoti(),
+                          )));
                 },
                 child: Stack(
                   children: <Widget>[

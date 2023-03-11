@@ -153,6 +153,109 @@ class CusCard extends StatelessWidget {
   }
 }
 
+
+class NotiCard extends StatelessWidget {
+  final String imgUrl;
+  final String title;
+  final String description;
+  final String body;
+  final String date;
+
+  NotiCard(
+      {required this.imgUrl,
+      required this.title,
+      required this.description,
+      required this.body,
+      required this.date});
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+        margin: EdgeInsets.all(5.0),
+        height: 150.0,
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+                child: Container(
+                  height: 20.0,
+                  width: 20.0,
+              margin: EdgeInsets.fromLTRB(5, 5, 50, 5),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(5.0),
+                child: Image(
+                  image: CachedNetworkImageProvider(imgUrl),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            )),
+            Expanded(
+                child: Container(
+                    margin: EdgeInsets.fromLTRB(0, 15, 15, 15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          description,
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.white54,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: Text(
+                            body,
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: Text(
+                            '${date.substring(0,10)}',
+                            style: TextStyle(
+                              fontSize: 10.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    )))
+          ],
+        ));
+  }
+}
+
+
 // class backgroundImage extends StatelessWidget {
 //   final String imgUrl;
 

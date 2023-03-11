@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:the_hit_times_app/bookmark_service/bookmark_service.dart';
 import 'package:the_hit_times_app/card_ui.dart';
+import 'package:the_hit_times_app/database_helper.dart';
 import 'package:the_hit_times_app/models/postmodel.dart';
 import 'package:the_hit_times_app/news.dart';
 import 'package:the_hit_times_app/display.dart';
+import 'package:the_hit_times_app/models/notification.dart' as nf;
 
 class Weeklies extends StatefulWidget {
   @override

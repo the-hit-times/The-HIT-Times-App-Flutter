@@ -9,9 +9,11 @@ import 'package:http/http.dart' as http;
 import 'package:photo_view/photo_view.dart';
 import 'package:the_hit_times_app/card_ui.dart';
 import 'package:intl/intl.dart';
+import 'package:the_hit_times_app/database_helper.dart';
 import 'package:the_hit_times_app/display.dart';
 // import 'card_ui.dart';
 import 'models/postmodel.dart';
+
 
 //import 'package:zoomable_image/zoomable_image.dart';
 
@@ -53,6 +55,7 @@ class NewsState extends State<News> {
   }
 
   Future<String> getSWData() async {
+    
     if (!hasmore) return "";
     if (loading) return "Loading";
     loading = true;
