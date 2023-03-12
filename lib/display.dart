@@ -150,11 +150,11 @@ class SliverListBldr extends StatelessWidget {
             padding: EdgeInsets.only(
                 left: 12.0, right: 12.0, bottom: 12.0, top: 12.0),
             child: Padding(
-              padding: const EdgeInsets.all(1.0),
+              padding: const EdgeInsets.all(5.0),
               child: Text(
                 body,
                 style: TextStyle(
-                    color: Colors.white, fontSize: 22.0, fontFamily: "Cambo"),
+                    color: Colors.white, fontSize: 18.0, fontFamily: "Cambo"),
               ),
             ),
           )
