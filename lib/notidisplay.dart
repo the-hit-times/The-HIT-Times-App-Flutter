@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 
-class DisplayPost extends StatelessWidget {
-  DisplayPost(
+class Notidisplay extends StatelessWidget {
+  Notidisplay(
       {required this.pIndex,
       required this.body,
       required this.title,
@@ -88,12 +88,12 @@ class SliverAppBarBldr extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                description,
+                title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20.0,
                   backgroundColor: Color.fromRGBO(37, 45, 59, 1),
-                  color: Color.fromARGB(255, 156, 223, 239),
+                  color: Color.fromARGB(255, 4, 201, 245),
                   fontWeight: FontWeight.w600,
                 ),
               )
@@ -138,17 +138,17 @@ class SliverListBldr extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Column(
         children: [
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20.0,
-              backgroundColor: Color.fromRGBO(37, 45, 59, 1),
-              color: Color.fromARGB(255, 4, 201, 245),
-              fontWeight: FontWeight.w600,
-            ),
-            maxLines: 3,
-          ),
+          // Text(
+          //   title,
+          //   textAlign: TextAlign.center,
+          //   style: TextStyle(
+          //     fontSize: 20.0,
+          //     backgroundColor: Color.fromRGBO(37, 45, 59, 1),
+          //     color: Color.fromARGB(255, 4, 201, 245),
+          //     fontWeight: FontWeight.w600,
+          //   ),
+          //   maxLines: 3,
+          // ),
           Container(
             margin: EdgeInsets.only(top: 10),
             child: Text(
