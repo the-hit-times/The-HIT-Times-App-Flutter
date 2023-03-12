@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 
-class DisplayPost extends StatelessWidget {
-  DisplayPost(
+class Notidisplay extends StatelessWidget {
+  Notidisplay(
       {required this.pIndex,
       required this.body,
       required this.title,
@@ -87,19 +87,15 @@ class SliverAppBarBldr extends StatelessWidget {
           width: double.maxFinite,
           child: Column(
             children: [
-              SizedBox(
-                height: 20,
-              ),
               Text(
-                description,
+                title,
                 textAlign: TextAlign.center,
-                style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium!
-                      .copyWith(height: 1.5, 
-                      color: Color.fromARGB(255, 156, 223, 239),
-                      backgroundColor: Color.fromRGBO(37, 45, 59, 1),
-                      ),
+                style: TextStyle(
+                  fontSize: 20.0,
+                  backgroundColor: Color.fromRGBO(37, 45, 59, 1),
+                  color: Color.fromARGB(255, 4, 201, 245),
+                  fontWeight: FontWeight.w600,
+                ),
               )
             ],
           ),
@@ -142,17 +138,17 @@ class SliverListBldr extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Column(
         children: [
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20.0,
-              backgroundColor: Color.fromRGBO(37, 45, 59, 1),
-              color: Color.fromARGB(255, 4, 201, 245),
-              fontWeight: FontWeight.w600,
-            ),
-            maxLines: 3,
-          ),
+          // Text(
+          //   title,
+          //   textAlign: TextAlign.center,
+          //   style: TextStyle(
+          //     fontSize: 20.0,
+          //     backgroundColor: Color.fromRGBO(37, 45, 59, 1),
+          //     color: Color.fromARGB(255, 4, 201, 245),
+          //     fontWeight: FontWeight.w600,
+          //   ),
+          //   maxLines: 3,
+          // ),
           Container(
             margin: EdgeInsets.only(top: 10),
             child: Text(
@@ -170,13 +166,11 @@ class SliverListBldr extends StatelessWidget {
             padding: EdgeInsets.only(
                 left: 12.0, right: 12.0, bottom: 12.0, top: 12.0),
             child: Padding(
-              padding: const EdgeInsets.all(5.0),
+              padding: const EdgeInsets.all(1.0),
               child: Text(
                 body,
-                style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(height: 1.5, color: Colors.white, fontFamily: "Cambo"),
+                style: TextStyle(
+                    color: Colors.white, fontSize: 22.0, fontFamily: "Cambo"),
               ),
             ),
           )

@@ -36,7 +36,6 @@ class NewsState extends State<News> {
   @override
   void initState() {
     super.initState();
-    print("home");
     getSWData();
     getLocalNews();
     controller.addListener(() {
