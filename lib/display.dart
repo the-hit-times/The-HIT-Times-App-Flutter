@@ -71,6 +71,9 @@ class SliverAppBarBldr extends StatelessWidget {
           width: double.maxFinite,
           child: Column(
             children: [
+              SizedBox(
+                
+              ),
               Text(
                 description,
                 textAlign: TextAlign.center,
@@ -165,10 +168,3 @@ class SliverListBldr extends StatelessWidget {
     );
   }
 }
-// Text(
-//                       body,
-                      // style: Theme.of(context)
-                      // .textTheme
-                      // .bodyMedium!
-                      // .copyWith(height: 1.5, color: Colors.white),
-//                     ),
