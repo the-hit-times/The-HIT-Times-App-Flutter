@@ -153,8 +153,10 @@ class SliverListBldr extends StatelessWidget {
               padding: const EdgeInsets.all(5.0),
               child: Text(
                 body,
-                style: TextStyle(
-                    color: Colors.white, fontSize: 18.0, fontFamily: "Cambo"),
+                style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(height: 1.5, color: Colors.white, fontFamily: "Cambo"),
               ),
             ),
           )
@@ -163,3 +165,10 @@ class SliverListBldr extends StatelessWidget {
     );
   }
 }
+// Text(
+//                       body,
+                      // style: Theme.of(context)
+                      // .textTheme
+                      // .bodyMedium!
+                      // .copyWith(height: 1.5, color: Colors.white),
+//                     ),
