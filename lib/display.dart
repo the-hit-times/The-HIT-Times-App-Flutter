@@ -72,17 +72,18 @@ class SliverAppBarBldr extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                
+                height: 20,
               ),
               Text(
                 description,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20.0,
-                  backgroundColor: Color.fromRGBO(37, 45, 59, 1),
-                  color: Color.fromARGB(255, 156, 223, 239),
-                  fontWeight: FontWeight.w600,
-                ),
+                style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium!
+                      .copyWith(height: 1.5, 
+                      color: Color.fromARGB(255, 156, 223, 239),
+                      backgroundColor: Color.fromRGBO(37, 45, 59, 1),
+                      ),
               )
             ],
           ),
