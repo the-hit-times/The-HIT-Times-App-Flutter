@@ -143,7 +143,7 @@ class FullScreen extends StatelessWidget {
       body: GestureDetector(
         child: Center(
           child: Hero(
-            tag: 'imageHero',
+            tag: 'image',
             child: Image.network(
               imgUrl,
                   fit: BoxFit.fill,
