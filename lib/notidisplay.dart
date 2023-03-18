@@ -79,23 +79,27 @@ class SliverAppBarBldr extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                     color: Color.fromARGB(255, 64, 64, 64),
-                    spreadRadius: 1,
-                    blurRadius: 10,
+                    spreadRadius: 5,
+                    blurRadius: 15,
                     offset: Offset(0, -12))
               ]),
           padding: EdgeInsets.all(10),
           width: double.maxFinite,
           child: Column(
             children: [
+              SizedBox(
+                height: 10,
+              ),
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20.0,
-                  backgroundColor: Color.fromRGBO(37, 45, 59, 1),
-                  color: Color.fromARGB(255, 4, 201, 245),
-                  fontWeight: FontWeight.w600,
-                ),
+                style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium!
+                      .copyWith(height: 1.5, 
+                      color: Color.fromARGB(255, 156, 223, 239),
+                      backgroundColor: Color.fromRGBO(37, 45, 59, 1),
+                      ),
               )
             ],
           ),
@@ -166,14 +170,21 @@ class SliverListBldr extends StatelessWidget {
             padding: EdgeInsets.only(
                 left: 12.0, right: 12.0, bottom: 12.0, top: 12.0),
             child: Padding(
-              padding: const EdgeInsets.all(1.0),
+              padding: const EdgeInsets.all(5.0),
               child: Text(
                 body,
-                style: TextStyle(
-                    color: Colors.white, fontSize: 22.0, fontFamily: "Cambo"),
+                style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(height: 1.5, color: Colors.white,
+                      fontSize: 15.0,
+                       fontFamily: "Cambo"),
               ),
             ),
-          )
+          ),
+          SizedBox(
+              height: 30,
+          ),
         ],
       ),
     );

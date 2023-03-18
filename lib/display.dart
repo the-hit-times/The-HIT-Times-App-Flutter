@@ -79,8 +79,8 @@ class SliverAppBarBldr extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                     color: Color.fromARGB(255, 64, 64, 64),
-                    spreadRadius: 1,
-                    blurRadius: 10,
+                    spreadRadius: 5,
+                    blurRadius: 15,
                     offset: Offset(0, -12))
               ]),
           padding: EdgeInsets.all(10),
@@ -88,7 +88,7 @@ class SliverAppBarBldr extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               Text(
                 description,
@@ -146,7 +146,7 @@ class SliverListBldr extends StatelessWidget {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 20.0,
+              fontSize: 22.0,
               backgroundColor: Color.fromRGBO(37, 45, 59, 1),
               color: Color.fromARGB(255, 4, 201, 245),
               fontWeight: FontWeight.w600,
@@ -176,10 +176,15 @@ class SliverListBldr extends StatelessWidget {
                 style: Theme.of(context)
                       .textTheme
                       .bodyLarge!
-                      .copyWith(height: 1.5, color: Colors.white, fontFamily: "Cambo"),
+                      .copyWith(height: 1.5, color: Colors.white,
+                      fontSize: 15.0,
+                       fontFamily: "Cambo"),
               ),
             ),
-          )
+          ),
+          SizedBox(
+              height: 30,
+          ),
         ],
       ),
     );
