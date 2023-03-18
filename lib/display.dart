@@ -114,9 +114,12 @@ class SliverAppBarBldr extends StatelessWidget {
       expandedHeight: MediaQuery.of(context).size.height / 1.5,
       flexibleSpace: FlexibleSpaceBar(
         stretchModes: [StretchMode.zoomBackground],
-        background: Image(
+        background: InkWell( 
+          onTap: () {},
+          child : Image(
           image: CachedNetworkImageProvider(imgUrl),
           fit: BoxFit.cover,
+        ),
         ),
       ),
     );
