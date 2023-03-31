@@ -114,9 +114,16 @@ class SliverAppBarBldr extends StatelessWidget {
       expandedHeight: MediaQuery.of(context).size.height / 1.5,
       flexibleSpace: FlexibleSpaceBar(
         stretchModes: [StretchMode.zoomBackground],
-        background: Image(
+        background: InkWell( 
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return FullScreen(imgUrl: imgUrl);
+          }));
+          },
+        child: Image(
           image: CachedNetworkImageProvider(imgUrl),
           fit: BoxFit.cover,
+        ),
         ),
       ),
     );
@@ -190,3 +197,45 @@ class SliverListBldr extends StatelessWidget {
     );
   }
 }
+
+
+class FullScreen extends StatelessWidget {
+  const FullScreen(
+      {
+      required this.imgUrl,});
+
+  final String imgUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GestureDetector(
+        child: Center(
+          child: Hero(
+            tag: 'image',
+            child: Image.network(
+              imgUrl,
+                  fit: BoxFit.fill,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+}
+
