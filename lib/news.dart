@@ -152,6 +152,7 @@ class NewsState extends State<News> {
                                   pIndex: index,
                                   title: items[index].title,
                                   body: items[index].body,
+                                  htmlBody: items[index].htmlBody,
                                   imgUrl: items[index].link,
                                   description: items[index].description,
                                   date: items[index].createdAt,

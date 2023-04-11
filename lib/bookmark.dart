@@ -86,6 +86,7 @@ class _BookMarkPageState extends State<BookMarkPage> {
                             pIndex: index,
                             title: localnews[index].title,
                             body: localnews[index].body,
+                            htmlBody: localnews[index].htmlBody,
                             imgUrl: localnews[index].link,
                             description: localnews[index].description,
                             date: localnews[index].createdAt,

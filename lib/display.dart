@@ -10,10 +10,12 @@ class DisplayPost extends StatelessWidget {
       required this.description,
       required this.imgUrl,
       required this.date,
-      required this.category});
+      required this.category,
+      required this.htmlBody});
 
   final int pIndex;
   final String body;
+  final String? htmlBody;
   final String title;
   final String imgUrl;
   final String date;
@@ -31,7 +33,7 @@ class DisplayPost extends StatelessWidget {
             description: description,
           ),
           SliverListBldr(
-              body: body, title: title, description: description, date: date)
+              body: body, htmlBody: htmlBody, title: title, description: description, date: date)
         ],
       ),
     );
@@ -176,13 +178,16 @@ class SliverListBldr extends StatelessWidget {
       required this.body,
       required this.title,
       required this.description,
-      required this.date})
+      required this.date,
+      required this.htmlBody
+      })
       : super(key: key);
 
   final String body;
   final String title;
   final String description;
   final String date;
+  final String? htmlBody;
 
   @override
   Widget build(BuildContext context) {
