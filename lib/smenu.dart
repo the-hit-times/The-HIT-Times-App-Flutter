@@ -117,16 +117,7 @@ class fourGrid extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => Scaffold(
-                            appBar: AppBar(
-                              title: Text("Notifications"),
-                              centerTitle: true,
-                              iconTheme: IconThemeData(
-                                color: Colors.white, //change your color here
-                              ),
-                            ),
-                            body: DispNoti(),
-                          )));
+                      builder: (BuildContext context) => DispNoti()));
                 },
                 child: Stack(
                   children: <Widget>[
