@@ -95,6 +95,14 @@ CREATE TABLE $tableNotifications (
     );
   }
 
+  Future<int> deleteAllNotifications() async {
+    final db = await instance.database;
+
+    return await db.delete(
+      tableNotifications,
+    );
+  }
+
   Future close() async {
     final db = await instance.database;
 

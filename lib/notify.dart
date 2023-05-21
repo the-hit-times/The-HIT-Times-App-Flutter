@@ -66,6 +66,15 @@ class Notify extends State<DispNoti> {
                         imgUrl: notes[index].imageUrl,
                         date: notes[index].createdTime.toIso8601String(),
                         description: notes[index].description,
+                        onClear: () {
+                          setState(() {
+                            NotificationDatabase.instance.delete(notes[index].id!);
+                            notes.removeAt(index);
+                            nfLength = notes.length;
+                          });
+
+                        },
+
                       ),
                     );
                   },

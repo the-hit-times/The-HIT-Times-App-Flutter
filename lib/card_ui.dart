@@ -162,13 +162,16 @@ class NotiCard extends StatelessWidget {
   final String description;
   final String body;
   final String date;
+  final VoidCallback onClear;
 
   NotiCard(
       {required this.imgUrl,
       required this.title,
       required this.description,
       required this.body,
-      required this.date});
+      required this.date,
+      required this.onClear
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -239,7 +242,11 @@ class NotiCard extends StatelessWidget {
                           ),
                         ),
                       ],
-                    )))
+                    ))),
+                    IconButton(
+                      onPressed: onClear,
+                      icon: Icon(Icons.clear, color: Colors.white,),
+                    )
           ],
         ));
   }
