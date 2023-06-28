@@ -204,7 +204,7 @@ class SliverListBldr extends StatelessWidget {
             // just like a css selector.
             "*" : Style(
               color: Colors.white,
-              fontSize: const FontSize(15.0),
+              fontSize: FontSize(15.0),
               fontFamily: "Cambo",
             )
           },

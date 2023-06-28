@@ -7,7 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'database_helper.dart';
 import 'firebase_options.dart';
 import 'notification_service/notification_service.dart';
-import 'package:the_hit_times_app/models/notification.dart'  as mNotification;
+import 'package:the_hit_times_app/models/notification.dart' as NotificationModel;
 
 
 // Whenever a notification is received in background, this function is called.
@@ -15,7 +15,7 @@ import 'package:the_hit_times_app/models/notification.dart'  as mNotification;
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await NotificationDatabase.instance.create(
-      mNotification.Notification(
+      NotificationModel.Notification(
         imageUrl: message.notification!.android!.imageUrl!,
         title: message.notification!.title!,
         description: message.notification!.body!,
