@@ -4,8 +4,26 @@ import 'package:the_hit_times_app/homepage.dart';
 // Firebase Imports
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'database_helper.dart';
 import 'firebase_options.dart';
 import 'notification_service/notification_service.dart';
+import 'package:the_hit_times_app/models/notification.dart' as NotificationModel;
+
+
+// Whenever a notification is received in background, this function is called.
+// Don't move this function to another file. It needs to at the top level to function properly.
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await NotificationDatabase.instance.create(
+      NotificationModel.Notification(
+        imageUrl: message.notification!.android!.imageUrl!,
+        title: message.notification!.title!,
+        description: message.notification!.body!,
+        createdTime:  DateTime.now()
+      )
+  );
+}
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +33,10 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   NotificationService().initialize();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    NotificationService().show(message);
+  });
   runApp(const MyApp());
 }
 

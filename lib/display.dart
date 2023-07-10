@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 
 class DisplayPost extends StatelessWidget {
@@ -10,10 +11,12 @@ class DisplayPost extends StatelessWidget {
       required this.description,
       required this.imgUrl,
       required this.date,
-      required this.category});
+      required this.category,
+      required this.htmlBody});
 
   final int pIndex;
   final String body;
+  final String? htmlBody;
   final String title;
   final String imgUrl;
   final String date;
@@ -31,7 +34,7 @@ class DisplayPost extends StatelessWidget {
             description: description,
           ),
           SliverListBldr(
-              body: body, title: title, description: description, date: date)
+              body: body, htmlBody: htmlBody, title: title, description: description, date: date)
         ],
       ),
     );
@@ -176,16 +179,49 @@ class SliverListBldr extends StatelessWidget {
       required this.body,
       required this.title,
       required this.description,
-      required this.date})
+      required this.date,
+      required this.htmlBody
+      })
       : super(key: key);
 
   final String body;
   final String title;
   final String description;
   final String date;
+  final String? htmlBody;
+
 
   @override
   Widget build(BuildContext context) {
+
+    Widget getValidContent() {
+      if ( htmlBody != null && htmlBody != "") {
+        return Html(
+          data: htmlBody!,
+          style: {
+            // This sets the color of the text to white to all the elements
+            // eg; p, a, div, etc.
+            // just like a css selector.
+            "*" : Style(
+              color: Colors.white,
+              fontSize: FontSize(15.0),
+              fontFamily: "Cambo",
+            )
+          },
+        );
+
+      }
+      return Text(
+        body,
+        style: Theme.of(context)
+            .textTheme
+            .bodyLarge!
+            .copyWith(height: 1.5, color: Colors.white,
+            fontSize: 15.0,
+            fontFamily: "Cambo"),
+      );
+    }
+
     return SliverToBoxAdapter(
       child: Column(
         children: [
@@ -218,15 +254,7 @@ class SliverListBldr extends StatelessWidget {
                 left: 12.0, right: 12.0, bottom: 12.0, top: 12.0),
             child: Padding(
               padding: const EdgeInsets.all(5.0),
-              child: Text(
-                body,
-                style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(height: 1.5, color: Colors.white,
-                      fontSize: 15.0,
-                       fontFamily: "Cambo"),
-              ),
+              child: getValidContent(),
             ),
           ),
           SizedBox(

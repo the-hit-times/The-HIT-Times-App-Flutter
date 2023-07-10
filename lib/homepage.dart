@@ -27,9 +27,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      NotificationService().show(message);
-    });
   }
 
   @override
