@@ -117,16 +117,7 @@ class fourGrid extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => Scaffold(
-                            appBar: AppBar(
-                              title: Text("Notifications"),
-                              centerTitle: true,
-                              iconTheme: IconThemeData(
-                                color: Colors.white, //change your color here
-                              ),
-                            ),
-                            body: DispNoti(),
-                          )));
+                      builder: (BuildContext context) => DispNoti()));
                 },
                 child: Stack(
                   children: <Widget>[
@@ -184,6 +175,90 @@ class fourGrid extends StatelessWidget {
                     Align(
                         alignment: Alignment.bottomLeft,
                         child: bottomTitle(caption: 'App Exclusive')),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(5),
+              height: MediaQuery.of(context).size.width * 0.5,
+              width: MediaQuery.of(context).size.width * 0.47,
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => Scaffold(
+                            appBar: AppBar(
+                              title: Text("Gazette"),
+                              centerTitle: true,
+                              iconTheme: IconThemeData(
+                                color: Colors.white, //change your color here
+                              ),
+                            ),
+                            body: Gazette(),
+                          )));
+                },
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        image: DecorationImage(
+                          image: ExactAssetImage('assets/images/gazette.png'),
+                          fit: BoxFit.fill,
+                          alignment: Alignment.center,
+                          colorFilter: ColorFilter.mode(
+                              Colors.black26, BlendMode.darken),
+                        ),
+                      ),
+                    ),
+                    Align(
+                        alignment: Alignment.bottomLeft,
+                        child: bottomTitle(caption: 'Gazette')),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(5),
+              height: MediaQuery.of(context).size.width * 0.5,
+              width: MediaQuery.of(context).size.width * 0.47,
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => Scaffold(
+                            appBar: AppBar(
+                              title: Text("Reportopolis"),
+                              centerTitle: true,
+                              iconTheme: IconThemeData(
+                                color: Colors.white, //change your color here
+                              ),
+                            ),
+                            body: Reportopolis(),
+                          )));
+                },
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        image: DecorationImage(
+                          image: ExactAssetImage('assets/images/reportopolis.png'),
+                          fit: BoxFit.fill,
+                          alignment: Alignment.center,
+                          colorFilter: ColorFilter.mode(
+                              Colors.black26, BlendMode.darken),
+                        ),
+                      ),
+                    ),
+                    Align(
+                        alignment: Alignment.bottomLeft,
+                        child: bottomTitle(caption: 'Reportopolis')),
                   ],
                 ),
               ),

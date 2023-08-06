@@ -64,7 +64,7 @@ class NewsState extends State<News> {
     if (loading) return "Loading";
     loading = true;
     final String url =
-        "https://the-hit-times-admin-production.up.railway.app/api/posts?limit=$limit&page=$page";
+        "https://tht-admin.onrender.com/api/posts?limit=$limit&page=$page";
     print("Fetching... $url");
     var res = await http.get(Uri.parse(Uri.encodeFull(url)),
         headers: {"Accept": "application/json"});
@@ -135,10 +135,25 @@ class NewsState extends State<News> {
         // child : DisplayBody(author: "Ayab", body: "bidu",date: "today",)
         child: RefreshIndicator(
           onRefresh: handelRefresh,
-          child: items.isEmpty
-              ? const Center(child: const CircularProgressIndicator())
-              : items.length != 0
-                  ? ListView.builder(
+          child: items.isEmpty 
+              ? !loading ? 
+              Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.chrome_reader_mode,
+                              color: Colors.grey, size: 60.0),
+                          Text(
+                            "No articles found",
+                            style:
+                                TextStyle(fontSize: 24.0, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    )
+                    : const Center(child: const CircularProgressIndicator())
+              : 
+                   ListView.builder(
                       itemCount: items.length + 1,
                       controller: controller,
                       itemBuilder: (BuildContext context, int index) {
@@ -152,6 +167,7 @@ class NewsState extends State<News> {
                                   pIndex: index,
                                   title: items[index].title,
                                   body: items[index].body,
+                                  htmlBody: items[index].htmlBody,
                                   imgUrl: items[index].link,
                                   description: items[index].description,
                                   date: items[index].createdAt,
@@ -198,20 +214,6 @@ class NewsState extends State<News> {
                         }
                       },
                     )
-                  : Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.chrome_reader_mode,
-                              color: Colors.grey, size: 60.0),
-                          Text(
-                            "No articles found",
-                            style:
-                                TextStyle(fontSize: 24.0, color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    ),
         ),
       ),
     ]);
