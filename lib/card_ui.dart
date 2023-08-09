@@ -139,7 +139,7 @@ class CusCard extends StatelessWidget {
                         Container(
                           margin: EdgeInsets.only(top: 10),
                           child: Text(
-                            body.isNotEmpty ? readingTime(body).msg : readingTime(title).msg,
+                            body.isNotEmpty ? readingTime(body).msg : "Nothing to read",
                             style: TextStyle(
                               fontSize: 10.0,
                               color: Colors.white,
