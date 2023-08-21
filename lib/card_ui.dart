@@ -123,7 +123,7 @@ class CusCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
                         ),
-                        Container(
+                        body.isNotEmpty ? Container(
                           margin: EdgeInsets.only(top: 10),
                           child: Text(
                             body,
@@ -135,11 +135,11 @@ class CusCard extends StatelessWidget {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
-                        ),
+                        ): Container(),
                         Container(
                           margin: EdgeInsets.only(top: 10),
                           child: Text(
-                            '${readingTime(body).msg}',
+                            body.isNotEmpty ? readingTime(body).msg : "Nothing to read",
                             style: TextStyle(
                               fontSize: 10.0,
                               color: Colors.white,
