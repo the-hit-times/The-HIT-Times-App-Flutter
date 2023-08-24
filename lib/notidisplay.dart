@@ -120,9 +120,13 @@ class SliverAppBarBldr extends StatelessWidget {
             return FullScreen(imgUrl: imgUrl);
           }));
           },
-        child: Image(
-          image: CachedNetworkImageProvider(imgUrl),
+        child: CachedNetworkImage(
+          imageUrl: imgUrl,
           fit: BoxFit.cover,
+          placeholder: (context, url) => Container(
+            color: Colors.black12,
+          ),
+          errorWidget: (context, url, error) => Icon(Icons.error),
         ),
         ),
       ),
