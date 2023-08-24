@@ -1,10 +1,10 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
 
 class Http {
+
+  @Deprecated('Use getBody instead. Characters are lost when using this method')
+  /// TODO: Fix characters being lost when using this method
   static Future<http.Response> get(String url, {required Map<String, String> headers}) async {
     var file = await DefaultCacheManager().getSingleFile(url);
     if (await file.exists()) {

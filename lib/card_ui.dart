@@ -73,7 +73,7 @@ class CusCard extends StatelessWidget {
                   placeholder: (context, url) => Container(
                     color: Colors.black12,
                   ),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => Icon(Icons.error, color: Colors.white,),
                 ),
               ),
             )),
@@ -203,7 +203,7 @@ class NotiCard extends StatelessWidget {
                   placeholder: (context, url) => Container(
                     color: Colors.black12,
                   ),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => Icon(Icons.error, color: Colors.white,),
                 ),
               ),
             )),
