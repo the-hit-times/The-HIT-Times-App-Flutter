@@ -55,12 +55,18 @@ class NotificationService {
         print(" hi "+message.notification!.android!.imageUrl!);
         print(" hi2 ${message.notification!.title}");
         print(" hi3 ${message.notification!.body}");
+        print(" hi3 ${message.data["body"]}");
+        print(" hi3 ${message.data["htmlBody"]}");
+        print(" hi3 ${message.data["category"]}");
 
         await NotificationDatabase.instance.create(
           Notification(
           imageUrl: message.notification!.android!.imageUrl!,
           title: message.notification!.title!,
-          description: message.notification!.body!, 
+          description: message.notification!.body!,
+          body: message.data['body']!,
+          htmlBody: message.data['htmlBody']!,
+          category: int.parse(message.data['category']!),
           createdTime:  DateTime.now(),)
           );
 

@@ -73,7 +73,7 @@ class Notify extends State<DispNoti> {
                         return InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => Notidisplay(
+                              builder: (BuildContext context) => DisplayPost(
                                   pIndex: index,
                                   title: notes[index].title,
                                   body: notes[index].description,
@@ -82,7 +82,8 @@ class Notify extends State<DispNoti> {
                                       .createdTime
                                       .toIso8601String(),
                                   description: notes[index].description,
-                                  category: 0),
+                                  category: notes[index].category,
+                                htmlBody: notes[index].htmlBody,),
                             ));
                           },
                           child: NotiCard(

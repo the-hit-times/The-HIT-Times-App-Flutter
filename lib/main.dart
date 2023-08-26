@@ -19,6 +19,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         imageUrl: message.notification!.android!.imageUrl!,
         title: message.notification!.title!,
         description: message.notification!.body!,
+        body: message.data['body']!,
+        htmlBody: message.data['htmlBody']!,
+        category: int.parse(message.data['category']!),
         createdTime:  DateTime.now()
       )
   );

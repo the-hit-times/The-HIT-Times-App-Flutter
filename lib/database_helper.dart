@@ -35,6 +35,9 @@ CREATE TABLE $tableNotifications (
   ${NotificationFields.imageUrl} $textType,
   ${NotificationFields.title} $textType,
   ${NotificationFields.description} $textType,
+  ${NotificationFields.body} $textType,
+  ${NotificationFields.htmlBody} $textType,
+  ${NotificationFields.category} $integerType,
   ${NotificationFields.time} $textType
   )
 ''');
