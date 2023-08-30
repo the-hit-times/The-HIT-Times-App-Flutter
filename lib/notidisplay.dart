@@ -125,6 +125,9 @@ class SliverAppBarBldr extends StatelessWidget {
           fit: BoxFit.cover,
           placeholder: (context, url) => Container(
             color: Colors.black12,
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
           ),
           errorWidget: (context, url, error) => Icon(Icons.error, color: Colors.white,),
         ),

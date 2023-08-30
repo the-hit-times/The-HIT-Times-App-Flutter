@@ -72,8 +72,11 @@ class CusCard extends StatelessWidget {
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Container(
                     color: Colors.black12,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   ),
-                  errorWidget: (context, url, error) => Icon(Icons.error, color: Colors.white,),
+                  errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.white,),
                 ),
               ),
             )),
@@ -202,6 +205,9 @@ class NotiCard extends StatelessWidget {
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Container(
                     color: Colors.black12,
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
                   ),
                   errorWidget: (context, url, error) => Icon(Icons.error, color: Colors.white,),
                 ),
