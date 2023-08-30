@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
+import 'package:html/dom.dart' as html;
+import 'package:url_launcher/url_launcher.dart';
 
 class DisplayPost extends StatelessWidget {
   DisplayPost(
@@ -197,6 +199,17 @@ class SliverListBldr extends StatelessWidget {
   final String date;
   final String? htmlBody;
 
+  /// Launches any url in browser, We are this method because
+  /// launch() function is deprecated.
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +226,15 @@ class SliverListBldr extends StatelessWidget {
               color: Colors.white,
               fontSize: FontSize(15.0),
               fontFamily: "Cambo",
+            ),
+            "a" : Style(
+              color: Colors.blue,
             )
+          },
+          onLinkTap:  (String? url, Map<String, String> attributes, html.Element? element,) {
+            if (url != null) {
+              _launchInBrowser(Uri.parse(url));
+            }
           },
         );
 
