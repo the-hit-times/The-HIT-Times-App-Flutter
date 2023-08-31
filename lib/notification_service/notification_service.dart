@@ -63,7 +63,7 @@ class NotificationService {
           Notification(
           imageUrl: message.notification!.android!.imageUrl!,
           title: message.notification!.title!,
-          description: message.notification!.body!,
+          description: message.data['description'],
           body: message.data['body']!,
           htmlBody: message.data['htmlBody']!,
           category: int.parse(message.data['category']!),
