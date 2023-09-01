@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/bookmark_service/bookmark_service.dart';
 import 'package:the_hit_times_app/card_ui.dart';
@@ -49,6 +50,13 @@ class _WeekliesState extends State<Weeklies> {
     print("Fetching... $url");
     var res = await Http.getBody(url,
         headers: {"Accept": "application/json"});
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      ScaffoldMessenger.of(context).showSnackBar( const SnackBar(
+        backgroundColor: Colors.green,
+        content: const Text('No Internet Connection!'),
+      ));
+    }
     setState(() {
       page = page + 1;
 
@@ -247,6 +255,13 @@ class _AppXState extends State<AppX> {
     print("Fetching... $url");
     var res = await Http.getBody(url,
         headers: {"Accept": "application/json"});
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      ScaffoldMessenger.of(context).showSnackBar( const SnackBar(
+        backgroundColor: Colors.green,
+        content: const Text('No Internet Connection!'),
+      ));
+    }
     setState(() {
       page = page + 1;
 
@@ -436,6 +451,13 @@ class _GazetteState extends State<Gazette> {
     print("Fetching... $url");
     var res = await Http.getBody(url,
         headers: {"Accept": "application/json"});
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      ScaffoldMessenger.of(context).showSnackBar( const SnackBar(
+        backgroundColor: Colors.green,
+        content: const Text('No Internet Connection!'),
+      ));
+    }
     setState(() {
       page = page + 1;
 
@@ -635,6 +657,13 @@ class _ReportopolisState extends State<Reportopolis> {
     print("Fetching... $url");
     var res = await Http.getBody(url,
         headers: {"Accept": "application/json"});
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      ScaffoldMessenger.of(context).showSnackBar( const SnackBar(
+        backgroundColor: Colors.green,
+        content: const Text('No Internet Connection!'),
+      ));
+    }
     setState(() {
       page = page + 1;
 

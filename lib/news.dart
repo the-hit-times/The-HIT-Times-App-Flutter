@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:the_hit_times_app/util/cache_manager.dart';
 
 import 'bookmark_service/bookmark_service.dart';
@@ -69,6 +70,15 @@ class NewsState extends State<News> {
     print("Fetching... $url");
     var res = await Http.getBody(url,
         headers: {"Accept": "application/json"});
+
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      ScaffoldMessenger.of(context).showSnackBar( const SnackBar(
+        backgroundColor: Colors.green,
+        content: const Text('No Internet Connection!'),
+      ));
+    }
+
     setState(() {
       page = page + 1;
 
