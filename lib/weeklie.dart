@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:the_hit_times_app/bookmark_service/bookmark_service.dart';
 import 'package:the_hit_times_app/card_ui.dart';
 import 'package:the_hit_times_app/database_helper.dart';
@@ -10,6 +10,7 @@ import 'package:the_hit_times_app/models/postmodel.dart';
 import 'package:the_hit_times_app/news.dart';
 import 'package:the_hit_times_app/display.dart';
 import 'package:the_hit_times_app/models/notification.dart' as nf;
+import 'package:the_hit_times_app/util/cache_manager.dart';
 
 class Weeklies extends StatefulWidget {
   @override
@@ -47,12 +48,19 @@ class _WeekliesState extends State<Weeklies> {
     final String url =
         "https://tht-admin.onrender.com/api/posts/weeklies?limit=$limit&page=$page";
     print("Fetching... $url");
-    var res = await http.get(Uri.parse(Uri.encodeFull(url)),
+    var res = await Http.getBody(url,
         headers: {"Accept": "application/json"});
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      ScaffoldMessenger.of(context).showSnackBar( const SnackBar(
+        backgroundColor: Colors.green,
+        content: const Text('No Internet Connection!'),
+      ));
+    }
     setState(() {
       page = page + 1;
 
-      var resBody = json.decode(res.body);
+      var resBody = json.decode(res);
       allPosts = PostList.fromJson(resBody);
       allPosts.posts.map((e) => print(e.body));
       if (resBody.length < limit) {
@@ -245,12 +253,19 @@ class _AppXState extends State<AppX> {
     final String url =
         "https://tht-admin.onrender.com/api/posts/appx?limit=$limit&page=$page";
     print("Fetching... $url");
-    var res = await http.get(Uri.parse(Uri.encodeFull(url)),
+    var res = await Http.getBody(url,
         headers: {"Accept": "application/json"});
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      ScaffoldMessenger.of(context).showSnackBar( const SnackBar(
+        backgroundColor: Colors.green,
+        content: const Text('No Internet Connection!'),
+      ));
+    }
     setState(() {
       page = page + 1;
 
-      var resBody = json.decode(res.body);
+      var resBody = json.decode(res);
       allPosts = PostList.fromJson(resBody);
       allPosts.posts.map((e) => print(e.body));
       if (resBody.length < limit) {
@@ -434,12 +449,19 @@ class _GazetteState extends State<Gazette> {
     final String url =
         "https://tht-admin.onrender.com/api/posts/gazette?limit=$limit&page=$page";
     print("Fetching... $url");
-    var res = await http.get(Uri.parse(Uri.encodeFull(url)),
+    var res = await Http.getBody(url,
         headers: {"Accept": "application/json"});
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      ScaffoldMessenger.of(context).showSnackBar( const SnackBar(
+        backgroundColor: Colors.green,
+        content: const Text('No Internet Connection!'),
+      ));
+    }
     setState(() {
       page = page + 1;
 
-      var resBody = json.decode(res.body);
+      var resBody = json.decode(res);
       allPosts = PostList.fromJson(resBody);
       allPosts.posts.map((e) => print(e.body));
       if (resBody.length < limit) {
@@ -633,12 +655,19 @@ class _ReportopolisState extends State<Reportopolis> {
     final String url =
         "https://tht-admin.onrender.com/api/posts/reportopolis?limit=$limit&page=$page";
     print("Fetching... $url");
-    var res = await http.get(Uri.parse(Uri.encodeFull(url)),
+    var res = await Http.getBody(url,
         headers: {"Accept": "application/json"});
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      ScaffoldMessenger.of(context).showSnackBar( const SnackBar(
+        backgroundColor: Colors.green,
+        content: const Text('No Internet Connection!'),
+      ));
+    }
     setState(() {
       page = page + 1;
 
-      var resBody = json.decode(res.body);
+      var resBody = json.decode(res);
       allPosts = PostList.fromJson(resBody);
       allPosts.posts.map((e) => print(e.body));
       if (resBody.length < limit) {

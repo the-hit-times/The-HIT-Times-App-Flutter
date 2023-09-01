@@ -67,9 +67,16 @@ class CusCard extends StatelessWidget {
               margin: EdgeInsets.all(7),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5.0),
-                child: Image(
-                  image: CachedNetworkImageProvider(link),
+                child: CachedNetworkImage(
+                  imageUrl: link,
                   fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    color: Colors.black12,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.white,),
                 ),
               ),
             )),
@@ -193,9 +200,16 @@ class NotiCard extends StatelessWidget {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5),
                     bottomLeft: Radius.circular(5)),
-                child: Image(
-                  image: CachedNetworkImageProvider(imgUrl),
+                child: CachedNetworkImage(
+                  imageUrl: imgUrl,
                   fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    color: Colors.black12,
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error, color: Colors.white,),
                 ),
               ),
             )),
