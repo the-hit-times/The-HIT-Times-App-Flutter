@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:the_hit_times_app/database_helper.dart';
+import 'package:the_hit_times_app/features/live/models/LiveMatch.dart';
 import 'package:the_hit_times_app/models/notification.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:the_hit_times_app/notify.dart';
@@ -90,8 +91,10 @@ class NotificationService {
   static void liveNotification(RemoteMessage message) async {
     // final http.Response response =
     // await http.get(Uri.parse(message.notification!.android!.imageUrl!));
+    print(message.data.toString());
 
-    print(" hi "+message.data.toString());
+    var matchInfo =  LiveMatch.fromNotification(message);
+    print(matchInfo.toFirestore().toString());
 
 
    /* var bigPictureStyleInformation = BigPictureStyleInformation(
@@ -104,18 +107,18 @@ class NotificationService {
           importance: Importance.max,
           priority: Priority.high,
           styleInformation: BigTextStyleInformation(
-              "${message.data["score"]}", htmlFormatBigText: true,
+              "${matchInfo.team1?.teamScore}-${matchInfo.team2?.teamScore}", htmlFormatBigText: true,
               htmlFormatTitle:true ,
               htmlFormatContent:true ,
-              contentTitle: message.data["team"],
+              contentTitle: "${matchInfo.team1?.getTeamName()}-${matchInfo.team2?.getTeamName()}",
               htmlFormatContentTitle: true,
           )),
     );
 
-    await _notificationsPlugin.show(
+   await _notificationsPlugin.show(
       LIVE_NOTIFICATION_ID,
-      "<b>${message.data["dept"]}</b>",
-      "${message.data["score"]}",
+      "<b>${matchInfo.team1?.getTeamName()}-${matchInfo.team2?.getTeamName()}</b>",
+      "${matchInfo.team1?.teamScore}-${matchInfo.team2?.teamScore}",
       notificationDetails,
     );
   }

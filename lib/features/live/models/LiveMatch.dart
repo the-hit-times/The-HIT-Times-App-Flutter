@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
@@ -11,6 +14,7 @@ class Team {
   final Map _codeToName = {
     "100": "CSE",
     "101": "IT",
+    "102": "ECE",
     "103": "AEIE",
     "104": "EE",
     "105": "MECH",
@@ -26,6 +30,7 @@ class Team {
   final Map _codeToFootballImage = {
     "100": "assets/images/football/cse.png",
     "101": "assets/images/football/it.jpg",
+    "102": "assets/images/football/it.jpg",
     "103": "AEIE",
     "104": "assets/images/football/ee.png",
     "105": "MECH",
@@ -42,6 +47,7 @@ class Team {
   final Map _codeToCricketImage = {
     "100": "assets/images/football/cse.png",
     "101": "assets/images/football/it.jpg",
+    "102": "assets/images/football/it.jpg",
     "103": "AEIE",
     "104": "assets/images/football/ee.png",
     "105": "MECH",
@@ -102,7 +108,7 @@ class LiveMatch {
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    debugPrint(data.toString());
+    // debugPrint(data.toString());
 
     final team1 = Team(
       teamCode: data?[FIELD_TEAM_ONE][FIELD_TEAM_CODE],
@@ -123,6 +129,33 @@ class LiveMatch {
         isLive: data?[FIELD_MATCH_LIVE],
         matchStatus: data?[FIELD_MATCH_STATUS],
         matchType: data?[FIELD_MATCH_TYPE]
+    );
+  }
+
+  factory LiveMatch.fromNotification(
+      RemoteMessage message
+      ) {
+    final data = jsonDecode(message.data["data"]);
+    debugPrint("From factory: " + data.toString());
+
+    final team1 = Team(
+      teamCode: data[FIELD_TEAM_ONE][FIELD_TEAM_CODE],
+      teamScore: data[FIELD_TEAM_ONE][FIELD_TEAM_SCORE],
+    );
+
+    final team2 = Team(
+      teamCode: data[FIELD_TEAM_TWO][FIELD_TEAM_CODE],
+      teamScore: data[FIELD_TEAM_TWO][FIELD_TEAM_SCORE],
+    );
+
+    return LiveMatch(
+        id: data["matchId"],
+        team1: team1,
+        team2: team2,
+        matchDate: DateTime.parse(data[FIELD_MATCH_DATE]),
+        isLive: data[FIELD_MATCH_LIVE],
+        matchStatus: data[FIELD_MATCH_STATUS],
+        matchType: data[FIELD_MATCH_TYPE]
     );
   }
 
