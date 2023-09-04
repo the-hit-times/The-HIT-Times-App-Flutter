@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -13,8 +14,10 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
+  static const LIVE_NOTIFICATION_ID = 0;
+
   //  Initialise Flutter Local Notifications Plugin with AndroidInitializationSettings
-  void initialize() {
+  static void initialize() {
     const InitializationSettings initializationSettings =
         InitializationSettings(
       android: AndroidInitializationSettings("@drawable/notification_icon"),
@@ -26,7 +29,7 @@ class NotificationService {
   }
 
   // Request notification permission for android 13 and iOS devices
-  void _requestNotificationPermission() async {
+  static void _requestNotificationPermission() async {
     NotificationSettings settings = await _messaging.requestPermission(
       alert: true,
       announcement: false,
@@ -41,14 +44,14 @@ class NotificationService {
 
   // Subscribes to topics to receive notification
   // when a notification is broadcast from backend.
-  void _subscribeToTopics() async {
-    await _messaging.subscribeToTopic("events_notification");
+  static void _subscribeToTopics() async {
+    await _messaging.subscribeToTopic("live_notification");
     await _messaging.subscribeToTopic("posts_notification");
   }
 
   // Display a notification when app is in foreground
   // with the help of Flutter Local Notification Plugin
-  void show(RemoteMessage message) async {
+  static void show(RemoteMessage message) async {
     final http.Response response =
         await http.get(Uri.parse(message.notification!.android!.imageUrl!));
 
@@ -77,10 +80,54 @@ class NotificationService {
     );
 
     await _notificationsPlugin.show(
-      0,
+      _notificationIDGenerator(),
       message.notification!.title,
       message.notification!.body,
       notificationDetails,
     );
   }
+
+  static void liveNotification(RemoteMessage message) async {
+    // final http.Response response =
+    // await http.get(Uri.parse(message.notification!.android!.imageUrl!));
+
+    print(" hi "+message.data.toString());
+
+
+   /* var bigPictureStyleInformation = BigPictureStyleInformation(
+        ByteArrayAndroidBitmap.fromBase64String(
+            base64Encode(response.bodyBytes)));*/
+
+    NotificationDetails notificationDetails = NotificationDetails(
+      android: AndroidNotificationDetails(
+          "Live Notification", "Live updates for HIT football, cricket and various other matches.",
+          importance: Importance.max,
+          priority: Priority.high,
+          styleInformation: BigTextStyleInformation(
+              "${message.data["score"]}", htmlFormatBigText: true,
+              htmlFormatTitle:true ,
+              htmlFormatContent:true ,
+              contentTitle: message.data["team"],
+              htmlFormatContentTitle: true,
+          )),
+    );
+
+    await _notificationsPlugin.show(
+      LIVE_NOTIFICATION_ID,
+      "<b>${message.data["dept"]}</b>",
+      "${message.data["score"]}",
+      notificationDetails,
+    );
+  }
+
+  /// It is responsible for generating random ids for the post such that
+  /// if two posts are posted at same time, two independent notifications
+  /// instead of its getting overriden by new post notification.
+  static int _notificationIDGenerator() {
+    final random = Random();
+    const MIN_ID = 100;
+    const MAX_ID = 10000;
+    return MIN_ID + random.nextInt(MAX_ID);
+  }
+
 }
