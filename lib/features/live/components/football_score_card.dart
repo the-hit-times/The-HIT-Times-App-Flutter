@@ -31,16 +31,16 @@ class FootballScoreCard extends StatelessWidget {
             height: 150,
             child: Stack(
               children: [
-                Positioned(
+                liveMatch.isLive! ? Positioned(
                   top: 0,
                   right: 0,
                   child: Badge(
                     label: Text(
-                      liveMatch.isLive! ? "LIVE" : "FT",
+                      "LIVE",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                ),
+                ): Text(""),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
