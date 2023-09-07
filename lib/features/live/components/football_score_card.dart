@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_hit_times_app/features/live/models/LiveMatch.dart';
+import 'package:the_hit_times_app/features/live/models/livematch.dart';
 
 class FootballScoreCard extends StatelessWidget {
   final LiveMatch liveMatch;
@@ -69,7 +69,7 @@ class FootballScoreCard extends StatelessWidget {
                               ),
                               Text(
                                 liveMatch.team1!.getTeamName(),
-                                style: TextStyle(color: Colors.white, fontSize: 20),
+                                style: TextStyle(color: Colors.white, fontSize: 12),
                               ),
                             ],
                           ),
@@ -154,7 +154,7 @@ class FootballScoreCard extends StatelessWidget {
                               ),
                               Text(
                                 liveMatch.team2!.getTeamName(),
-                                style: TextStyle(color: Colors.white, fontSize: 20),
+                                style: TextStyle(color: Colors.white, fontSize: 12),
                               ),
                             ],
                           ),

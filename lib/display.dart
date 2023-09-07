@@ -222,7 +222,7 @@ class SliverListBldr extends StatelessWidget {
             // This sets the color of the text to white to all the elements
             // eg; p, a, div, etc.
             // just like a css selector.
-            "*" : Style(
+            "body" : Style(
               color: Colors.white,
               fontSize: FontSize(15.0),
               fontFamily: "Cambo",

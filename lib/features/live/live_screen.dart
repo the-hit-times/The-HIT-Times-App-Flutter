@@ -1,7 +1,8 @@
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:the_hit_times_app/features/live/models/LiveMatch.dart';
+import 'package:the_hit_times_app/features/live/models/livematch.dart';
 import 'package:the_hit_times_app/features/live/repo/live_match_repo.dart';
+import 'package:the_hit_times_app/features/live/timeline_screen.dart';
 
 import 'components/football_score_card.dart';
 
@@ -45,7 +46,7 @@ class LiveScreen extends StatelessWidget {
           color: Colors.white, //change your color here
         ),
       ),
-     /* body: SafeArea(
+      body: SafeArea(
         child: FirestoreListView<LiveMatch>(
             emptyBuilder: (context) {
               return Text("No data");
@@ -56,28 +57,42 @@ class LiveScreen extends StatelessWidget {
               final match = doc.data();
               return Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-                child: FootballScoreCard(liveMatch: match),
+                child: FootballScoreCard(liveMatch: match, onTap: () {
+                  Navigator.of(context).pushNamed(TimelineScreen.ROUTE_NAME,
+                      arguments:
+                      TimelineScreenArguments(id: match.id!));
+                },),
               );
             }),
-      ),*/
-      body: SafeArea(
+      ),
+      /*body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Wrap(
             runSpacing: 8.0,
             children: [
-              FootballScoreCard(liveMatch: LiveMatch(
-                team1: Team(teamCode: "101", teamScore: "11"),
-                team2: Team(teamCode: "106", teamScore: "10"),
-                isLive: true, matchDate: DateTime.now(),
-                matchType: "Football",
-                matchStatus: "Delayed due to rain.",
-                id: "S4mzZcHWIZ3iq0QkeTGy",
-              )),
-              FootballScoreCard(liveMatch: LiveMatch(
+              FootballScoreCard(
+                liveMatch: LiveMatch(
+                  team1: Team(teamCode: "101", teamScore: "11"),
+                  team2: Team(teamCode: "106", teamScore: "10"),
+                  isLive: true,
+                  matchDate: DateTime.now(),
+                  matchType: "Football",
+                  matchStatus: "Delayed due to rain.",
+                  id: "S4mzZcHWIZ3iq0QkeTGy",
+                ),
+                onTap: () {
+                  Navigator.of(context).pushNamed(TimelineScreen.ROUTE_NAME,
+                      arguments:
+                          TimelineScreenArguments(id: "S4mzZcHWIZ3iq0QkeTGy"));
+                },
+              ),
+              FootballScoreCard(
+                  liveMatch: LiveMatch(
                 team1: Team(teamCode: "101", teamScore: "0"),
                 team2: Team(teamCode: "100", teamScore: "1"),
-                isLive: true, matchDate: DateTime.now(),
+                isLive: true,
+                matchDate: DateTime.now(),
                 matchType: "Football",
                 matchStatus: "Half-Time",
                 id: "NxUp0yyXlQNe0If9dAPO",
@@ -85,7 +100,7 @@ class LiveScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
+      ),*/
     );
   }
 }

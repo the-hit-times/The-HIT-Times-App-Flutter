@@ -6,6 +6,7 @@ import 'package:the_hit_times_app/homepage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'database_helper.dart';
+import 'features/live/timeline_screen.dart';
 import 'firebase_options.dart';
 import 'notification_service/notification_service.dart';
 import 'package:the_hit_times_app/models/notification.dart' as NotificationModel;
@@ -88,6 +89,7 @@ class MyApp extends StatelessWidget {
       home: MainPage(),
       routes: {
         LiveScreen.ROUTE_NAME: (context) => LiveScreen(),
+        TimelineScreen.ROUTE_NAME: (context) => TimelineScreen(),
       },
     );
   }
