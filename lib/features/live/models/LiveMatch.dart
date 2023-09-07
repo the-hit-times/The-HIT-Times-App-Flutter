@@ -181,4 +181,9 @@ class LiveMatch {
   String formattedMatchDate() {
     return DateFormat.MMMEd().format(matchDate!);
   }
+
+  String formattedMatchTime() {
+    return DateFormat.jm().format(matchDate!);
+  }
+
 }

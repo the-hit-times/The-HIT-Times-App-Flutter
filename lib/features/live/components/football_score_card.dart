@@ -3,118 +3,168 @@ import 'package:the_hit_times_app/features/live/models/LiveMatch.dart';
 
 class FootballScoreCard extends StatelessWidget {
   final LiveMatch liveMatch;
-
-  const FootballScoreCard({super.key, required this.liveMatch});
+  final Function? onTap;
+  const FootballScoreCard({super.key, required this.liveMatch, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final team1Logo = liveMatch.team1?.getTeamFootballLogo();
     final team2Logo = liveMatch.team2?.getTeamFootballLogo();
 
-    return Container(
-      margin: const EdgeInsets.all(5.0),
-      decoration: const BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.all(Radius.circular(5)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(right: 16, top:16),
-            child: liveMatch.isLive!
-                ? Badge(
-                    label: Text("LIVE"),
-                  )
-                : Text(""),
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 32, right: 32, bottom: 32),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
+    return Material(
+      color: Colors.black,
+      borderRadius: BorderRadius.circular(5.0),
+      child: Ink(
+        child: InkWell(
+          borderRadius: BorderRadius.circular(5.0),
+          onTap: () {
+            debugPrint("Tapped");
+            if (onTap != null) {
+              onTap!();
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+            ),
+            height: 150,
+            child: Stack(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    team1Logo != null
-                        ? Image.asset(
-                            team1Logo,
-                            width: 60,
-                            height: 60,
-                          )
-                        : Container(
-                            width: 60,
-                            height: 60,
-                          ),
-                    SizedBox(
-                      height: 10,
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Badge(
+                    label: Text(
+                      liveMatch.isLive! ? "LIVE" : "FT",
+                      style: TextStyle(color: Colors.white),
                     ),
-                    Text(
-                      liveMatch.team1!.getTeamName(),
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                  ],
-                ),
-                Center(
-                  child: Text(
-                    liveMatch.team1!.teamScore.toString(),
-                    style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 12, right: 12),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        liveMatch.matchStatus.toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                        width: double.infinity,
+                        child: Wrap(
+                          direction: Axis.vertical,
+                          alignment: WrapAlignment.center,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          runAlignment: WrapAlignment.center,
+                          spacing: 5.0,
+                          children: [
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(team1Logo!),
+                                  fit: BoxFit.scaleDown,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              liveMatch.team1!.getTeamName(),
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                          ],
                         ),
                       ),
-                      Text(
-                        liveMatch.formattedMatchDate(),
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    liveMatch.team2!.teamScore.toString(),
-                    style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    team2Logo != null
-                        ? Image.asset(
-                            team2Logo,
-                            width: 60,
-                            height: 60,
-                          )
-                        : Container(
-                            width: 60,
-                            height: 60,
-                          ),
-                    SizedBox(
-                      height: 10,
                     ),
-                    Text(
-                      liveMatch.team2!.getTeamName(),
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                        width: double.infinity,
+                        child: Center(
+                            child: Text(
+                          liveMatch.team1!.teamScore.toString(),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold),
+                        )),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: Container(
+                          width: double.infinity,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                liveMatch.matchStatus.toString(),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 15,
+                                    fontWeight: FontWeight.w300
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(height: 5.0,),
+                              Text(
+                                liveMatch.formattedMatchDate(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Text(
+                                liveMatch.formattedMatchTime(),
+                                style: TextStyle( color: Colors.white, fontSize: 12,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ],
+                          )),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                        width: double.infinity,
+                        child: Center(
+                            child: Text(
+                          liveMatch.team2!.teamScore.toString(),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold),
+                        )),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                        width: double.infinity,
+                        child: Wrap(
+                          direction: Axis.vertical,
+                          alignment: WrapAlignment.center,
+                          runAlignment: WrapAlignment.center,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 5.0,
+                          children: [
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(team2Logo!),
+                                  fit: BoxFit.scaleDown,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              liveMatch.team2!.getTeamName(),
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
-                ),
+                )
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

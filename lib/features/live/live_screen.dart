@@ -34,7 +34,18 @@ class LiveScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      appBar: AppBar(
+        title: const Text('The HIT Times'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+      ),
+      /*body: SafeArea(
         child: FirestoreListView<LiveMatch>(
             emptyBuilder: (context) {
               return Text("No data");
@@ -45,6 +56,32 @@ class LiveScreen extends StatelessWidget {
               final match = doc.data();
               return FootballScoreCard(liveMatch: match);
             }),
+      ),*/
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Wrap(
+            runSpacing: 8.0,
+            children: [
+              FootballScoreCard(liveMatch: LiveMatch(
+                team1: Team(teamCode: "101", teamScore: "11"),
+                team2: Team(teamCode: "106", teamScore: "10"),
+                isLive: true, matchDate: DateTime.now(),
+                matchType: "Football",
+                matchStatus: "Delayed due to rain.",
+                id: "1",
+              )),
+              FootballScoreCard(liveMatch: LiveMatch(
+                team1: Team(teamCode: "101", teamScore: "0"),
+                team2: Team(teamCode: "100", teamScore: "1"),
+                isLive: true, matchDate: DateTime.now(),
+                matchType: "Football",
+                matchStatus: "Half-Time",
+                id: "1",
+              )),
+            ],
+          ),
+        ),
       ),
     );
   }
