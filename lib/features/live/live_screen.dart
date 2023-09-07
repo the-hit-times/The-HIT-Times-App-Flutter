@@ -45,7 +45,7 @@ class LiveScreen extends StatelessWidget {
           color: Colors.white, //change your color here
         ),
       ),
-      /*body: SafeArea(
+     /* body: SafeArea(
         child: FirestoreListView<LiveMatch>(
             emptyBuilder: (context) {
               return Text("No data");
@@ -54,7 +54,10 @@ class LiveScreen extends StatelessWidget {
             query: _liveMatchRepo.getLiveMatches(),
             itemBuilder: (context, doc) {
               final match = doc.data();
-              return FootballScoreCard(liveMatch: match);
+              return Padding(
+                padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                child: FootballScoreCard(liveMatch: match),
+              );
             }),
       ),*/
       body: SafeArea(
@@ -66,10 +69,10 @@ class LiveScreen extends StatelessWidget {
               FootballScoreCard(liveMatch: LiveMatch(
                 team1: Team(teamCode: "101", teamScore: "11"),
                 team2: Team(teamCode: "106", teamScore: "10"),
-                isLive: true, matchDate: DateTime.now(),
+                isLive: false, matchDate: DateTime.now(),
                 matchType: "Football",
                 matchStatus: "Delayed due to rain.",
-                id: "1",
+                id: "S4mzZcHWIZ3iq0QkeTGy",
               )),
               FootballScoreCard(liveMatch: LiveMatch(
                 team1: Team(teamCode: "101", teamScore: "0"),
@@ -77,7 +80,7 @@ class LiveScreen extends StatelessWidget {
                 isLive: true, matchDate: DateTime.now(),
                 matchType: "Football",
                 matchStatus: "Half-Time",
-                id: "1",
+                id: "NxUp0yyXlQNe0If9dAPO",
               )),
             ],
           ),
