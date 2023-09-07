@@ -69,7 +69,7 @@ class LiveScreen extends StatelessWidget {
               FootballScoreCard(liveMatch: LiveMatch(
                 team1: Team(teamCode: "101", teamScore: "11"),
                 team2: Team(teamCode: "106", teamScore: "10"),
-                isLive: false, matchDate: DateTime.now(),
+                isLive: true, matchDate: DateTime.now(),
                 matchType: "Football",
                 matchStatus: "Delayed due to rain.",
                 id: "S4mzZcHWIZ3iq0QkeTGy",
