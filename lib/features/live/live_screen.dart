@@ -49,7 +49,19 @@ class LiveScreen extends StatelessWidget {
       body: SafeArea(
         child: FirestoreListView<LiveMatch>(
             emptyBuilder: (context) {
-              return Text("No data");
+              return Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.sports_soccer, color: Colors.white, size: 64,),
+                    const SizedBox(height: 8.0,),
+                    Text("No Live Matches", style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.white,
+                    ),),
+                  ],
+                ),
+              );
             },
             pageSize: 4,
             query: _liveMatchRepo.getLiveMatches(),
