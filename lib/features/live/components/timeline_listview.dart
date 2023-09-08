@@ -22,26 +22,32 @@ class TimelineListView extends StatefulWidget {
 
 class _TimelineListViewState extends State<TimelineListView> {
 
-
   Timer? _timer;
-
-
   List<Timeline> items = [];
+  bool isLoading = true;
+  bool failedLoading = false;
 
   // load timeline from the database
   void _loadTimeline() async {
-    String url = "http://192.168.1.7:8000/api/live/match/${widget.matchFirebaseId}/timeline";
-    var response = await Http.getBody(url, headers: {
+    String url = "https://a2k-tht-dev.onrender.com/api/live/match/${widget.matchFirebaseId}/timeline";
+    var response = await CachedHttp.get(url, headers: {
       "Content-Type": "application/json"
     });
-    var data = jsonDecode(response);
+
+    if (response.error) {
+      setState(() {
+        isLoading = false;
+        failedLoading = true;
+      });
+    }
+
+    var data = response.responseBody;
     data = data["timeline"];
 
-
     TimelineList timelineList = TimelineList.fromJson(data);
-
     setState(() {
       items = timelineList.timelines;
+      isLoading = false;
     });
 
   }
@@ -73,7 +79,21 @@ class _TimelineListViewState extends State<TimelineListView> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return isLoading ? const Center(
+      child: CircularProgressIndicator(),
+    ) : failedLoading ? Center(
+      child: Stack(
+        children: [
+          Text("Failed to load!"),
+          IconButton(onPressed: () {
+            setState(() {
+              isLoading = true;
+            });
+            _loadTimeline();
+          }, icon: Icon(Icons.refresh))
+        ],
+      ),
+    ) : ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: items.length,
@@ -86,10 +106,10 @@ class _TimelineListViewState extends State<TimelineListView> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, top: 12.0, bottom: 4.0, right: 16.0),
                 child: Text(
-                  items[index].getFormattedDate(),
-                  style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: Colors.grey,
-                  )
+                    items[index].getFormattedDate(),
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                      color: Colors.grey,
+                    )
                 ),
               ),
               Container(

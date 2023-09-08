@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       title: 'The HIT Times',
       theme: ThemeData(
         // This is the theme of your application.

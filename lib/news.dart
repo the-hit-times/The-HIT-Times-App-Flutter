@@ -68,7 +68,7 @@ class NewsState extends State<News> {
     final String url =
         "https://tht-admin.onrender.com/api/posts?limit=$limit&page=$page";
     print("Fetching... $url");
-    var res = await Http.getBody(url, headers: {"Accept": "application/json"});
+    var res = await CachedHttp.getBody(url, headers: {"Accept": "application/json"});
 
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {

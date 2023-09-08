@@ -48,7 +48,7 @@ class _WeekliesState extends State<Weeklies> {
     final String url =
         "https://tht-admin.onrender.com/api/posts/weeklies?limit=$limit&page=$page";
     print("Fetching... $url");
-    var res = await Http.getBody(url,
+    var res = await CachedHttp.getBody(url,
         headers: {"Accept": "application/json"});
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
@@ -253,7 +253,7 @@ class _AppXState extends State<AppX> {
     final String url =
         "https://tht-admin.onrender.com/api/posts/appx?limit=$limit&page=$page";
     print("Fetching... $url");
-    var res = await Http.getBody(url,
+    var res = await CachedHttp.getBody(url,
         headers: {"Accept": "application/json"});
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
@@ -449,7 +449,7 @@ class _GazetteState extends State<Gazette> {
     final String url =
         "https://tht-admin.onrender.com/api/posts/gazette?limit=$limit&page=$page";
     print("Fetching... $url");
-    var res = await Http.getBody(url,
+    var res = await CachedHttp.getBody(url,
         headers: {"Accept": "application/json"});
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
@@ -655,7 +655,7 @@ class _ReportopolisState extends State<Reportopolis> {
     final String url =
         "https://tht-admin.onrender.com/api/posts/reportopolis?limit=$limit&page=$page";
     print("Fetching... $url");
-    var res = await Http.getBody(url,
+    var res = await CachedHttp.getBody(url,
         headers: {"Accept": "application/json"});
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
