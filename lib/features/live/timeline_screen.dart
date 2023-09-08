@@ -65,12 +65,12 @@ class TimelineScreen extends StatelessWidget {
               }
               if (snapshot.hasData) {
                 final match = LiveMatch.fromFirestore(snapshot.data!, null);
-                return Wrap(
-                  runSpacing: 8.0,
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     FootballScoreCard(liveMatch: match),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                    const Padding(
+                      padding: EdgeInsets.all(16),
                       child: Text("TIMELINE", style: TextStyle(fontSize: 14, color: Colors.white)),
                     ),
                     Padding(
@@ -80,7 +80,7 @@ class TimelineScreen extends StatelessWidget {
                   ],
                 );
               }
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             },
           ),
 

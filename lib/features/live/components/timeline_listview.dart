@@ -81,19 +81,53 @@ class _TimelineListViewState extends State<TimelineListView> {
   Widget build(BuildContext context) {
     return isLoading ? const Center(
       child: CircularProgressIndicator(),
-    ) : failedLoading ? Center(
-      child: Stack(
-        children: [
-          Text("Failed to load!"),
-          IconButton(onPressed: () {
-            setState(() {
-              isLoading = true;
-            });
-            _loadTimeline();
-          }, icon: Icon(Icons.refresh))
-        ],
+    ) : failedLoading ? Container(
+      width: double.infinity,
+      height: 200,
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Failed to load!", style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Colors.white,
+            )),
+            const SizedBox(height: 8.0,),
+            FilledButton.icon(onPressed: () {
+              setState(() {
+                isLoading = true;
+              });
+              _loadTimeline();
+            }, icon: Icon(Icons.refresh, color: Colors.white,),
+               label: Text("Retry"),
+            )
+          ],
+        ),
       ),
-    ) : ListView.builder(
+    ) : items.isEmpty ? Container(
+      width: double.infinity,
+      height: 200,
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Stay tunes for update!", style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Colors.white,
+            )),
+            const SizedBox(height: 8.0,),
+            FilledButton.icon(onPressed: () {
+              setState(() {
+                isLoading = true;
+              });
+              _loadTimeline();
+            }, icon: Icon(Icons.refresh, color: Colors.white,),
+              label: Text("Refresh"),
+            )
+          ],
+        ),
+      ),
+    ): ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: items.length,
@@ -104,7 +138,7 @@ class _TimelineListViewState extends State<TimelineListView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 8.0, top: 12.0, bottom: 4.0, right: 16.0),
+                padding: const EdgeInsets.only(left: 8.0, top: 12.0, bottom: 0.0, right: 16.0),
                 child: Text(
                     items[index].getFormattedDate(),
                     style: Theme.of(context).textTheme.labelMedium!.copyWith(
