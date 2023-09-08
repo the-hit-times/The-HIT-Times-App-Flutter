@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/features/live/models/livematch.dart';
@@ -12,25 +14,6 @@ class LiveScreen extends StatelessWidget {
   LiveScreen({super.key});
 
   LiveMatchRepo _liveMatchRepo = LiveMatchRepo();
-
-  /*FirestoreListView<LiveMatch>(
-          emptyBuilder: (context) {
-            return Text("No data");
-          },
-          pageSize: 4,
-          query: _liveMatchRepo.getLiveMatches(), itemBuilder: (context, doc) {
-            final match = doc.data();
-            return ListTile(
-              title: Text("${match.team1?.getTeamName()} vs ${match.team2?.getTeamName()}",
-              style: TextStyle(
-                  color: Colors.white,
-              ),
-              ),
-              subtitle: Text("${match.team1?.teamScore} vs ${match.team2?.teamScore}\n${match.isLive}",  style: TextStyle(
-                color: Colors.white,
-              ),),
-            );
-      }),*/
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +37,16 @@ class LiveScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.sports_soccer, color: Colors.white, size: 64,),
-                    const SizedBox(height: 8.0,),
-                    Text("No Live Matches", style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.white,
-                    ),),
+                    AnimatedIconWidget(),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    Text(
+                      "No Live Matches",
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
                   ],
                 ),
               );
@@ -69,11 +57,13 @@ class LiveScreen extends StatelessWidget {
               final match = doc.data();
               return Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-                child: FootballScoreCard(liveMatch: match, onTap: () {
-                  Navigator.of(context).pushNamed(TimelineScreen.ROUTE_NAME,
-                      arguments:
-                      TimelineScreenArguments(id: match.id!));
-                },),
+                child: FootballScoreCard(
+                  liveMatch: match,
+                  onTap: () {
+                    Navigator.of(context).pushNamed(TimelineScreen.ROUTE_NAME,
+                        arguments: TimelineScreenArguments(id: match.id!));
+                  },
+                ),
               );
             }),
       ),
@@ -113,6 +103,78 @@ class LiveScreen extends StatelessWidget {
           ),
         ),
       ),*/
+    );
+  }
+
+/*FirestoreListView<LiveMatch>(
+          emptyBuilder: (context) {
+            return Text("No data");
+          },
+          pageSize: 4,
+          query: _liveMatchRepo.getLiveMatches(), itemBuilder: (context, doc) {
+            final match = doc.data();
+            return ListTile(
+              title: Text("${match.team1?.getTeamName()} vs ${match.team2?.getTeamName()}",
+              style: TextStyle(
+                  color: Colors.white,
+              ),
+              ),
+              subtitle: Text("${match.team1?.teamScore} vs ${match.team2?.teamScore}\n${match.isLive}",  style: TextStyle(
+                color: Colors.white,
+              ),),
+            );
+      }),*/
+}
+
+class AnimatedIconWidget extends StatefulWidget {
+  const AnimatedIconWidget({Key? key}) : super(key: key);
+
+  @override
+  State<AnimatedIconWidget> createState() => _AnimatedIconWidgetState();
+}
+
+class _AnimatedIconWidgetState extends State<AnimatedIconWidget> {
+  int index = 0;
+  Timer? _timer;
+
+  dynamic icons = [
+    Icons.sports_soccer,
+    Icons.sports_basketball,
+    Icons.sports_cricket,
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        index = (index + 1) % 3;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 500),
+      child: Icon(
+        icons[index],
+        key: ValueKey<int>(index),
+        size: 60.0,
+        color: Colors.white,
+      ),
+      transitionBuilder: (child, animation) {
+        return ScaleTransition(
+          scale: animation,
+          child: child,
+        );
+      },
     );
   }
 }
