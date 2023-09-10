@@ -149,7 +149,7 @@ class LiveMatch {
     );
 
     return LiveMatch(
-        id: data["matchId"],
+        id: data["id"],
         team1: team1,
         team2: team2,
         matchDate: DateTime.parse(data[FIELD_MATCH_DATE]),

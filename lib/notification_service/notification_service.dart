@@ -46,7 +46,9 @@ class NotificationService {
           _navigatorKey.currentState!.push(MaterialPageRoute(builder: (context) => NotificationDisplayWeb(postId: data["id"],)));
           break;
         case "LIVE":
-          _navigatorKey.currentState!.pushNamed(TimelineScreen.ROUTE_NAME, arguments: TimelineScreenArguments(id: data["id"]));
+          _navigatorKey.currentState!.push(
+              MaterialPageRoute(builder: (context) => TimelineScreen( matchId: data["id"],))
+          );
           break;
       }
     }

@@ -16,15 +16,20 @@ class TimelineScreenArguments {
 class TimelineScreen extends StatelessWidget {
   static const ROUTE_NAME = "/live-screen/timeline";
 
-  TimelineScreen({super.key});
+  String? matchId;
+
+  TimelineScreen({super.key, this.matchId});
 
   LiveMatchRepo _liveMatchRepo = LiveMatchRepo();
-
 
   @override
   Widget build(BuildContext context) {
     final args =
-        ModalRoute.of(context)!.settings.arguments as TimelineScreenArguments;
+        ModalRoute.of(context)!.settings.arguments as TimelineScreenArguments?;
+
+    if (matchId == null && args != null) {
+      matchId = args.id;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -55,10 +60,8 @@ class TimelineScreen extends StatelessWidget {
       ),*/
       body: SafeArea(
         child: SingleChildScrollView(
-          child:
-
-          StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-            stream: _liveMatchRepo.getLiveMatchById(args.id),
+          child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+            stream: _liveMatchRepo.getLiveMatchById(matchId!),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Text("Error: ${snapshot.error}");
@@ -71,11 +74,12 @@ class TimelineScreen extends StatelessWidget {
                     FootballScoreCard(liveMatch: match),
                     const Padding(
                       padding: EdgeInsets.all(16),
-                      child: Text("TIMELINE", style: TextStyle(fontSize: 14, color: Colors.white)),
+                      child: Text("TIMELINE",
+                          style: TextStyle(fontSize: 14, color: Colors.white)),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-                      child: TimelineListView(matchFirebaseId: args.id),
+                      child: TimelineListView(matchFirebaseId: matchId!),
                     ),
                   ],
                 );
@@ -83,10 +87,6 @@ class TimelineScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             },
           ),
-
-
-
-
         ),
       ),
     );
