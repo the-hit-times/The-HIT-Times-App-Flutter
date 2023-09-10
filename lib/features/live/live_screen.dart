@@ -29,7 +29,7 @@ class LiveScreen extends StatelessWidget {
           color: Colors.white, //change your color here
         ),
       ),
-     /* body: SafeArea(
+      body: SafeArea(
         child: FirestoreListView<LiveMatch>(
             emptyBuilder: (context) {
               return Center(
@@ -66,8 +66,8 @@ class LiveScreen extends StatelessWidget {
                 ),
               );
             }),
-      ),*/
-      body: SafeArea(
+      ),
+      /*body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
@@ -149,7 +149,7 @@ class LiveScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
+      ),*/
     );
   }
 
