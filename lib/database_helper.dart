@@ -20,7 +20,8 @@ class NotificationDatabase {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(path,
+        version: 2, onCreate: _createDB, onUpgrade: _updateDB);
   }
 
   Future _createDB(Database db, int version) async {
@@ -35,9 +36,19 @@ CREATE TABLE $tableNotifications (
   ${NotificationFields.imageUrl} $textType,
   ${NotificationFields.title} $textType,
   ${NotificationFields.description} $textType,
-  ${NotificationFields.time} $textType
+  ${NotificationFields.time} $textType,
+  ${NotificationFields.postId} $textType
   )
 ''');
+  }
+
+  Future _updateDB(Database db, int oldVersion, int newVersion) async {
+    final textType = 'TEXT NULL';
+
+    if (oldVersion < 2) {
+      await db.execute(
+          '''ALTER TABLE $tableNotifications ADD COLUMN ${NotificationFields.postId} $textType''');
+    }
   }
 
   Future<Notification> create(Notification notifications) async {

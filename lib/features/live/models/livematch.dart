@@ -29,16 +29,16 @@ class Team {
 
   final Map _codeToFootballImage = {
     "100": "assets/images/football/cse.png",
-    "101": "assets/images/football/it.jpg",
-    "102": "assets/images/football/it.jpg",
+    "101": "assets/images/football/it.png",
+    "102": "ECE",
     "103": "AEIE",
     "104": "assets/images/football/ee.png",
-    "105": "MECH",
+    "105": "assets/images/football/mech.png",
     "106": "assets/images/football/civil.png",
     "107": "assets/images/football/chemical.png",
     "108": "assets/images/football/bt_ft.png",
     "109": "CSE CS",
-    "110": "CSE DS",
+    "110": "assets/images/football/cse_ds.png",
     "111": "assets/images/football/aiml.png",
     "112": "MASTERS",
   };

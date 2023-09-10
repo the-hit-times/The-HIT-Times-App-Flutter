@@ -13,13 +13,18 @@ import 'notification_service/notification_service.dart';
 import 'package:the_hit_times_app/models/notification.dart' as NotificationModel;
 
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+
 // Whenever a notification is received in background, this function is called.
 // Don't move this function to another file. It needs to at the top level to function properly.
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   var notificationType = message.data["type"];
   if (notificationType == "LIVE") {
-    NotificationService.initialize();
+    NotificationService.initialize(
+        navigatorKey: navigatorKey
+    );
     NotificationService.liveNotification(message);
   } else {
     await NotificationDatabase.instance.create(
@@ -27,7 +32,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
             imageUrl: message.notification!.android!.imageUrl!,
             title: message.notification!.title!,
             description: message.notification!.body!,
-            createdTime:  DateTime.now()
+            createdTime:  DateTime.now(),
+            postId: message.data["id"]!
         )
     );
   }
@@ -41,11 +47,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseFirestore.instance.settings = const Settings(
-    persistenceEnabled: false,
-    cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+  NotificationService.initialize(
+      navigatorKey: navigatorKey
   );
-  NotificationService.initialize();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     var notificationType = message.data["type"];
@@ -70,6 +74,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: true,
       title: 'The HIT Times',
       theme: ThemeData(

@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:the_hit_times_app/database_helper.dart';
+import 'package:the_hit_times_app/features/live/live_screen.dart';
 import 'package:the_hit_times_app/features/live/models/livematch.dart';
-import 'package:the_hit_times_app/models/notification.dart';
+import 'package:the_hit_times_app/features/live/timeline_screen.dart';
+import 'package:the_hit_times_app/models/notification.dart' as NotificationModel;
 import 'package:sqflite/sqflite.dart';
+import 'package:the_hit_times_app/notidisplay.dart';
 import 'package:the_hit_times_app/notify.dart';
 
 
@@ -17,16 +21,35 @@ class NotificationService {
 
   static const LIVE_NOTIFICATION_ID = 0;
 
+  static late GlobalKey<NavigatorState> _navigatorKey;
+
   //  Initialise Flutter Local Notifications Plugin with AndroidInitializationSettings
-  static void initialize() {
+  static void initialize({required GlobalKey<NavigatorState> navigatorKey}) {
     const InitializationSettings initializationSettings =
         InitializationSettings(
       android: AndroidInitializationSettings("@drawable/notification_icon"),
     );
-
-    _notificationsPlugin.initialize(initializationSettings);
+    _navigatorKey = navigatorKey;
+    _notificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
     _requestNotificationPermission();
     _subscribeToTopics();
+  }
+
+  /// When a notification is tapped, this method is called.
+  /// It is responsible for navigating to the respective screen
+  /// based on the notification type.
+  static Future<dynamic> onSelectNotification(payload) async {
+    if (payload != null) {
+      var data = jsonDecode(payload);
+      switch (data["type"]) {
+        case "POST":
+          _navigatorKey.currentState!.push(MaterialPageRoute(builder: (context) => NotificationDisplayWeb(postId: data["id"],)));
+          break;
+        case "LIVE":
+          _navigatorKey.currentState!.pushNamed(TimelineScreen.ROUTE_NAME, arguments: TimelineScreenArguments(id: data["id"]));
+          break;
+      }
+    }
   }
 
   // Request notification permission for android 13 and iOS devices
@@ -61,11 +84,12 @@ class NotificationService {
         print(" hi3 ${message.notification!.body}");
 
         await NotificationDatabase.instance.create(
-          Notification(
+            NotificationModel.Notification(
           imageUrl: message.notification!.android!.imageUrl!,
           title: message.notification!.title!,
           description: message.notification!.body!, 
-          createdTime:  DateTime.now(),)
+          createdTime:  DateTime.now(),
+            postId: message.data["postId"],)
           );
 
     var bigPictureStyleInformation = BigPictureStyleInformation(
@@ -80,11 +104,17 @@ class NotificationService {
           styleInformation: bigPictureStyleInformation),
     );
 
+    var payload = jsonEncode({
+      "id": message.data["postId"],
+      "type": "POST"
+    });
+
     await _notificationsPlugin.show(
       _notificationIDGenerator(),
       message.notification!.title,
       message.notification!.body,
       notificationDetails,
+      payload: payload,
     );
   }
 
@@ -119,11 +149,17 @@ class NotificationService {
           )),
     );
 
+    var payload = jsonEncode({
+      "id": matchInfo.id,
+      "type": "LIVE"
+    });
+
    await _notificationsPlugin.show(
       LIVE_NOTIFICATION_ID,
       "<b>${matchInfo.team1?.getTeamName()} vs ${matchInfo.team2?.getTeamName()}</b>",
       "${matchInfo.team1?.teamScore} vs ${matchInfo.team2?.teamScore}",
       notificationDetails,
+     payload: payload,
     );
   }
 

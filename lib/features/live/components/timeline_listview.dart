@@ -29,7 +29,7 @@ class _TimelineListViewState extends State<TimelineListView> {
 
   // load timeline from the database
   void _loadTimeline() async {
-    String url = "https://a2k-tht-dev.onrender.com/api/live/match/${widget.matchFirebaseId}/timeline";
+    String url = "http://192.168.1.8:8000/api/live/match/${widget.matchFirebaseId}/timeline";
     var response = await CachedHttp.get(url, headers: {
       "Content-Type": "application/json"
     });
