@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/features/live/models/livematch.dart';
 
@@ -60,11 +61,10 @@ class FootballScoreCard extends StatelessWidget {
                               Container(
                                 width: 40,
                                 height: 40,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(team1Logo!),
-                                    fit: BoxFit.scaleDown,
-                                  ),
+                                child: CachedNetworkImage(
+                                  imageUrl: team1Logo!,
+                                  placeholder: (context, url) => CircularProgressIndicator(),
+                                  fit: BoxFit.scaleDown,
                                 ),
                               ),
                               Text(
@@ -145,11 +145,10 @@ class FootballScoreCard extends StatelessWidget {
                               Container(
                                 width: 40,
                                 height: 40,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(team2Logo!),
-                                    fit: BoxFit.scaleDown,
-                                  ),
+                                child: CachedNetworkImage(
+                                  imageUrl: team2Logo!,
+                                  placeholder: (context, url) => CircularProgressIndicator(),
+                                  fit: BoxFit.scaleDown,
                                 ),
                               ),
                               Text(

@@ -19,8 +19,8 @@ class Team {
     "104": "EE",
     "105": "MECH",
     "106": "CIVIL",
-    "107": "CHEMICAL",
-    "108": "BT/FT",
+    "107": "CHE",
+    "108": "BT/FT+AGE",
     "109": "CSE CS",
     "110": "CSE DS",
     "111": "CSE AIML",
@@ -28,19 +28,19 @@ class Team {
   };
 
   final Map _codeToFootballImage = {
-    "100": "assets/images/football/cse.png",
-    "101": "assets/images/football/it.png",
-    "102": "ECE",
-    "103": "AEIE",
-    "104": "assets/images/football/ee.png",
-    "105": "assets/images/football/mech.png",
-    "106": "assets/images/football/civil.png",
-    "107": "assets/images/football/chemical.png",
-    "108": "assets/images/football/bt_ft.png",
-    "109": "CSE CS",
-    "110": "assets/images/football/cse_ds.png",
-    "111": "assets/images/football/aiml.png",
-    "112": "MASTERS",
+    "100": "https://drive.google.com/file/d/1wqZR93KPy9MZ3R0HTxy9BxRCy_fqJadf/view?usp=drive_link", // CSE
+    "101": "https://drive.google.com/file/d/144jjcBnP8zA0FuWyESWXI36Ki0gtWvhE/view?usp=drive_link", // IT
+    "102": "https://drive.google.com/file/d/1HMG_MxHBQBf8eKYo_5mOftu4yFOmLp6M/view?usp=drive_link", // ECE
+    "103": "https://drive.google.com/file/d/11F2Lhy4ldNfDXTPlc6_u7QC7yA-4UBFQ/view?usp=drive_link", // AEIE
+    "104": "https://drive.google.com/file/d/1_ej_C4URenZcLZ5me_GLB8KWJ0_7-ecl/view?usp=drive_link", // EE
+    "105": "https://drive.google.com/file/d/1-F5F-G0py1-iBc_DO-KHVEj8Ab70kO9_/view?usp=drive_link", // MECH
+    "106": "https://drive.google.com/file/d/1E3L7hJaT0jw22aT4VM9m0T6WypWLuV5s/view?usp=drive_link", // CIVIL
+    "107": "https://drive.google.com/file/d/1Y_Ob8lKyX_rGph9RZpU7lJO9NNYVVzTq/view?usp=drive_link", // CHEMICAL
+    "108": "https://drive.google.com/file/d/1ekwOSkFgspwF1N3mPmOtd-ov3g_H6hJV/view?usp=drive_link", // BT/FT+AGE
+    "109": null, // CSE CS
+    "110": "https://drive.google.com/file/d/1bgWdM45WkDYYLh6vQSl1-83KTLeW0Gow/view?usp=drive_link", // CSE DS
+    "111": "https://drive.google.com/file/d/1c4_hDng2y7rCJUjO7iGsXyekzK3KMUkR/view?usp=drive_link", // CSE AIML
+    "112": "https://drive.google.com/file/d/1wLghT_Sf2DPckPFIjVBtuP7lCj0BV7ln/view?usp=drive_link", // MASTERS
   };
 
   // TODO: Not yet implemented
@@ -64,12 +64,19 @@ class Team {
     return _codeToName[teamCode] ?? teamCode;
   }
 
+  /// Converts the Google Drive link to a image link that can be used in CachedNetworkImage
   String? getTeamFootballLogo() {
-    return _codeToFootballImage[teamCode];
+    if (_codeToFootballImage[teamCode] == null) {
+      return "";
+    }
+    String fileId = _codeToFootballImage[teamCode].substring(_codeToFootballImage[teamCode].indexOf('/d/') + 3, _codeToFootballImage[teamCode].indexOf('/view'));
+    String newLink = 'https://drive.google.com/uc?export=view&id=$fileId';
+    return newLink;
   }
 
   // TODO: Not yet implemented
   String? getTeamCricketLogo() {
+    throw UnimplementedError();
     return _codeToCricketImage[teamCode];
   }
 

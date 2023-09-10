@@ -29,7 +29,7 @@ class LiveScreen extends StatelessWidget {
           color: Colors.white, //change your color here
         ),
       ),
-      body: SafeArea(
+     /* body: SafeArea(
         child: FirestoreListView<LiveMatch>(
             emptyBuilder: (context) {
               return Center(
@@ -66,43 +66,90 @@ class LiveScreen extends StatelessWidget {
                 ),
               );
             }),
-      ),
-      /*body: SafeArea(
+      ),*/
+      body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Wrap(
-            runSpacing: 8.0,
-            children: [
-              FootballScoreCard(
-                liveMatch: LiveMatch(
-                  team1: Team(teamCode: "101", teamScore: "11"),
-                  team2: Team(teamCode: "106", teamScore: "10"),
+          child: SingleChildScrollView(
+            child: Wrap(
+              runSpacing: 8.0,
+              children: [
+                FootballScoreCard(
+                  liveMatch: LiveMatch(
+                    team1: Team(teamCode: "100", teamScore: "11"),
+                    team2: Team(teamCode: "101", teamScore: "10"),
+                    isLive: true,
+                    matchDate: DateTime.now(),
+                    matchType: "Football",
+                    matchStatus: "Delayed due to rain.",
+                    id: "",
+                  ),
+                ),
+                FootballScoreCard(
+                    liveMatch: LiveMatch(
+                  team1: Team(teamCode: "102", teamScore: "0"),
+                  team2: Team(teamCode: "103", teamScore: "1"),
                   isLive: true,
                   matchDate: DateTime.now(),
                   matchType: "Football",
-                  matchStatus: "Delayed due to rain.",
-                  id: "S4mzZcHWIZ3iq0QkeTGy",
-                ),
-                onTap: () {
-                  Navigator.of(context).pushNamed(TimelineScreen.ROUTE_NAME,
-                      arguments:
-                          TimelineScreenArguments(id: "S4mzZcHWIZ3iq0QkeTGy"));
-                },
-              ),
-              FootballScoreCard(
-                  liveMatch: LiveMatch(
-                team1: Team(teamCode: "101", teamScore: "0"),
-                team2: Team(teamCode: "100", teamScore: "1"),
-                isLive: true,
-                matchDate: DateTime.now(),
-                matchType: "Football",
-                matchStatus: "Half-Time",
-                id: "NxUp0yyXlQNe0If9dAPO",
-              )),
-            ],
+                  matchStatus: "Half-Time",
+                  id: "",
+                )),
+                FootballScoreCard(
+                    liveMatch: LiveMatch(
+                  team1: Team(teamCode: "104", teamScore: "0"),
+                  team2: Team(teamCode: "105", teamScore: "0"),
+                  isLive: true,
+                  matchDate: DateTime.now(),
+                  matchType: "Football",
+                  matchStatus: "Full-Time",
+                  id: "",
+                )),
+                FootballScoreCard(
+                    liveMatch: LiveMatch(
+                  team1: Team(teamCode: "106", teamScore: "0"),
+                  team2: Team(teamCode: "107", teamScore: "0"),
+                  isLive: true,
+                  matchDate: DateTime.now(),
+                  matchType: "Football",
+                  matchStatus: "Full-Time",
+                  id: "",
+                )),
+                FootballScoreCard(
+                    liveMatch: LiveMatch(
+                  team1: Team(teamCode: "108", teamScore: "0"),
+                  team2: Team(teamCode: "109", teamScore: "0"),
+                  isLive: true,
+                  matchDate: DateTime.now(),
+                  matchType: "Football",
+                  matchStatus: "Full-Time",
+                  id: "",
+                )),
+                FootballScoreCard(
+                    liveMatch: LiveMatch(
+                  team1: Team(teamCode: "110", teamScore: "0"),
+                  team2: Team(teamCode: "111", teamScore: "0"),
+                  isLive: true,
+                  matchDate: DateTime.now(),
+                  matchType: "Football",
+                  matchStatus: "Full-Time",
+                  id: "",
+                )),
+                FootballScoreCard(
+                    liveMatch: LiveMatch(
+                  team1: Team(teamCode: "112", teamScore: "0"),
+                  team2: Team(teamCode: "112", teamScore: "0"),
+                  isLive: true,
+                  matchDate: DateTime.now(),
+                  matchType: "Football",
+                  matchStatus: "Full-Time",
+                  id: "",
+                )),
+              ],
+            ),
           ),
         ),
-      ),*/
+      ),
     );
   }
 
