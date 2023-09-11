@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:the_hit_times_app/features/live/models/livematch.dart';
 import 'package:the_hit_times_app/features/live/repo/live_match_repo.dart';
 
@@ -50,7 +51,19 @@ class MatchScreen extends StatelessWidget {
                 },
               ),
               backgroundColor: Colors.teal,
-              expandedHeight: 220.0,
+              expandedHeight: 200.0,
+              systemOverlayStyle: const SystemUiOverlayStyle(
+                statusBarColor: Colors.transparent,
+                statusBarIconBrightness: Brightness.light,
+              ),
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.share),
+                  onPressed: () {
+                    debugPrint("Share");
+                  },
+                ),
+              ],
               flexibleSpace: FlexibleSpaceBar(
                 background: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                   stream: _liveMatchRepo.getLiveMatchById(matchId!),
@@ -60,7 +73,12 @@ class MatchScreen extends StatelessWidget {
                     }
                     if (snapshot.hasData) {
                       final match = LiveMatch.fromFirestore(snapshot.data!, null);
-                      return FootballScoreCard(liveMatch: match, backgroundColor: Colors.teal);
+                      return Center(
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 40.0),
+                          child: FootballScoreCard(liveMatch: match, backgroundColor: Colors.teal),
+                        ),
+                      );
                     }
                     return const Center(child: CircularProgressIndicator());
                   },
