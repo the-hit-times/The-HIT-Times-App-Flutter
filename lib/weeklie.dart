@@ -46,7 +46,7 @@ class _WeekliesState extends State<Weeklies> {
     if (loading) return "Loading";
     loading = true;
     final String url =
-        "https://a2k-tht-dev.onrender.com/api/posts/weeklies?limit=$limit&page=$page";
+        "https://tht-admin.onrender.com/api/posts/weeklies?limit=$limit&page=$page";
     print("Fetching... $url");
     var res = await CachedHttp.getBody(url,
         headers: {"Accept": "application/json"});
@@ -251,7 +251,7 @@ class _AppXState extends State<AppX> {
     if (loading) return "Loading";
     loading = true;
     final String url =
-        "https://a2k-tht-dev.onrender.com/api/posts/appx?limit=$limit&page=$page";
+        "https://tht-admin.onrender.com/api/posts/appx?limit=$limit&page=$page";
     print("Fetching... $url");
     var res = await CachedHttp.getBody(url,
         headers: {"Accept": "application/json"});
@@ -447,7 +447,7 @@ class _GazetteState extends State<Gazette> {
     if (loading) return "Loading";
     loading = true;
     final String url =
-        "https://a2k-tht-dev.onrender.com/api/posts/gazette?limit=$limit&page=$page";
+        "https://tht-admin.onrender.com/api/posts/gazette?limit=$limit&page=$page";
     print("Fetching... $url");
     var res = await CachedHttp.getBody(url,
         headers: {"Accept": "application/json"});
@@ -653,7 +653,7 @@ class _ReportopolisState extends State<Reportopolis> {
     if (loading) return "Loading";
     loading = true;
     final String url =
-        "https://a2k-tht-dev.onrender.com/api/posts/reportopolis?limit=$limit&page=$page";
+        "https://tht-admin.onrender.com/api/posts/reportopolis?limit=$limit&page=$page";
     print("Fetching... $url");
     var res = await CachedHttp.getBody(url,
         headers: {"Accept": "application/json"});
