@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
-import 'package:the_hit_times_app/features/live/live_screen.dart';
+import 'package:the_hit_times_app/features/live/all_match_screen.dart';
 import 'package:the_hit_times_app/features/live/models/timelinemodel.dart';
 import 'package:the_hit_times_app/features/live/repo/live_match_repo.dart';
 import 'package:the_hit_times_app/util/cache_manager.dart';

@@ -4,7 +4,7 @@ import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/features/live/models/livematch.dart';
 import 'package:the_hit_times_app/features/live/repo/live_match_repo.dart';
-import 'package:the_hit_times_app/features/live/timeline_screen.dart';
+import 'package:the_hit_times_app/features/live/match_screen.dart';
 
 import 'components/football_score_card.dart';
 
@@ -60,8 +60,8 @@ class LiveScreen extends StatelessWidget {
                 child: FootballScoreCard(
                   liveMatch: match,
                   onTap: () {
-                    Navigator.of(context).pushNamed(TimelineScreen.ROUTE_NAME,
-                        arguments: TimelineScreenArguments(id: match.id!));
+                    Navigator.of(context).pushNamed(MatchScreen.ROUTE_NAME,
+                        arguments: MatchScreenArguments(id: match.id!));
                   },
                 ),
               );

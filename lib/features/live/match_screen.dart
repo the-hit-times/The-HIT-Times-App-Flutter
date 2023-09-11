@@ -7,25 +7,25 @@ import 'package:the_hit_times_app/features/live/repo/live_match_repo.dart';
 import 'components/football_score_card.dart';
 import 'components/timeline_listview.dart';
 
-class TimelineScreenArguments {
+class MatchScreenArguments {
   final String id;
 
-  TimelineScreenArguments({required this.id});
+  MatchScreenArguments({required this.id});
 }
 
-class TimelineScreen extends StatelessWidget {
+class MatchScreen extends StatelessWidget {
   static const ROUTE_NAME = "/live-screen/timeline";
 
   String? matchId;
 
-  TimelineScreen({super.key, this.matchId});
+  MatchScreen({super.key, this.matchId});
 
   LiveMatchRepo _liveMatchRepo = LiveMatchRepo();
 
   @override
   Widget build(BuildContext context) {
     final args =
-        ModalRoute.of(context)!.settings.arguments as TimelineScreenArguments?;
+        ModalRoute.of(context)!.settings.arguments as MatchScreenArguments?;
 
     if (matchId == null && args != null) {
       matchId = args.id;
@@ -43,21 +43,6 @@ class TimelineScreen extends StatelessWidget {
           color: Colors.white, //change your color here
         ),
       ),
-      /* body: SafeArea(
-        child: FirestoreListView<LiveMatch>(
-            emptyBuilder: (context) {
-              return Text("No data");
-            },
-            pageSize: 4,
-            query: _liveMatchRepo.getLiveMatches(),
-            itemBuilder: (context, doc) {
-              final match = doc.data();
-              return Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-                child: FootballScoreCard(liveMatch: match),
-              );
-            }),
-      ),*/
       body: SafeArea(
         child: SingleChildScrollView(
           child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(

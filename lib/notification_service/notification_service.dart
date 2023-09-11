@@ -5,9 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:the_hit_times_app/database_helper.dart';
-import 'package:the_hit_times_app/features/live/live_screen.dart';
+import 'package:the_hit_times_app/features/live/all_match_screen.dart';
 import 'package:the_hit_times_app/features/live/models/livematch.dart';
-import 'package:the_hit_times_app/features/live/timeline_screen.dart';
+import 'package:the_hit_times_app/features/live/match_screen.dart';
 import 'package:the_hit_times_app/models/notification.dart' as NotificationModel;
 import 'package:sqflite/sqflite.dart';
 import 'package:the_hit_times_app/notidisplay.dart';
@@ -47,7 +47,7 @@ class NotificationService {
           break;
         case "LIVE":
           _navigatorKey.currentState!.push(
-              MaterialPageRoute(builder: (context) => TimelineScreen( matchId: data["id"],))
+              MaterialPageRoute(builder: (context) => MatchScreen( matchId: data["id"],))
           );
           break;
       }
