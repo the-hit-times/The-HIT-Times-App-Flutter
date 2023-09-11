@@ -34,8 +34,8 @@ class FootballScoreCard extends StatelessWidget {
             child: Stack(
               children: [
                 liveMatch.isLive! ? Positioned(
-                  top: 8,
-                  right: 8,
+                  top: 18,
+                  right: 18,
                   child: Badge(
                     label: Text(
                       "LIVE",

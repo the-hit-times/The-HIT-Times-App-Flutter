@@ -75,7 +75,7 @@ class MatchScreen extends StatelessWidget {
                       final match = LiveMatch.fromFirestore(snapshot.data!, null);
                       return Center(
                         child: Container(
-                          margin: const EdgeInsets.only(top: 40.0),
+                          margin: const EdgeInsets.only(top: 50.0),
                           child: FootballScoreCard(liveMatch: match, backgroundColor: Colors.teal),
                         ),
                       );
