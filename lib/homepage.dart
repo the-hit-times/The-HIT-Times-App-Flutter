@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/bookmark.dart';
 import 'package:the_hit_times_app/contact_us.dart';
-import 'package:the_hit_times_app/features/live/live_screen.dart';
+import 'package:the_hit_times_app/features/live/all_match_screen.dart';
 import 'package:the_hit_times_app/news.dart';
 import 'package:the_hit_times_app/smenu.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

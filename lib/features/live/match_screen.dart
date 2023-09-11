@@ -31,47 +31,73 @@ class MatchScreen extends StatelessWidget {
       matchId = args.id;
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('The HIT Times'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Colors.white, //change your color here
-        ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-            stream: _liveMatchRepo.getLiveMatchById(matchId!),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Text("Error: ${snapshot.error}");
-              }
-              if (snapshot.hasData) {
-                final match = LiveMatch.fromFirestore(snapshot.data!, null);
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FootballScoreCard(liveMatch: match),
-                    const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text("TIMELINE",
-                          style: TextStyle(fontSize: 14, color: Colors.white)),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        body: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: <Widget>[
+            SliverAppBar(
+              floating: true,
+              pinned: true,
+              snap: false,
+              title: Text("The Hit Times"),
+              centerTitle: true,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              backgroundColor: Colors.teal,
+              expandedHeight: 220.0,
+              flexibleSpace: FlexibleSpaceBar(
+                background: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                  stream: _liveMatchRepo.getLiveMatchById(matchId!),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("Error: ${snapshot.error}");
+                    }
+                    if (snapshot.hasData) {
+                      final match = LiveMatch.fromFirestore(snapshot.data!, null);
+                      return FootballScoreCard(liveMatch: match, backgroundColor: Colors.teal);
+                    }
+                    return const Center(child: CircularProgressIndicator());
+                  },
+                ),
+              ),
+              bottom: const PreferredSize(
+                preferredSize: Size.fromHeight(60.0),
+                child: TabBar(
+                  indicatorWeight: 3.0,
+                  indicatorColor: Colors.white,
+                  tabs: [
+                    Tab(
+                      child: Text(
+                        "Timeline",
+                      ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-                      child: TimelineListView(matchFirebaseId: matchId!),
+                    Tab(
+                      child: Text(
+                        "Lineup",
+                      ),
                     ),
                   ],
-                );
-              }
-              return const Center(child: CircularProgressIndicator());
-            },
-          ),
+                ),
+              ),
+            ),
+            SliverFillRemaining(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                child: TabBarView(
+                  children: [
+                    TimelineListView(matchFirebaseId: matchId!),
+                    Center(child: Text("Lineup", style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Colors.white),)),
+                  ],
+                ),
+              ),
+            ),
+          ]
         ),
       ),
     );

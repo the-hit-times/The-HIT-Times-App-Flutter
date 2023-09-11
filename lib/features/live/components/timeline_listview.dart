@@ -41,6 +41,7 @@ class _TimelineListViewState extends State<TimelineListView> {
   Widget build(BuildContext context) {
     return FirestoreListView<Timeline>(
       shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         emptyBuilder: (context) {
           return Center(
             child: Column(

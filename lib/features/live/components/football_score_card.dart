@@ -5,7 +5,9 @@ import 'package:the_hit_times_app/features/live/models/livematch.dart';
 class FootballScoreCard extends StatelessWidget {
   final LiveMatch liveMatch;
   final Function? onTap;
-  const FootballScoreCard({super.key, required this.liveMatch, this.onTap});
+  final Color backgroundColor;
+  final double height;
+  const FootballScoreCard({super.key, required this.liveMatch, this.onTap, this.backgroundColor = Colors.black, this.height = 150.0});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,7 @@ class FootballScoreCard extends StatelessWidget {
     final team2Logo = liveMatch.team2?.getTeamFootballLogo();
 
     return Material(
-      color: Colors.black,
+      color: backgroundColor,
       borderRadius: BorderRadius.circular(5.0),
       child: Ink(
         child: InkWell(
@@ -28,7 +30,7 @@ class FootballScoreCard extends StatelessWidget {
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(5)),
             ),
-            height: 150,
+            height: height,
             child: Stack(
               children: [
                 liveMatch.isLive! ? Positioned(
