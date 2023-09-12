@@ -23,7 +23,7 @@ class TimelineListView extends StatefulWidget {
   State<TimelineListView> createState() => _TimelineListViewState();
 }
 
-class _TimelineListViewState extends State<TimelineListView> {
+class _TimelineListViewState extends State<TimelineListView>  with AutomaticKeepAliveClientMixin {
 
   final LiveMatchRepo _liveMatchRepo = LiveMatchRepo();
 
@@ -105,4 +105,7 @@ class _TimelineListViewState extends State<TimelineListView> {
           );
         });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

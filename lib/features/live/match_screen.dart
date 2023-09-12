@@ -36,55 +36,53 @@ class MatchScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        body: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: <Widget>[
-            SliverAppBar(
-              floating: true,
-              pinned: true,
-              snap: false,
-              title: Text("The Hit Times"),
-              centerTitle: true,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              backgroundColor: Color.fromARGB(255, 7, 95, 115),
-              expandedHeight: 200.0,
-              systemOverlayStyle: const SystemUiOverlayStyle(
-                statusBarColor: Colors.transparent,
-                statusBarIconBrightness: Brightness.light,
-              ),
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.share),
-                  onPressed: () {
-                    debugPrint("Share");
-                  },
-                ),
-              ],
-              flexibleSpace: FlexibleSpaceBar(
-                background: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                  stream: _liveMatchRepo.getLiveMatchById(matchId!),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Text("Error: ${snapshot.error}");
-                    }
-                    if (snapshot.hasData) {
-                      final match = LiveMatch.fromFirestore(snapshot.data!, null);
-                      return Center(
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 50.0),
-                          child: FootballScoreCard(liveMatch: match, backgroundColor: Color.fromARGB(255, 7, 95, 115)),
+        body:
+
+        StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+          stream: _liveMatchRepo.getLiveMatchById(matchId!),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text("Error: ${snapshot.error}");
+            }
+            if (snapshot.hasData) {
+              final match = LiveMatch.fromFirestore(snapshot.data!, null);
+              return CustomScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    slivers: <Widget>[
+                      SliverAppBar(
+                        floating: true,
+                        pinned: true,
+                        snap: false,
+                        title: Text("The Hit Times"),
+                        centerTitle: true,
+                        leading: IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         ),
-                      );
-                    }
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                ),
-                /*background: Center(
+                        backgroundColor: Color.fromARGB(255, 7, 95, 115),
+                        expandedHeight: 200.0,
+                        systemOverlayStyle: const SystemUiOverlayStyle(
+                          statusBarColor: Colors.transparent,
+                          statusBarIconBrightness: Brightness.light,
+                        ),
+                        actions: [
+                          IconButton(
+                            icon: Icon(Icons.share),
+                            onPressed: () {
+                              debugPrint("Share");
+                            },
+                          ),
+                        ],
+                        flexibleSpace: FlexibleSpaceBar(
+                          background: Center(
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 50.0),
+                              child: FootballScoreCard(liveMatch: match, backgroundColor: Color.fromARGB(255, 7, 95, 115)),
+                            ),
+                          ),
+                          /*background: Center(
                   child: Container(
                     margin: const EdgeInsets.only(top: 50.0),
                     child: FootballScoreCard(liveMatch: LiveMatch(
@@ -104,40 +102,45 @@ class MatchScreen extends StatelessWidget {
                     ), backgroundColor: Color.fromARGB(255, 7, 95, 115)),
                   ),
                 ),*/
-              ),
-              bottom: const PreferredSize(
-                preferredSize: Size.fromHeight(60.0),
-                child: TabBar(
-                  indicatorWeight: 3.0,
-                  indicatorColor: Colors.white,
-                  tabs: [
-                    Tab(
-                      child: Text(
-                        "Timeline",
+                        ),
+                        bottom: const PreferredSize(
+                          preferredSize: Size.fromHeight(60.0),
+                          child: TabBar(
+                            indicatorWeight: 3.0,
+                            indicatorColor: Colors.white,
+                            tabs: [
+                              Tab(
+                                child: Text(
+                                  "Timeline",
+                                ),
+                              ),
+                              Tab(
+                                child: Text(
+                                  "Team",
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                    Tab(
-                      child: Text(
-                        "Team",
+                      SliverFillRemaining(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                          child: TabBarView(
+                            children: [
+                              TimelineListView(matchFirebaseId: matchId!),
+                              TeamList(team1Code: match.team1!.teamCode!, team2Code: match.team2!.teamCode!)
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SliverFillRemaining(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                child: TabBarView(
-                  children: [
-                    TimelineListView(matchFirebaseId: matchId!),
-                    TeamList(team1Code: "100", team2Code: "101")
-                  ],
-                ),
-              ),
-            ),
-          ]
-        ),
+                    ]
+                );
+
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
+        )
       ),
     );
   }
