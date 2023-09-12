@@ -50,7 +50,7 @@ class MatchScreen extends StatelessWidget {
                   Navigator.pop(context);
                 },
               ),
-              backgroundColor: Colors.teal,
+              backgroundColor: Color.fromARGB(255, 7, 95, 115),
               expandedHeight: 200.0,
               systemOverlayStyle: const SystemUiOverlayStyle(
                 statusBarColor: Colors.transparent,
@@ -76,13 +76,33 @@ class MatchScreen extends StatelessWidget {
                       return Center(
                         child: Container(
                           margin: const EdgeInsets.only(top: 50.0),
-                          child: FootballScoreCard(liveMatch: match, backgroundColor: Colors.teal),
+                          child: FootballScoreCard(liveMatch: match, backgroundColor: Color.fromARGB(255, 7, 95, 115)),
                         ),
                       );
                     }
                     return const Center(child: CircularProgressIndicator());
                   },
                 ),
+                /*background: Center(
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 50.0),
+                    child: FootballScoreCard(liveMatch: LiveMatch(
+                      isLive: false,
+                      team1: Team(
+                        teamScore: "1",
+                        teamCode: "111",
+                      ),
+                      team2: Team(
+                        teamScore: "2",
+                        teamCode: "112",
+                      ),
+                      matchStatus: "Half Time",
+                      matchDate: DateTime.now(),
+                      matchType: "Test",
+                      id: "1",
+                    ), backgroundColor: Colors.teal),
+                  ),
+                ),*/
               ),
               bottom: const PreferredSize(
                 preferredSize: Size.fromHeight(60.0),

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:the_hit_times_app/features/live/all_match_screen.dart';
+import 'package:the_hit_times_app/features/live/match_history.dart';
 import 'package:the_hit_times_app/homepage.dart';
 
 // Firebase Imports
@@ -98,7 +98,7 @@ class MyApp extends StatelessWidget {
       ),
       home: MainPage(),
       routes: {
-        LiveScreen.ROUTE_NAME: (context) => LiveScreen(),
+        MatchHistoryScreen.ROUTE_NAME: (context) => MatchHistoryScreen(),
         MatchScreen.ROUTE_NAME: (context) => MatchScreen(),
       },
     );

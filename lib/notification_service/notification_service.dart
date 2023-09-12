@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:the_hit_times_app/database_helper.dart';
-import 'package:the_hit_times_app/features/live/all_match_screen.dart';
+import 'package:the_hit_times_app/features/live/match_history.dart';
 import 'package:the_hit_times_app/features/live/models/livematch.dart';
 import 'package:the_hit_times_app/features/live/match_screen.dart';
 import 'package:the_hit_times_app/models/notification.dart' as NotificationModel;
@@ -17,6 +17,9 @@ import 'package:the_hit_times_app/notify.dart';
 class NotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
+
+  FlutterLocalNotificationsPlugin get notificationsPlugin => _notificationsPlugin;
+
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   static const LIVE_NOTIFICATION_ID = 0;
@@ -24,7 +27,11 @@ class NotificationService {
   static late GlobalKey<NavigatorState> _navigatorKey;
 
   //  Initialise Flutter Local Notifications Plugin with AndroidInitializationSettings
-  static void initialize({required GlobalKey<NavigatorState> navigatorKey}) {
+  static void initialize({required GlobalKey<NavigatorState> navigatorKey}) async {
+
+    final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+        await _notificationsPlugin.getNotificationAppLaunchDetails();
+
     const InitializationSettings initializationSettings =
         InitializationSettings(
       android: AndroidInitializationSettings("@drawable/notification_icon"),

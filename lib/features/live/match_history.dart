@@ -8,10 +8,10 @@ import 'package:the_hit_times_app/features/live/match_screen.dart';
 
 import 'components/football_score_card.dart';
 
-class LiveScreen extends StatelessWidget {
+class MatchHistoryScreen extends StatelessWidget {
   static const ROUTE_NAME = "/live-screen";
 
-  LiveScreen({super.key});
+  MatchHistoryScreen({super.key});
 
   LiveMatchRepo _liveMatchRepo = LiveMatchRepo();
 
