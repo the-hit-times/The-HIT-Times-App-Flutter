@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:the_hit_times_app/features/live/components/team_list.dart';
 import 'package:the_hit_times_app/features/live/models/livematch.dart';
 import 'package:the_hit_times_app/features/live/repo/live_match_repo.dart';
 
@@ -100,7 +101,7 @@ class MatchScreen extends StatelessWidget {
                       matchDate: DateTime.now(),
                       matchType: "Test",
                       id: "1",
-                    ), backgroundColor: Colors.teal),
+                    ), backgroundColor: Color.fromARGB(255, 7, 95, 115)),
                   ),
                 ),*/
               ),
@@ -117,7 +118,7 @@ class MatchScreen extends StatelessWidget {
                     ),
                     Tab(
                       child: Text(
-                        "Lineup",
+                        "Team",
                       ),
                     ),
                   ],
@@ -130,7 +131,7 @@ class MatchScreen extends StatelessWidget {
                 child: TabBarView(
                   children: [
                     TimelineListView(matchFirebaseId: matchId!),
-                    Center(child: Text("Lineup", style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Colors.white),)),
+                    TeamList(team1Code: "100", team2Code: "101")
                   ],
                 ),
               ),
