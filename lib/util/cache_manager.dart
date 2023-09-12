@@ -56,14 +56,16 @@ class CachedHttp {
     }
 
     // Try to load from cache for specific Url.
-    var file = await DefaultCacheManager().getSingleFile(url);
-    if (await file.exists()) {
+    var file = await DefaultCacheManager().getFileFromCache(url);
+    if (file != null) {
       return CachedResponse(
           responseStatus: CACHED_RESPONSE,
-          responseBody: jsonDecode(await file.readAsString()),
+          responseBody: jsonDecode(await file.file.readAsString()),
           error: false,
           errorMessage: null
       );
+    } else {
+      print("File not found: $url");
     }
 
     // Return an empty response if there is no cache available.
