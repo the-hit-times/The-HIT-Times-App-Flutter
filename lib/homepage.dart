@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/bookmark.dart';
 import 'package:the_hit_times_app/contact_us.dart';
-import 'package:the_hit_times_app/features/live/all_match_screen.dart';
+import 'package:the_hit_times_app/features/live/match_history.dart';
 import 'package:the_hit_times_app/news.dart';
 import 'package:the_hit_times_app/smenu.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -99,7 +99,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             tooltip: 'Live',
             onPressed: () async {
               Navigator.of(context)
-                  .pushNamed(LiveScreen.ROUTE_NAME)
+                  .pushNamed(MatchHistoryScreen.ROUTE_NAME)
                   .then((value) => {setState(() {})});
             },
           ),
