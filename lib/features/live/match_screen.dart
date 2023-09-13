@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:the_hit_times_app/features/live/components/team_list.dart';
 import 'package:the_hit_times_app/features/live/models/livematch.dart';
 import 'package:the_hit_times_app/features/live/repo/live_match_repo.dart';
@@ -19,10 +24,29 @@ class MatchScreen extends StatelessWidget {
   static const ROUTE_NAME = "/live-screen/timeline";
 
   String? matchId;
+  ScreenshotController screenshotController = ScreenshotController();
 
   MatchScreen({super.key, this.matchId});
 
   LiveMatchRepo _liveMatchRepo = LiveMatchRepo();
+
+  void handleShareButton() async {
+    screenshotController.capture().then((Uint8List? value) async {
+      // make a XFile from the bytes
+      final path = await storeFileTemporarily(value!);
+      await Share.shareXFiles(
+        [XFile(path)], text: "Get the latest updates on The HIT Times App. Download now: https://play.google.com/store/apps/details?id=com.thehittimes.tht&hl=en-IN",
+      );
+    });
+  }
+
+  Future<String> storeFileTemporarily(Uint8List image) async {
+    final tempDir = await getTemporaryDirectory();
+    final path = '${tempDir.path}/test.png';
+    final file = await File(path).create();
+    file.writeAsBytesSync(image);
+    return path;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,16 +94,16 @@ class MatchScreen extends StatelessWidget {
                         actions: [
                           IconButton(
                             icon: Icon(Icons.share),
-                            onPressed: () {
-                              debugPrint("Share");
-                            },
+                            onPressed: handleShareButton,
                           ),
                         ],
                         flexibleSpace: FlexibleSpaceBar(
                           background: Center(
                             child: Container(
                               margin: const EdgeInsets.only(top: 50.0),
-                              child: FootballScoreCard(liveMatch: match, backgroundColor: Color.fromARGB(255, 7, 95, 115)),
+                              child: Screenshot(
+                                  controller: screenshotController,
+                                  child: FootballScoreCard(liveMatch: match, backgroundColor: Color.fromARGB(255, 7, 95, 115))),
                             ),
                           ),
                           /*background: Center(
