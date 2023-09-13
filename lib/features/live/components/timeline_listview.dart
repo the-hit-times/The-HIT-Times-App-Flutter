@@ -54,7 +54,7 @@ class _TimelineListViewState extends State<TimelineListView>  with AutomaticKeep
                   height: 8.0,
                 ),
                 Text(
-                  "No Timeline Matches",
+                  "No Timeline Available",
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Colors.white,
                   ),

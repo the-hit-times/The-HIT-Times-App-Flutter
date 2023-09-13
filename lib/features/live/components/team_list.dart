@@ -14,7 +14,7 @@ class TeamList extends StatefulWidget {
 }
 
 class _TeamListState extends State<TeamList> {
-  static const String BASE_URL = "http://192.168.1.3:8000/api/team/";
+  static const String BASE_URL = "https://tht-test-portal.onrender.com/api/team/";
 
   bool isLoading = true;
   bool isError = false;
@@ -36,7 +36,7 @@ class _TeamListState extends State<TeamList> {
           headers: {"Content-Type": "application/json"});
 
       if (team1Response.error ||
-          team2Response.error) {
+          team2Response.error || team1Response.responseBody['data'] == null || team2Response.responseBody['data'] == null) {
         setState(() {
           isError = true;
           isLoading = false;
