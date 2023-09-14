@@ -25,21 +25,15 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   var notificationType = message.data["type"];
+  print("Notification Type: $notificationType");
+  NotificationService.initialize(
+      navigatorKey: navigatorKey
+  );
   if (notificationType == "LIVE") {
-    NotificationService.initialize(
-        navigatorKey: navigatorKey
-    );
     NotificationService.liveNotification(message);
-  } else {
-    await NotificationDatabase.instance.create(
-        NotificationModel.Notification(
-            imageUrl: message.notification!.android!.imageUrl!,
-            title: message.notification!.title!,
-            description: message.notification!.body!,
-            createdTime:  DateTime.now(),
-            postId: message.data["id"]!
-        )
-    );
+  } else if (notificationType == "POST") {
+    print("creating a notification database" );
+    NotificationService.storeNotificationInDatabase(message); // Store notification in database
   }
 }
 

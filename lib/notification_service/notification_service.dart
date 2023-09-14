@@ -92,14 +92,7 @@ class NotificationService {
         print(" hi2 ${message.notification!.title}");
         print(" hi3 ${message.notification!.body}");
 
-        await NotificationDatabase.instance.create(
-            NotificationModel.Notification(
-          imageUrl: message.notification!.android!.imageUrl!,
-          title: message.notification!.title!,
-          description: message.notification!.body!, 
-          createdTime:  DateTime.now(),
-            postId: message.data["postId"],)
-          );
+        storeNotificationInDatabase(message);
 
     var bigPictureStyleInformation = BigPictureStyleInformation(
         ByteArrayAndroidBitmap.fromBase64String(
@@ -124,6 +117,17 @@ class NotificationService {
       message.notification!.body,
       notificationDetails,
       payload: payload,
+    );
+  }
+
+  static void storeNotificationInDatabase(RemoteMessage message) async {
+    await NotificationDatabase.instance.create(
+        NotificationModel.Notification(
+          imageUrl: message.notification!.android!.imageUrl!,
+          title: message.notification!.title!,
+          description: message.notification!.body!,
+          createdTime:  DateTime.now(),
+          postId: message.data["postId"],)
     );
   }
 

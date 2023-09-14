@@ -32,8 +32,10 @@ class MatchScreen extends StatelessWidget {
 
   void handleShareButton() async {
     screenshotController.capture().then((Uint8List? value) async {
+      if (value == null) return;
+
       // make a XFile from the bytes
-      final path = await storeFileTemporarily(value!);
+      final path = await storeFileTemporarily(value);
       await Share.shareXFiles(
         [XFile(path)], text: "Get the latest updates on The HIT Times App. Download now: https://play.google.com/store/apps/details?id=com.thehittimes.tht&hl=en-IN",
       );
@@ -42,7 +44,7 @@ class MatchScreen extends StatelessWidget {
 
   Future<String> storeFileTemporarily(Uint8List image) async {
     final tempDir = await getTemporaryDirectory();
-    final path = '${tempDir.path}/test.png';
+    final path = '${tempDir.path}/score_card.png';
     final file = await File(path).create();
     file.writeAsBytesSync(image);
     return path;
@@ -60,9 +62,7 @@ class MatchScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        body:
-
-        StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
           stream: _liveMatchRepo.getLiveMatchById(matchId!),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -106,26 +106,6 @@ class MatchScreen extends StatelessWidget {
                                   child: FootballScoreCard(liveMatch: match, backgroundColor: Color.fromARGB(255, 7, 95, 115))),
                             ),
                           ),
-                          /*background: Center(
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 50.0),
-                    child: FootballScoreCard(liveMatch: LiveMatch(
-                      isLive: false,
-                      team1: Team(
-                        teamScore: "1",
-                        teamCode: "111",
-                      ),
-                      team2: Team(
-                        teamScore: "2",
-                        teamCode: "112",
-                      ),
-                      matchStatus: "Half Time",
-                      matchDate: DateTime.now(),
-                      matchType: "Test",
-                      id: "1",
-                    ), backgroundColor: Color.fromARGB(255, 7, 95, 115)),
-                  ),
-                ),*/
                         ),
                         bottom: const PreferredSize(
                           preferredSize: Size.fromHeight(60.0),
