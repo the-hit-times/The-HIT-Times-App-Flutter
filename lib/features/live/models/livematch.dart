@@ -37,7 +37,7 @@ class Team {
     "106": "https://drive.google.com/file/d/1E3L7hJaT0jw22aT4VM9m0T6WypWLuV5s/view?usp=drive_link", // CIVIL
     "107": "https://drive.google.com/file/d/1Y_Ob8lKyX_rGph9RZpU7lJO9NNYVVzTq/view?usp=drive_link", // CHEMICAL
     "108": "https://drive.google.com/file/d/1ekwOSkFgspwF1N3mPmOtd-ov3g_H6hJV/view?usp=drive_link", // BT/FT+AGE
-    "109": null, // CSE CS
+    "109": "https://drive.google.com/file/d/1RCJN4tjXR9e4oMYosU56CSiReK4gIi60/view?usp=drive_link", // CSE CS
     "110": "https://drive.google.com/file/d/1bgWdM45WkDYYLh6vQSl1-83KTLeW0Gow/view?usp=drive_link", // CSE DS
     "111": "https://drive.google.com/file/d/1c4_hDng2y7rCJUjO7iGsXyekzK3KMUkR/view?usp=drive_link", // CSE AIML
     "112": "https://drive.google.com/file/d/1wLghT_Sf2DPckPFIjVBtuP7lCj0BV7ln/view?usp=drive_link", // MASTERS
@@ -45,19 +45,19 @@ class Team {
 
   // TODO: Not yet implemented
   final Map _codeToCricketImage = {
-    "100": "assets/images/football/cse.png",
-    "101": "assets/images/football/it.jpg",
-    "102": "assets/images/football/it.jpg",
-    "103": "AEIE",
-    "104": "assets/images/football/ee.png",
-    "105": "MECH",
-    "106": "assets/images/football/civil.png",
-    "107": "assets/images/football/chemical.png",
-    "108": "assets/images/football/bt_ft.png",
-    "109": "CSE CS",
-    "110": "CSE DS",
-    "111": "assets/images/football/aiml.png",
-    "112": "MASTERS",
+    "100": null, // CSE
+    "101": null, // IT
+    "102": null, // ECE
+    "103": null, // AEIE
+    "104": null, // EE
+    "105": null, // MECH
+    "106": null, // CIVIL
+    "107": null, // CHEMICAL
+    "108": null, // BT/FT+AGE
+    "109": null, // CSE CS
+    "110": null, // CSE DS
+    "111": null, // CSE AIML
+    "112": null, // MASTERS
   };
 
   String getTeamName() {

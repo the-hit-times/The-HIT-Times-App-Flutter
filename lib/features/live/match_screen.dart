@@ -77,7 +77,7 @@ class MatchScreen extends StatelessWidget {
                         floating: true,
                         pinned: true,
                         snap: false,
-                        title: Text("The Hit Times"),
+                        title: Text("The HIT Times"),
                         centerTitle: true,
                         leading: IconButton(
                           icon: Icon(Icons.arrow_back),
