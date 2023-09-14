@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/bookmark.dart';
 import 'package:the_hit_times_app/contact_us.dart';
@@ -8,6 +10,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:the_hit_times_app/notification_service/notification_service.dart';
 // import 'notification.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:http/http.dart' as http;
 
 
 class MainPage extends StatefulWidget {
@@ -19,6 +22,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   // FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   int _currentIndex = 1;
+  int matchCount = 0;
 
   BottomNavigationBarType _type = BottomNavigationBarType.shifting;
   late PageController _pageController;
@@ -27,7 +31,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
-
+    loadLiveMatchCount();
   }
 
   @override
@@ -45,6 +49,17 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   void _rebuild() {
     setState(() {
       // Rebuild in order to animate views.
+    });
+  }
+
+  void loadLiveMatchCount() async {
+    print("Loading live match count");
+    String url = "http://192.168.1.3:8000/api/live/count";
+    var response = await http.get(Uri.parse(url), headers: {"Accept": "application/json"});
+    var count = jsonDecode(response.body)["count"];
+    print("Live match count: $count");
+    setState(() {
+      matchCount = count;
     });
   }
 
@@ -95,7 +110,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         actions: [
           IconButton(
             padding: EdgeInsets.zero,
-            icon: const Icon(Icons.live_tv),
+            icon: matchCount > 0 ?  Badge(
+              label: Text("$matchCount"),
+              child: Icon(Icons.live_tv),
+            ): Icon(Icons.live_tv),
             tooltip: 'Live',
             onPressed: () async {
               Navigator.of(context)
