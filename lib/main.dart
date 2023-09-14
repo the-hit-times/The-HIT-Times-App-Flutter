@@ -31,7 +31,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   );
   if (notificationType == "LIVE") {
     NotificationService.liveNotification(message);
-  } else if (notificationType == "POST") {
+  } else {
     print("creating a notification database" );
     NotificationService.storeNotificationInDatabase(message); // Store notification in database
   }
@@ -130,12 +130,13 @@ class _MyAppState extends State<MyApp> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.selectedNotificationPayload != null) {
         var data = jsonDecode(widget.selectedNotificationPayload!);
+        print("Data: $data");
         switch (data["type"]) {
           case "POST":
-            navigatorKey.currentState!.push(MaterialPageRoute(builder: (context) => NotificationDisplayWeb(postId: data["id"],)));
+            navigatorKey.currentState?.push(MaterialPageRoute(builder: (context) => NotificationDisplayWeb(postId: data["id"],)));
             break;
           case "LIVE":
-            navigatorKey.currentState!.push(
+            navigatorKey.currentState?.push(
                 MaterialPageRoute(builder: (context) => MatchScreen( matchId: data["id"],))
             );
             break;

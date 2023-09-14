@@ -59,6 +59,23 @@ class MatchScreen extends StatelessWidget {
       matchId = args.id;
     }
 
+    // This is a edge case when app loads from live screen from the match id
+    // It should never happen
+    if (matchId == null && args == null) {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text("The HIT Times"),
+            centerTitle: true,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+          body: Center(child: CircularProgressIndicator()));
+    }
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
