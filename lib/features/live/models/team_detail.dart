@@ -39,6 +39,20 @@ class FootballTeam {
     );
   }
 
+  String? getTeamLogo() {
+    if (teamLogo.contains('https://drive.google.com/file')) {
+      return _getImageUrlFromDrive(teamLogo);
+    }
+    return teamLogo;
+  }
+
+
+  String _getImageUrlFromDrive(String driveImageLink) {
+    String fileId = driveImageLink.substring(driveImageLink.indexOf('/d/') + 3, driveImageLink.indexOf('/view'));
+    String newLink = 'https://drive.google.com/uc?export=view&id=$fileId';
+    return newLink;
+  }
+
 }
 
 class PlayerDetails {
@@ -58,6 +72,19 @@ class PlayerDetails {
       playerDescription: json[FIELD_PLAYER_DESCRIPTION],
       playerImage: json[FIELD_PLAYER_IMAGE]
     );
+  }
+
+  String getPlayerImage() {
+    if (playerImage.contains('https://drive.google.com/file')) {
+      return _getImageUrlFromDrive(playerImage);
+    }
+    return playerImage;
+  }
+
+  String _getImageUrlFromDrive(String driveImageLink) {
+    String fileId = driveImageLink.substring(driveImageLink.indexOf('/d/') + 3, driveImageLink.indexOf('/view'));
+    String newLink = 'https://drive.google.com/uc?export=view&id=$fileId';
+    return newLink;
   }
 
 }

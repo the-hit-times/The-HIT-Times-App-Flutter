@@ -133,7 +133,7 @@ class _TeamListState extends State<TeamList> {
                                         borderRadius: BorderRadius.circular(50),
                                         child: CachedNetworkImage(
                                           imageUrl: team1Details
-                                              .football.players[index].playerImage,
+                                              .football.players[index].getPlayerImage(),
                                           placeholder: (context, url) =>
                                               const CircularProgressIndicator(),
                                           errorWidget: (context, url, error) =>
@@ -251,7 +251,7 @@ class _TeamListState extends State<TeamList> {
                                         borderRadius: BorderRadius.circular(50),
                                         child: CachedNetworkImage(
                                           imageUrl: team2Details
-                                              .football.players[index].playerImage,
+                                              .football.players[index].getPlayerImage(),
                                           placeholder: (context, url) =>
                                           const CircularProgressIndicator(),
                                           errorWidget: (context, url, error) =>
