@@ -266,7 +266,7 @@ class _NotificationDisplayWebState extends State<NotificationDisplayWeb> {
 
   // load timeline from the database
   void _loadTimeline() async {
-    String url = "https://tht-test-portal.onrender.com/api/post/${widget.postId}";
+    String url = "https://tht-admin.onrender.com/api/post/${widget.postId}";
     var response =
         await CachedHttp.get(url, headers: {"Accept": "application/json"});
 

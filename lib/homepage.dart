@@ -54,7 +54,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   void loadLiveMatchCount() async {
     print("Loading live match count");
-    String url = "https://tht-test-portal.onrender.com/api/live/count";
+    String url = "https://tht-admin.onrender.com/api/live/count";
     var response = await http.get(Uri.parse(url), headers: {"Accept": "application/json"});
     var count = jsonDecode(response.body)["count"];
     print("Live match count: $count");

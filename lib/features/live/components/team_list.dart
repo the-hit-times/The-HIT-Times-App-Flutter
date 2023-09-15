@@ -14,7 +14,7 @@ class TeamList extends StatefulWidget {
 }
 
 class _TeamListState extends State<TeamList> {
-  static const String BASE_URL = "https://tht-test-portal.onrender.com/api/team/";
+  static const String BASE_URL = "https://tht-admin.onrender.com/api/team/";
 
   bool isLoading = true;
   bool isError = false;
