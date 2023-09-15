@@ -30,6 +30,8 @@ class MatchScreen extends StatelessWidget {
 
   LiveMatchRepo _liveMatchRepo = LiveMatchRepo();
 
+  /// Handles the share button on the app bar
+  /// It takes a screenshot of the score card and shares it.
   void handleShareButton() async {
     screenshotController.capture().then((Uint8List? value) async {
       if (value == null) return;
@@ -37,11 +39,14 @@ class MatchScreen extends StatelessWidget {
       // make a XFile from the bytes
       final path = await storeFileTemporarily(value);
       await Share.shareXFiles(
-        [XFile(path)], text: "Get the latest updates on The HIT Times App. Download now: https://play.google.com/store/apps/details?id=com.thehittimes.tht&hl=en-IN",
+        [XFile(path)], text: """THT Khabri: Know about the buzz around campus, as it happens with light speed.
+Get the latest updates, accurate and earliest... delivered specially for you.
+Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&hl=en-IN""".trim(),
       );
     });
   }
-
+  /// store the image generate from the ScreenShotController
+  /// in a temporary directory.
   Future<String> storeFileTemporarily(Uint8List image) async {
     final tempDir = await getTemporaryDirectory();
     final path = '${tempDir.path}/score_card.png';
