@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/features/live/models/livematch.dart';
@@ -8,12 +9,38 @@ import 'package:the_hit_times_app/features/live/match_screen.dart';
 
 import 'components/football_score_card.dart';
 
-class MatchHistoryScreen extends StatelessWidget {
+class MatchHistoryScreen extends StatefulWidget {
   static const ROUTE_NAME = "/live-screen";
 
-  MatchHistoryScreen({super.key});
+  MatchHistoryScreen({Key? key}) : super(key: key);
 
-  LiveMatchRepo _liveMatchRepo = LiveMatchRepo();
+  @override
+  State<MatchHistoryScreen> createState() => _MatchHistoryScreenState();
+}
+
+class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
+
+  final LiveMatchRepo _liveMatchRepo = LiveMatchRepo();
+  bool _isOffline = false;
+
+  void _isDeviceOffline() async {
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+       setState(() {
+          _isOffline = true;
+       });
+    } else {
+      setState(() {
+        _isOffline = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    _isDeviceOffline();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +57,39 @@ class MatchHistoryScreen extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: FirestoreListView<LiveMatch>(
+        child: _isOffline ? Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const AnimatedIconWidget(),
+              const SizedBox(
+                height: 8.0,
+              ),
+              Text(
+                "No Internet Connection",
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              FilledButton.icon(
+                  onPressed: _isDeviceOffline,
+                  icon: const Icon(Icons.refresh),
+                  label: const Text("Retry")
+              )
+            ],
+          ),
+        ) : FirestoreListView<LiveMatch>(
             emptyBuilder: (context) {
               return Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    AnimatedIconWidget(),
+                    const AnimatedIconWidget(),
                     const SizedBox(
                       height: 8.0,
                     ),
@@ -214,7 +266,7 @@ class _AnimatedIconWidgetState extends State<AnimatedIconWidget> {
         icons[index],
         key: ValueKey<int>(index),
         size: 60.0,
-        color: Colors.white,
+        color: Colors.grey,
       ),
       transitionBuilder: (child, animation) {
         return ScaleTransition(
