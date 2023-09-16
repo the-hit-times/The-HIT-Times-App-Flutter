@@ -13,6 +13,7 @@ import 'package:the_hit_times_app/features/live/repo/live_match_repo.dart';
 
 import 'components/football_score_card.dart';
 import 'components/timeline_listview.dart';
+import 'match_history.dart';
 
 class MatchScreenArguments {
   final String id;
@@ -88,7 +89,24 @@ Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&h
           stream: _liveMatchRepo.getLiveMatchById(matchId!),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return Text("Error: ${snapshot.error}");
+              return Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const AnimatedIconWidget(),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    Text(
+                      "Failed to load live match",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              );
             }
             if (snapshot.hasData) {
               final match = LiveMatch.fromFirestore(snapshot.data!, null);

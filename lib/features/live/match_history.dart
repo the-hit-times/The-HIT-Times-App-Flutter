@@ -117,7 +117,28 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
                   },
                 ),
               );
-            }),
+            },
+            errorBuilder: (context, error, stackTrace) {
+              return Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const AnimatedIconWidget(),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    Text(
+                      "Failed to load live matches",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+            ),
       ),
       /*body: SafeArea(
         child: Padding(
