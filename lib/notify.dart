@@ -4,6 +4,7 @@ import 'package:the_hit_times_app/database_helper.dart';
 import 'package:the_hit_times_app/display.dart';
 import 'package:the_hit_times_app/models/notification.dart' as nf;
 import 'package:the_hit_times_app/notidisplay.dart';
+import 'package:the_hit_times_app/util/cache_manager.dart';
 
 class DispNoti extends StatefulWidget {
   DispNoti();
@@ -71,19 +72,29 @@ class Notify extends State<DispNoti> {
                       itemCount: nfLength == 0 ? 0 : nfLength,
                       itemBuilder: (BuildContext context, int index) {
                         return InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => Notidisplay(
-                                  pIndex: index,
-                                  title: notes[index].title,
-                                  body: notes[index].description,
-                                  imgUrl: notes[index].imageUrl,
-                                  date: notes[index]
-                                      .createdTime
-                                      .toIso8601String(),
-                                  description: notes[index].description,
-                                  category: 0),
-                            ));
+                          onTap: ()  {
+                            if (notes[index].postId != null && notes[index].postId! != "") {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => NotificationDisplayWeb(postId: notes[index].postId!,)
+                                ),
+                              );
+                            } else {
+                              Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => Notidisplay(
+                                    pIndex: index,
+                                    title: notes[index].title,
+                                    body: notes[index].description,
+                                    imgUrl: notes[index].imageUrl,
+                                    date: notes[index]
+                                        .createdTime
+                                        .toIso8601String(),
+                                    description: notes[index].description,
+                                    category: 0),
+                              )
+                              );
+                            }
                           },
                           child: NotiCard(
                             title: notes[index].title,

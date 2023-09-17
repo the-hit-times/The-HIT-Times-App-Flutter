@@ -1,27 +1,40 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:the_hit_times_app/features/live/match_history.dart';
 import 'package:the_hit_times_app/homepage.dart';
 
 // Firebase Imports
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'database_helper.dart';
+import 'features/live/match_screen.dart';
 import 'firebase_options.dart';
+import 'notidisplay.dart';
 import 'notification_service/notification_service.dart';
 import 'package:the_hit_times_app/models/notification.dart' as NotificationModel;
+
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 
 // Whenever a notification is received in background, this function is called.
 // Don't move this function to another file. It needs to at the top level to function properly.
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await NotificationDatabase.instance.create(
-      NotificationModel.Notification(
-        imageUrl: message.notification!.android!.imageUrl!,
-        title: message.notification!.title!,
-        description: message.notification!.body!,
-        createdTime:  DateTime.now()
-      )
+  var notificationType = message.data["type"];
+  print("Notification Type: $notificationType");
+  NotificationService.initialize(
+      navigatorKey: navigatorKey
   );
+  if (notificationType == "LIVE") {
+    NotificationService.liveNotification(message);
+  } else {
+    print("creating a notification database" );
+    NotificationService.storeNotificationInDatabase(message); // Store notification in database
+  }
 }
 
 
@@ -32,12 +45,31 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  NotificationService().initialize();
+  NotificationService.initialize(
+      navigatorKey: navigatorKey
+  );
+
+  String? selectedNotificationPayload;
+
+  final NotificationAppLaunchDetails? notificationAppLaunchDetails = await
+  NotificationService().notificationsPlugin.getNotificationAppLaunchDetails();
+  if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+    selectedNotificationPayload =
+        notificationAppLaunchDetails!.payload;
+
+  }
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    NotificationService().show(message);
+    var notificationType = message.data["type"];
+    if (notificationType == "LIVE") {
+      NotificationService.liveNotification(message);
+    } else {
+      NotificationService.show(message);
+    }
   });
-  runApp(const MyApp());
+  runApp(MyApp(
+    selectedNotificationPayload: selectedNotificationPayload,
+  ));
 }
 
 /*
@@ -45,13 +77,24 @@ void main() async {
 *   1. Events
 * */
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  String? selectedNotificationPayload;
+  MyApp({Key? key, this.selectedNotificationPayload}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'The HIT Times',
       theme: ThemeData(
@@ -74,7 +117,32 @@ class MyApp extends StatelessWidget {
             elevation: 0.0),
       ),
       home: MainPage(),
+      routes: {
+        MatchHistoryScreen.ROUTE_NAME: (context) => MatchHistoryScreen(),
+        MatchScreen.ROUTE_NAME: (context) => MatchScreen(),
+      },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.selectedNotificationPayload != null) {
+        var data = jsonDecode(widget.selectedNotificationPayload!);
+        print("Data: $data");
+        switch (data["type"]) {
+          case "POST":
+            navigatorKey.currentState?.push(MaterialPageRoute(builder: (context) => NotificationDisplayWeb(postId: data["id"],)));
+            break;
+          case "LIVE":
+            navigatorKey.currentState?.push(
+                MaterialPageRoute(builder: (context) => MatchScreen( matchId: data["id"],))
+            );
+            break;
+        }
+      }
+    });
   }
 }
 

@@ -37,9 +37,7 @@ class NavigationIconView {
       iconColor = _color;
     } else {
       final ThemeData themeData = Theme.of(context);
-      iconColor = themeData.brightness == Brightness.light
-          ? themeData.primaryColor
-          : themeData.accentColor;
+      iconColor = themeData.primaryColor;
     }
 
     return FadeTransition(

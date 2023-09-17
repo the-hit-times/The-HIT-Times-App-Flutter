@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:html/dom.dart' as html;
+import 'package:the_hit_times_app/util/cache_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DisplayPost extends StatelessWidget {
@@ -24,6 +25,7 @@ class DisplayPost extends StatelessWidget {
   final String date;
   final String description;
   final int category;
+
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +224,7 @@ class SliverListBldr extends StatelessWidget {
             // This sets the color of the text to white to all the elements
             // eg; p, a, div, etc.
             // just like a css selector.
-            "*" : Style(
+            "body" : Style(
               color: Colors.white,
               fontSize: FontSize(15.0),
               fontFamily: "Cambo",
