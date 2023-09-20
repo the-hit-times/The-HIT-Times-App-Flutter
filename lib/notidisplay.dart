@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
+import 'package:the_hit_times_app/display.dart';
+import 'package:the_hit_times_app/models/postmodel.dart';
+import 'package:the_hit_times_app/util/cache_manager.dart';
 
 class Notidisplay extends StatelessWidget {
   Notidisplay(
@@ -44,6 +47,7 @@ class SliverAppBarBldr extends StatelessWidget {
       required this.imgUrl,
       required this.title,
       required this.description});
+
   final String imgUrl;
   final String description;
   final String title;
@@ -93,13 +97,11 @@ class SliverAppBarBldr extends StatelessWidget {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium!
-                      .copyWith(height: 1.5, 
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      height: 1.5,
                       color: Color.fromARGB(255, 156, 223, 239),
                       backgroundColor: Color.fromRGBO(37, 45, 59, 1),
-                      ),
+                    ),
               )
             ],
           ),
@@ -114,16 +116,26 @@ class SliverAppBarBldr extends StatelessWidget {
       expandedHeight: MediaQuery.of(context).size.height / 1.5,
       flexibleSpace: FlexibleSpaceBar(
         stretchModes: [StretchMode.zoomBackground],
-        background: InkWell( 
+        background: InkWell(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (_) {
-            return FullScreen(imgUrl: imgUrl);
-          }));
+              return FullScreen(imgUrl: imgUrl);
+            }));
           },
-        child: Image(
-          image: CachedNetworkImageProvider(imgUrl),
-          fit: BoxFit.cover,
-        ),
+          child: CachedNetworkImage(
+            imageUrl: imgUrl,
+            fit: BoxFit.cover,
+            placeholder: (context, url) => Container(
+              color: Colors.black12,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+            errorWidget: (context, url, error) => Icon(
+              Icons.error,
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
     );
@@ -180,17 +192,16 @@ class SliverListBldr extends StatelessWidget {
               padding: const EdgeInsets.all(5.0),
               child: Text(
                 body,
-                style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(height: 1.5, color: Colors.white,
-                      fontSize: 15.0,
-                       fontFamily: "Cambo"),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    height: 1.5,
+                    color: Colors.white,
+                    fontSize: 15.0,
+                    fontFamily: "Cambo"),
               ),
             ),
           ),
           SizedBox(
-              height: 30,
+            height: 30,
           ),
         ],
       ),
@@ -198,11 +209,10 @@ class SliverListBldr extends StatelessWidget {
   }
 }
 
-
 class FullScreen extends StatelessWidget {
-  const FullScreen(
-      {
-      required this.imgUrl,});
+  const FullScreen({
+    required this.imgUrl,
+  });
 
   final String imgUrl;
 
@@ -215,19 +225,19 @@ class FullScreen extends StatelessWidget {
             tag: 'image',
             child: Image.network(
               imgUrl,
-                  fit: BoxFit.fill,
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                            : null,
-                      ),
-                    );
-                  },
+              fit: BoxFit.fill,
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
             ),
           ),
         ),
@@ -239,3 +249,87 @@ class FullScreen extends StatelessWidget {
   }
 }
 
+class NotificationDisplayWeb extends StatefulWidget {
+  final String postId;
+
+  const NotificationDisplayWeb({Key? key, required this.postId})
+      : super(key: key);
+
+  @override
+  _NotificationDisplayWebState createState() => _NotificationDisplayWebState();
+}
+
+class _NotificationDisplayWebState extends State<NotificationDisplayWeb> {
+  late PostModel post;
+  bool isLoading = true;
+  bool failedLoading = false;
+
+  // load timeline from the database
+  void _loadTimeline() async {
+    String url = "https://tht-admin.onrender.com/api/post/${widget.postId}";
+    var response =
+        await CachedHttp.get(url, headers: {"Accept": "application/json"});
+
+    if (response.error) {
+      setState(() {
+        isLoading = false;
+        failedLoading = true;
+      });
+    }
+
+    var data = response.responseBody;
+
+    setState(() {
+      post = PostModel.fromJson(data['data']);
+      isLoading = false;
+    });
+  }
+
+  @override
+  initState() {
+    super.initState();
+    _loadTimeline();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return isLoading
+        ? Scaffold(
+        appBar: AppBar(
+          title: Text("The Hit Times"),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+        body: Center(child: CircularProgressIndicator()))
+        : failedLoading
+            ? Scaffold(
+                appBar: AppBar(
+                  title: Text("The Hit Times"),
+                  leading: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+                body: Center(
+                    child: Text(
+                "Failed to load post",
+                style: Theme.of(context).textTheme.headlineMedium,
+              )))
+            : DisplayPost(
+                pIndex: 0,
+                body: post.body,
+                title: post.title,
+                description: post.description,
+                imgUrl: post.link,
+                date: post.createdAt,
+                htmlBody: post.htmlBody,
+                category: int.parse(post.dropdown),
+              );
+  }
+}

@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:the_hit_times_app/util/cache_manager.dart';
+
 import 'bookmark_service/bookmark_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:photo_view/photo_view.dart';
 import 'package:the_hit_times_app/card_ui.dart';
 import 'package:intl/intl.dart';
@@ -66,12 +68,20 @@ class NewsState extends State<News> {
     final String url =
         "https://tht-admin.onrender.com/api/posts?limit=$limit&page=$page";
     print("Fetching... $url");
-    var res = await http.get(Uri.parse(Uri.encodeFull(url)),
-        headers: {"Accept": "application/json"});
+    var res = await CachedHttp.getBody(url, headers: {"Accept": "application/json"});
+
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: Colors.green,
+        content: const Text('No Internet Connection!'),
+      ));
+    }
+
     setState(() {
       page = page + 1;
 
-      var resBody = json.decode(res.body);
+      var resBody = json.decode(res);
       allPosts = PostList.fromJson(resBody);
       allPosts.posts.map((e) => print(e.body));
       if (resBody.length < limit) {
