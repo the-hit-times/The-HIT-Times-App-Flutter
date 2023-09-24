@@ -199,13 +199,13 @@ class _TeamListState extends State<TeamList> {
                             ),
                           ),
                           ListView.builder(
-                            padding: const EdgeInsets.only(top: 12.0),
+                            padding: const EdgeInsets.only(top: 8.0),
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: team2Details.football.players.length,
                             itemBuilder: (context, index) {
                               return Container(
-                                margin: const EdgeInsets.only(top: 8.0),
+                                margin: const EdgeInsets.only(top: 12.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
