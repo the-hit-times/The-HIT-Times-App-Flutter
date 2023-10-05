@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:the_hit_times_app/features/live/models/team_detail.dart';
 import 'package:the_hit_times_app/util/cache_manager.dart';
 
@@ -92,183 +95,152 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
                   ],
                 ),
               )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+            :
+    Padding(
+      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                "Team ${team1Details.football.teamName}",
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              const Spacer(),
+              Text(
+                "Team ${team2Details.football.teamName}",
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+            ],
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.only(top: 8.0),
+              shrinkWrap: true,
+              itemCount: max(team1Details.football.players.length, team2Details.football.players.length),
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: const EdgeInsets.only(top: 12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      index > team1Details.football.players.length - 1 ? Container() :
+                      Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 18.0),
-                            child: Text(
-                              "Team ${team1Details.football.teamName}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: CachedNetworkImage(
+                                imageUrl: team1Details
+                                    .football.players[index].getPlayerImage(),
+                                placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                const Icon(Icons.person ),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                          ListView.builder(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: team1Details.football.players.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                margin: const EdgeInsets.only(top: 12.0),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.white,
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(50),
-                                        child: CachedNetworkImage(
-                                          imageUrl: team1Details
-                                              .football.players[index].getPlayerImage(),
-                                          placeholder: (context, url) =>
-                                              const CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(Icons.person ),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Flexible(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            team1Details
-                                                .football.players[index].playerName,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium!
-                                                .copyWith(
-                                                    color: Colors.white),
-                                          ),
-                                          const SizedBox(
-                                            height: 2.0,),
-                                          Text(
-                                              team1Details.football.players[index]
-                                                  .playerDescription,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall!
-                                                  .copyWith(color: Colors.grey[400])),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                team1Details
+                                    .football.players[index].playerName,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                    color: Colors.white),
+                              ),
+                              const SizedBox(
+                                height: 2.0,),
+                              Text(
+                                  team1Details.football.players[index]
+                                      .playerDescription,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(color: Colors.grey[400])),
+                            ],
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                      index > team2Details.football.players.length - 1 ? Container() :
+                      Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 18.0),
-                            child: Text(
-                              "Team ${team2Details.football.teamName}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                team2Details
+                                    .football.players[index].playerName,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                    color: Colors.white),
+                              ),
+                              const SizedBox(
+                                height: 2.0,),
+                              Text(
+                                  team2Details.football.players[index]
+                                      .playerDescription,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(color: Colors.grey[400])),
+                            ],
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: CachedNetworkImage(
+                                imageUrl: team2Details
+                                    .football.players[index].getPlayerImage(),
+                                placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                const Icon(Icons.person ),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                          ListView.builder(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: team2Details.football.players.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                margin: const EdgeInsets.only(top: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Flexible(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.end,
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            team2Details
-                                                .football.players[index].playerName,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium!
-                                                .copyWith(
-                                                color: Colors.white),
-                                          ),
-                                          const SizedBox(
-                                            height: 2.0,),
-                                          Text(
-                                              team2Details.football.players[index]
-                                                  .playerDescription,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall!
-                                                  .copyWith(color: Colors.grey[400])),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.white,
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(50),
-                                        child: CachedNetworkImage(
-                                          imageUrl: team2Details
-                                              .football.players[index].getPlayerImage(),
-                                          placeholder: (context, url) =>
-                                          const CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) =>
-                                          const Icon(Icons.person),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
                         ],
-                      ),
-                    ),
+                      )
+                    ],
                   ),
-                ],
-              );
+                );
+              },
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   // This is used to keep the state of the widget alive
