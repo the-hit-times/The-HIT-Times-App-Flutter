@@ -13,7 +13,7 @@ class TeamList extends StatefulWidget {
   State<TeamList> createState() => _TeamListState();
 }
 
-class _TeamListState extends State<TeamList> {
+class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin  {
   static const String BASE_URL = "https://tht-admin.onrender.com/api/team/";
 
   bool isLoading = true;
@@ -156,9 +156,8 @@ class _TeamListState extends State<TeamList> {
                                                 .football.players[index].playerName,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .titleLarge!
+                                                .titleMedium!
                                                 .copyWith(
-                                                    fontWeight: FontWeight.bold,
                                                     color: Colors.white),
                                           ),
                                           const SizedBox(
@@ -220,9 +219,8 @@ class _TeamListState extends State<TeamList> {
                                                 .football.players[index].playerName,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .titleLarge!
+                                                .titleMedium!
                                                 .copyWith(
-                                                fontWeight: FontWeight.bold,
                                                 color: Colors.white),
                                           ),
                                           const SizedBox(
@@ -272,4 +270,9 @@ class _TeamListState extends State<TeamList> {
                 ],
               );
   }
+
+  // This is used to keep the state of the widget alive
+  // ie. when we switch between tabs, the state of the widget is not lost.
+  @override
+  bool get wantKeepAlive => true;
 }
