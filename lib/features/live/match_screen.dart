@@ -21,13 +21,19 @@ class MatchScreenArguments {
   MatchScreenArguments({required this.id});
 }
 
-class MatchScreen extends StatelessWidget {
+class MatchScreen extends StatefulWidget {
   static const ROUTE_NAME = "/live-screen/timeline";
 
   String? matchId;
-  ScreenshotController screenshotController = ScreenshotController();
 
   MatchScreen({super.key, this.matchId});
+
+  @override
+  State<MatchScreen> createState() => _MatchScreenState();
+}
+
+class _MatchScreenState extends State<MatchScreen> {
+  ScreenshotController screenshotController = ScreenshotController();
 
   LiveMatchRepo _liveMatchRepo = LiveMatchRepo();
 
@@ -40,12 +46,16 @@ class MatchScreen extends StatelessWidget {
       // make a XFile from the bytes
       final path = await storeFileTemporarily(value);
       await Share.shareXFiles(
-        [XFile(path)], text: """THT Khabri: Know about the buzz around campus, as it happens with light speed.
+        [XFile(path)],
+        text:
+            """THT Khabri: Know about the buzz around campus, as it happens with light speed.
 Get the latest updates, accurate and earliest... delivered specially for you.
-Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&hl=en-IN""".trim(),
+Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&hl=en-IN"""
+                .trim(),
       );
     });
   }
+
   /// store the image generate from the ScreenShotController
   /// in a temporary directory.
   Future<String> storeFileTemporarily(Uint8List image) async {
@@ -61,13 +71,13 @@ Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&h
     final args =
         ModalRoute.of(context)!.settings.arguments as MatchScreenArguments?;
 
-    if (matchId == null && args != null) {
-      matchId = args.id;
+    if (widget.matchId == null && args != null) {
+      widget.matchId = args.id;
     }
 
     // This is a edge case when app loads from live screen from the match id
     // It should never happen
-    if (matchId == null && args == null) {
+    if (widget.matchId == null && args == null) {
       return Scaffold(
           appBar: AppBar(
             title: Text("The HIT Times"),
@@ -85,71 +95,78 @@ Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&h
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-          stream: _liveMatchRepo.getLiveMatchById(matchId!),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const AnimatedIconWidget(),
-                    const SizedBox(
-                      height: 8.0,
+          body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        stream: _liveMatchRepo.getLiveMatchById(widget.matchId!),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const AnimatedIconWidget(),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  Text(
+                    "Failed to load live match",
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Colors.grey,
+                        ),
+                  ),
+                ],
+              ),
+            );
+          }
+          if (snapshot.hasData) {
+            final match = LiveMatch.fromFirestore(snapshot.data!, null);
+            return NestedScrollView(
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  SliverAppBar(
+                    title: Text("The HIT Times"),
+                    centerTitle: true,
+                    forceElevated: innerBoxIsScrolled,
+                    automaticallyImplyLeading: false,
+                    leading: IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                     ),
-                    Text(
-                      "Failed to load live match",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.grey,
+                    backgroundColor: Color.fromARGB(255, 7, 95, 115),
+                    expandedHeight: 170.0,
+                    systemOverlayStyle: const SystemUiOverlayStyle(
+                      statusBarColor: Colors.transparent,
+                      statusBarIconBrightness: Brightness.light,
+                    ),
+                    actions: [
+                      IconButton(
+                        icon: Icon(Icons.share),
+                        onPressed: handleShareButton,
+                      ),
+                    ],
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: Center(
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 80.0),
+                          child: Screenshot(
+                              controller: screenshotController,
+                              child: FootballScoreCard(
+                                  liveMatch: match,
+                                  backgroundColor:
+                                      Color.fromARGB(255, 7, 95, 115))),
+                        ),
                       ),
                     ),
-                  ],
-                ),
-              );
-            }
-            if (snapshot.hasData) {
-              final match = LiveMatch.fromFirestore(snapshot.data!, null);
-              return CustomScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    slivers: <Widget>[
-                      SliverAppBar(
-                        floating: true,
-                        pinned: true,
-                        snap: false,
-                        title: Text("The HIT Times"),
-                        centerTitle: true,
-                        leading: IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        backgroundColor: Color.fromARGB(255, 7, 95, 115),
-                        expandedHeight: 200.0,
-                        systemOverlayStyle: const SystemUiOverlayStyle(
-                          statusBarColor: Colors.transparent,
-                          statusBarIconBrightness: Brightness.light,
-                        ),
-                        actions: [
-                          IconButton(
-                            icon: Icon(Icons.share),
-                            onPressed: handleShareButton,
-                          ),
-                        ],
-                        flexibleSpace: FlexibleSpaceBar(
-                          background: Center(
-                            child: Container(
-                              margin: const EdgeInsets.only(top: 50.0),
-                              child: Screenshot(
-                                  controller: screenshotController,
-                                  child: FootballScoreCard(liveMatch: match, backgroundColor: Color.fromARGB(255, 7, 95, 115))),
-                            ),
-                          ),
-                        ),
-                        bottom: const PreferredSize(
-                          preferredSize: Size.fromHeight(60.0),
-                          child: TabBar(
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (_, int index) {
+                        return Container(
+                          color: const Color.fromARGB(255, 7, 95, 115),
+                          child: const TabBar(
                             indicatorWeight: 3.0,
                             indicatorColor: Colors.white,
                             tabs: [
@@ -165,27 +182,29 @@ Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&h
                               ),
                             ],
                           ),
-                        ),
-                      ),
-                      SliverFillRemaining(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                          child: TabBarView(
-                            children: [
-                              TimelineListView(matchFirebaseId: matchId!),
-                              TeamList(team1Code: match.team1!.teamCode!, team2Code: match.team2!.teamCode!)
-                            ],
-                          ),
-                        ),
-                      ),
-                    ]
-                );
-
-            }
-            return const Center(child: CircularProgressIndicator());
-          },
-        )
-      ),
+                        );
+                      },
+                      childCount: 1,
+                    ),
+                  ),
+                ];
+              },
+              body: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TabBarView(
+                  children: <Widget>[
+                    TimelineListView(matchFirebaseId: widget.matchId!),
+                    TeamList(
+                        team1Code: match.team1!.teamCode!,
+                        team2Code: match.team2!.teamCode!)
+                  ],
+                ),
+              ),
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
+      )),
     );
   }
 }
