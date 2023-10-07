@@ -126,12 +126,24 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
             shrinkWrap: true,
             itemCount: max(team1Details.football.players.length, team2Details.football.players.length),
             itemBuilder: (context, index) {
+
+              final hasPlayerTeam1Description =
+                  index > team1Details.football.players.length - 1 ? false :
+                  team1Details.football.players[index].playerDescription.trim() != "";
+              final hasPlayerTeam2Description =
+                  index > team2Details.football.players.length - 1 ? false :
+                  team2Details.football.players[index].playerDescription.trim() != "";
+
+              final hasItemHeight = hasPlayerTeam1Description || hasPlayerTeam2Description;
+
               return Container(
                 margin: const EdgeInsets.only(top: 12.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    index > team1Details.football.players.length - 1 ? Container() :
+                    index > team1Details.football.players.length - 1 ? Container(
+                      height: 40,
+                    ) :
                     Row(
                       children: [
                         Container(
@@ -169,20 +181,24 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
                                   .copyWith(
                                   color: Colors.white),
                             ),
+                            hasItemHeight ?
                             const SizedBox(
-                              height: 2.0,),
+                              height: 2.0,): Container(),
+                            hasItemHeight ?
                             Text(
                                 team1Details.football.players[index]
                                     .playerDescription,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall!
-                                    .copyWith(color: Colors.grey[400])),
+                                    .copyWith(color: Colors.grey[400])) : Container(),
                           ],
                         ),
                       ],
                     ),
-                    index > team2Details.football.players.length - 1 ? Container() :
+                    index > team2Details.football.players.length - 1 ? Container(
+                      height: 40,
+                    ) :
                     Row(
                       children: [
                         Column(
@@ -197,15 +213,17 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
                                   .copyWith(
                                   color: Colors.white),
                             ),
+                            hasItemHeight ?
                             const SizedBox(
-                              height: 2.0,),
-                            Text(
-                                team2Details.football.players[index]
-                                    .playerDescription,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(color: Colors.grey[400])),
+                              height: 2.0,): Container(),
+                            hasItemHeight ?
+                              Text(
+                                  team2Details.football.players[index]
+                                      .playerDescription,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(color: Colors.grey[400])): Container(),
                           ],
                         ),
                         const SizedBox(
