@@ -96,11 +96,11 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
                 ),
               )
             :
-    Padding(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-      child: Column(
-        children: [
-          Row(
+    Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+          child: Row(
             children: [
               Text(
                 "Team ${team1Details.football.teamName}",
@@ -119,127 +119,127 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
               ),
             ],
           ),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.only(top: 8.0),
-              shrinkWrap: true,
-              itemCount: max(team1Details.football.players.length, team2Details.football.players.length),
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.only(top: 12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      index > team1Details.football.players.length - 1 ? Container() :
-                      Row(
-                        children: [
-                          Container(
-                            width: 40,
-                            height: 40,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              child: CachedNetworkImage(
-                                imageUrl: team1Details
-                                    .football.players[index].getPlayerImage(),
-                                placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                const Icon(Icons.person ),
-                                fit: BoxFit.cover,
-                              ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+            shrinkWrap: true,
+            itemCount: max(team1Details.football.players.length, team2Details.football.players.length),
+            itemBuilder: (context, index) {
+              return Container(
+                margin: const EdgeInsets.only(top: 12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    index > team1Details.football.players.length - 1 ? Container() :
+                    Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: CachedNetworkImage(
+                              imageUrl: team1Details
+                                  .football.players[index].getPlayerImage(),
+                              placeholder: (context, url) =>
+                              const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                              const Icon(Icons.person ),
+                              fit: BoxFit.cover,
                             ),
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                team1Details
-                                    .football.players[index].playerName,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              team1Details
+                                  .football.players[index].playerName,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                  color: Colors.white),
+                            ),
+                            const SizedBox(
+                              height: 2.0,),
+                            Text(
+                                team1Details.football.players[index]
+                                    .playerDescription,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                    color: Colors.white),
-                              ),
-                              const SizedBox(
-                                height: 2.0,),
-                              Text(
-                                  team1Details.football.players[index]
-                                      .playerDescription,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(color: Colors.grey[400])),
-                            ],
-                          ),
-                        ],
-                      ),
-                      index > team2Details.football.players.length - 1 ? Container() :
-                      Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                team2Details
-                                    .football.players[index].playerName,
+                                    .bodySmall!
+                                    .copyWith(color: Colors.grey[400])),
+                          ],
+                        ),
+                      ],
+                    ),
+                    index > team2Details.football.players.length - 1 ? Container() :
+                    Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              team2Details
+                                  .football.players[index].playerName,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                  color: Colors.white),
+                            ),
+                            const SizedBox(
+                              height: 2.0,),
+                            Text(
+                                team2Details.football.players[index]
+                                    .playerDescription,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                    color: Colors.white),
-                              ),
-                              const SizedBox(
-                                height: 2.0,),
-                              Text(
-                                  team2Details.football.players[index]
-                                      .playerDescription,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(color: Colors.grey[400])),
-                            ],
+                                    .bodySmall!
+                                    .copyWith(color: Colors.grey[400])),
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Container(
-                            width: 40,
-                            height: 40,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              child: CachedNetworkImage(
-                                imageUrl: team2Details
-                                    .football.players[index].getPlayerImage(),
-                                placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                const Icon(Icons.person ),
-                                fit: BoxFit.cover,
-                              ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: CachedNetworkImage(
+                              imageUrl: team2Details
+                                  .football.players[index].getPlayerImage(),
+                              placeholder: (context, url) =>
+                              const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                              const Icon(Icons.person ),
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        ],
-                      )
-                    ],
-                  ),
-                );
-              },
-            ),
-          )
-        ],
-      ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
+        )
+      ],
     );
   }
 
