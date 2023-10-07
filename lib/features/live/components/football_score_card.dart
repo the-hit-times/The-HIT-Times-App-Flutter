@@ -14,6 +14,11 @@ class FootballScoreCard extends StatelessWidget {
     final team1Logo = liveMatch.team1?.getTeamFootballLogo();
     final team2Logo = liveMatch.team2?.getTeamFootballLogo();
 
+    // check if the match is penalty shootout
+    final isPenalty = (liveMatch.team1?.teamPenalty != null && liveMatch.team2?.teamPenalty != null)
+        && (liveMatch.team1?.teamPenalty != "0" || liveMatch.team2?.teamPenalty != "0") &&
+        (liveMatch.team1?.teamScore == liveMatch.team2?.teamScore);
+
     return Material(
       color: backgroundColor,
       borderRadius: BorderRadius.circular(5.0),
@@ -116,6 +121,18 @@ class FootballScoreCard extends StatelessWidget {
                                   style: TextStyle( color: Colors.white, fontSize: 12,
                                       fontWeight: FontWeight.w300),
                                 ),
+                                isPenalty ?
+                                Container(
+                                  margin: EdgeInsets.only(top: 10.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Penalty: ", style: TextStyle(color: Colors.white),),
+                                      Text( "${liveMatch.team1!.teamPenalty.toString()}-${liveMatch.team2!.teamPenalty.toString()}"
+                                      , style: TextStyle(color: Colors.white),),
+                                    ],
+                                  ),
+                                ) : SizedBox(height: 0.0,),
                               ],
                             )),
                       ),
@@ -163,7 +180,7 @@ class FootballScoreCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

@@ -40,7 +40,7 @@ class _TimelineListViewState extends State<TimelineListView>  with AutomaticKeep
   @override
   Widget build(BuildContext context) {
     return FirestoreListView<Timeline>(
-      padding: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
       shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         emptyBuilder: (context) {

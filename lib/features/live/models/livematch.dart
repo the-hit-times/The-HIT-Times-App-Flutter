@@ -8,8 +8,9 @@ import 'package:intl/intl.dart';
 class Team {
   String? teamCode;
   String? teamScore;
+  String? teamPenalty;
 
-  Team({required this.teamCode, required this.teamScore});
+  Team({required this.teamCode, required this.teamScore, required this.teamPenalty});
 
   final Map _codeToName = {
     "100": "CSE",
@@ -96,6 +97,7 @@ class LiveMatch {
   static const FIELD_TEAM_TWO = "team2";
   static const FIELD_TEAM_SCORE = "team_score";
   static const FIELD_TEAM_CODE = "team_code";
+  static const FIELD_TEAM_PENALTY = "team_penalty";
   static const FIELD_MATCH_LIVE = "is_live";
   static const FIELD_MATCH_STATUS = "match_status";
   static const FIELD_MATCH_TYPE = "match_type";
@@ -120,11 +122,13 @@ class LiveMatch {
     final team1 = Team(
       teamCode: data?[FIELD_TEAM_ONE][FIELD_TEAM_CODE],
       teamScore: data?[FIELD_TEAM_ONE][FIELD_TEAM_SCORE],
+      teamPenalty: data?[FIELD_TEAM_ONE][FIELD_TEAM_PENALTY],
     );
 
     final team2 = Team(
       teamCode: data?[FIELD_TEAM_TWO][FIELD_TEAM_CODE],
       teamScore: data?[FIELD_TEAM_TWO][FIELD_TEAM_SCORE],
+      teamPenalty: data?[FIELD_TEAM_TWO][FIELD_TEAM_PENALTY],
     );
 
     return LiveMatch(
@@ -148,11 +152,13 @@ class LiveMatch {
     final team1 = Team(
       teamCode: data[FIELD_TEAM_ONE][FIELD_TEAM_CODE],
       teamScore: data[FIELD_TEAM_ONE][FIELD_TEAM_SCORE],
+      teamPenalty: data[FIELD_TEAM_ONE][FIELD_TEAM_PENALTY],
     );
 
     final team2 = Team(
       teamCode: data[FIELD_TEAM_TWO][FIELD_TEAM_CODE],
       teamScore: data[FIELD_TEAM_TWO][FIELD_TEAM_SCORE],
+      teamPenalty: data[FIELD_TEAM_TWO][FIELD_TEAM_PENALTY],
     );
 
     return LiveMatch(
@@ -172,11 +178,13 @@ class LiveMatch {
         FIELD_TEAM_ONE: {
           if (team1!.teamCode != null) FIELD_TEAM_CODE: team1!.teamCode,
           if (team1!.teamScore != null) FIELD_TEAM_SCORE: team1!.teamScore,
+          if (team1!.teamPenalty != null) FIELD_TEAM_PENALTY: team1!.teamPenalty,
         },
       if (team2 != null)
         FIELD_TEAM_TWO: {
-          if (team1!.teamCode != null) FIELD_TEAM_CODE: team2!.teamCode,
-          if (team1!.teamScore != null) FIELD_TEAM_SCORE: team2!.teamScore,
+          if (team2!.teamCode != null) FIELD_TEAM_CODE: team2!.teamCode,
+          if (team2!.teamScore != null) FIELD_TEAM_SCORE: team2!.teamScore,
+          if (team2!.teamPenalty != null) FIELD_TEAM_PENALTY: team2!.teamPenalty,
         },
       if (matchDate != null) FIELD_MATCH_DATE: matchDate,
       if (isLive != null) FIELD_MATCH_LIVE: isLive,
