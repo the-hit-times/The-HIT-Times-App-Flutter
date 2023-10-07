@@ -127,6 +127,7 @@ Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&h
                   SliverAppBar(
                     title: Text("The HIT Times"),
                     centerTitle: true,
+                    pinned: true,
                     forceElevated: innerBoxIsScrolled,
                     automaticallyImplyLeading: false,
                     leading: IconButton(
@@ -136,7 +137,7 @@ Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&h
                       },
                     ),
                     backgroundColor: Color.fromARGB(255, 7, 95, 115),
-                    expandedHeight: 170.0,
+                    expandedHeight: 220.0,
                     systemOverlayStyle: const SystemUiOverlayStyle(
                       statusBarColor: Colors.transparent,
                       statusBarIconBrightness: Brightness.light,
@@ -150,7 +151,7 @@ Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&h
                     flexibleSpace: FlexibleSpaceBar(
                       background: Center(
                         child: Container(
-                          margin: const EdgeInsets.only(top: 80.0),
+                          margin: const EdgeInsets.only(top: 50.0),
                           child: Screenshot(
                               controller: screenshotController,
                               child: FootballScoreCard(
@@ -160,31 +161,27 @@ Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&h
                         ),
                       ),
                     ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (_, int index) {
-                        return Container(
-                          color: const Color.fromARGB(255, 7, 95, 115),
-                          child: const TabBar(
-                            indicatorWeight: 3.0,
-                            indicatorColor: Colors.white,
-                            tabs: [
-                              Tab(
-                                child: Text(
-                                  "Timeline",
-                                ),
+                    bottom: PreferredSize(
+                      preferredSize: const Size.fromHeight(50.0),
+                      child: Container(
+                        color: const Color.fromARGB(255, 7, 95, 115),
+                        child: const TabBar(
+                          indicatorWeight: 3.0,
+                          indicatorColor: Colors.white,
+                          tabs: [
+                            Tab(
+                              child: Text(
+                                "Timeline",
                               ),
-                              Tab(
-                                child: Text(
-                                  "Team",
-                                ),
+                            ),
+                            Tab(
+                              child: Text(
+                                "Team",
                               ),
-                            ],
-                          ),
-                        );
-                      },
-                      childCount: 1,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ];
