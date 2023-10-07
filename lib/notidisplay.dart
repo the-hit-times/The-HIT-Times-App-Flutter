@@ -265,7 +265,7 @@ class _NotificationDisplayWebState extends State<NotificationDisplayWeb> {
   bool failedLoading = false;
 
   // load timeline from the database
-  void _loadTimeline() async {
+  void _loadPost() async {
     String url = "https://tht-admin.onrender.com/api/post/${widget.postId}";
     var response =
         await CachedHttp.get(url, headers: {"Accept": "application/json"});
@@ -279,6 +279,13 @@ class _NotificationDisplayWebState extends State<NotificationDisplayWeb> {
 
     var data = response.responseBody;
 
+    if (data['data'] == null) {
+      setState(() {
+        isLoading = false;
+        failedLoading = true;
+      });
+    }
+
     setState(() {
       post = PostModel.fromJson(data['data']);
       isLoading = false;
@@ -288,7 +295,7 @@ class _NotificationDisplayWebState extends State<NotificationDisplayWeb> {
   @override
   initState() {
     super.initState();
-    _loadTimeline();
+    _loadPost();
   }
 
   @override
@@ -317,10 +324,40 @@ class _NotificationDisplayWebState extends State<NotificationDisplayWeb> {
                   ),
                 ),
                 body: Center(
-                    child: Text(
-                "Failed to load post",
-                style: Theme.of(context).textTheme.headlineMedium,
-              )))
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(
+                        height: 8.0,
+                      ),
+                      Text(
+                        "Failed to load post",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8.0,
+                      ),
+                      FilledButton.icon(
+                        icon: Icon(Icons.refresh),
+                        onPressed: () {
+
+                          setState(() {
+                            isLoading = true;
+                            failedLoading = false;
+                          });
+
+                          _loadPost();
+                        }, label: Text("Retry"),)
+                    ],
+                  ),
+                ))
             : DisplayPost(
                 pIndex: 0,
                 body: post.body,
