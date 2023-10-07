@@ -145,6 +145,29 @@ class NotificationService {
             base64Encode(response.bodyBytes)));*/
 
     var timelineMessage = jsonDecode(message.data["data"])["timeline_message"];
+    var team1Name = matchInfo.team1?.getTeamName();
+    var team2Name = matchInfo.team2?.getTeamName();
+    var team1Score = matchInfo.team1?.teamScore;
+    var team2Score = matchInfo.team2?.teamScore;
+    var team1Penalty = matchInfo.team1?.teamPenalty;
+    var team2Penalty = matchInfo.team2?.teamPenalty;
+
+    var hasPenalty = ( team1Penalty != null && team2Penalty != null)
+        && (team1Penalty != "0" || team2Penalty != "0")
+        && team1Score == team2Score;
+
+    var title = "<b>${team1Name} vs ${team2Name}</b>";
+    var messageBody = "${team1Score} vs ${team2Score}<br>";
+    if (hasPenalty) {
+      messageBody += "<br>Penalty Shootout: <br>";
+      messageBody += "${team1Penalty} vs ${team2Penalty}<br>";
+    }
+    if (timelineMessage != null) {
+      messageBody += "<br>";
+      messageBody += timelineMessage;
+    }
+
+
 
     NotificationDetails notificationDetails = NotificationDetails(
       android: AndroidNotificationDetails(
@@ -152,12 +175,10 @@ class NotificationService {
           importance: Importance.max,
           priority: Priority.high,
           styleInformation: BigTextStyleInformation(
-              timelineMessage != null ?
-              "${matchInfo.team1?.teamScore} vs ${matchInfo.team2?.teamScore}<br><br>${timelineMessage}" :
-              "${matchInfo.team1?.teamScore} vs ${matchInfo.team2?.teamScore}", htmlFormatBigText: true,
+            messageBody, htmlFormatBigText: true,
               htmlFormatTitle:true ,
               htmlFormatContent:true ,
-              contentTitle: "${matchInfo.team1?.getTeamName()} vs ${matchInfo.team2?.getTeamName()}",
+              contentTitle: title,
               htmlFormatContentTitle: true,
           )),
     );
@@ -169,8 +190,8 @@ class NotificationService {
 
    await _notificationsPlugin.show(
       LIVE_NOTIFICATION_ID,
-      "<b>${matchInfo.team1?.getTeamName()} vs ${matchInfo.team2?.getTeamName()}</b>",
-      "${matchInfo.team1?.teamScore} vs ${matchInfo.team2?.teamScore}",
+      title,
+     messageBody,
       notificationDetails,
      payload: payload,
     );
