@@ -10,7 +10,9 @@ class LiveMatchRepo {
   late final _liveSessionRef;
 
    LiveMatchRepo() {
-     _liveSessionRef = _db.collection(_liveSessionCollection).withConverter(
+     _liveSessionRef = _db.collection(_liveSessionCollection).where(LiveMatch.FIELD_MATCH_TYPE,
+       isEqualTo: "cricket"
+     ).withConverter(
         fromFirestore: LiveMatch.fromFirestore,
         toFirestore: (LiveMatch liveMatch, options) => liveMatch.toFirestore()
     );
