@@ -7,6 +7,7 @@ import 'package:the_hit_times_app/features/live/models/livematch.dart';
 import 'package:the_hit_times_app/features/live/repo/live_match_repo.dart';
 import 'package:the_hit_times_app/features/live/match_screen.dart';
 
+import 'components/cricket_score_card.dart';
 import 'components/football_score_card.dart';
 
 class MatchHistoryScreen extends StatefulWidget {
@@ -195,7 +196,7 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
                     final match = doc.data();
                     return Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-                      child: FootballScoreCard(
+                      child: CricketScoreCard(
                         liveMatch: match,
                         onTap: () {
                           Navigator.of(context).pushNamed(MatchScreen.ROUTE_NAME,

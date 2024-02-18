@@ -11,6 +11,7 @@ import 'package:the_hit_times_app/features/live/components/team_list.dart';
 import 'package:the_hit_times_app/features/live/models/livematch.dart';
 import 'package:the_hit_times_app/features/live/repo/live_match_repo.dart';
 
+import 'components/cricket_score_card.dart';
 import 'components/football_score_card.dart';
 import 'components/timeline_listview.dart';
 import 'match_history.dart';
@@ -92,6 +93,24 @@ Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&h
           body: Center(child: CircularProgressIndicator()));
     }
 
+    Widget getScoreCard(LiveMatch match) {
+      if (match.matchType == "football") {
+        return FootballScoreCard(
+          liveMatch: match,
+          backgroundColor: Color.fromARGB(255, 7, 95, 115),
+        );
+      }
+
+      if (match.matchType == "cricket") {
+        return CricketScoreCard(
+          liveMatch: match,
+          backgroundColor: Color.fromARGB(255, 7, 95, 115),
+        );
+      }
+
+      return const SizedBox();
+    }
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -154,10 +173,7 @@ Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&h
                           margin: const EdgeInsets.only(top: 50.0),
                           child: Screenshot(
                               controller: screenshotController,
-                              child: FootballScoreCard(
-                                  liveMatch: match,
-                                  backgroundColor:
-                                      Color.fromARGB(255, 7, 95, 115))),
+                              child: getScoreCard(match)),
                         ),
                       ),
                     ),
@@ -202,3 +218,5 @@ Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&h
     );
   }
 }
+
+

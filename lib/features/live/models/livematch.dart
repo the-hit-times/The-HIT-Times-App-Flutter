@@ -77,8 +77,12 @@ class Team {
 
   // TODO: Not yet implemented
   String? getTeamCricketLogo() {
-    throw UnimplementedError();
-    return _codeToCricketImage[teamCode];
+    if (_codeToCricketImage[teamCode] == null) {
+      return "";
+    }
+    String fileId = _codeToCricketImage[teamCode].substring(_codeToCricketImage[teamCode].indexOf('/d/') + 3, _codeToCricketImage[teamCode].indexOf('/view'));
+    String newLink = 'https://drive.google.com/uc?export=view&id=$fileId';
+    return newLink;
   }
 
 }
