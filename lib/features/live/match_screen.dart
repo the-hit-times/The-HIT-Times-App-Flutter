@@ -206,8 +206,10 @@ Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&h
                 children: <Widget>[
                   TimelineListView(matchFirebaseId: widget.matchId!),
                   TeamList(
-                      team1Code: match.team1!.teamCode!,
-                      team2Code: match.team2!.teamCode!)
+                    team1Code: match.team1!.teamCode!,
+                    team2Code: match.team2!.teamCode!,
+                    matchType: match.matchType!,
+                  )
                 ],
               ),
             );
@@ -218,5 +220,3 @@ Download now:https://play.google.com/store/apps/details?id=com.thehittimes.tht&h
     );
   }
 }
-
-

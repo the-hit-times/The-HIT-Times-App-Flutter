@@ -2,15 +2,15 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:the_hit_times_app/features/live/models/team_detail.dart';
 import 'package:the_hit_times_app/util/cache_manager.dart';
 
 class TeamList extends StatefulWidget {
   String team1Code;
   String team2Code;
+  String matchType;
 
-  TeamList({super.key, required this.team1Code, required this.team2Code});
+  TeamList({super.key, required this.team1Code, required this.team2Code, required this.matchType});
 
   @override
   State<TeamList> createState() => _TeamListState();
@@ -23,6 +23,9 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
   bool isError = false;
   late TeamDetails team1Details;
   late TeamDetails team2Details;
+
+  late BaseTeamDetails team1;
+  late BaseTeamDetails team2;
 
   @override
   initState() {
@@ -47,8 +50,35 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
         return;
       }
       setState(() {
+
+        print(team1Response.responseBody['data']);
+        print(team2Response.responseBody['data']);
+
         team1Details = TeamDetails.fromJson(team1Response.responseBody['data']);
         team2Details = TeamDetails.fromJson(team2Response.responseBody['data']);
+
+        if (widget.matchType == "cricket") {
+
+          if (team1Details.cricket == null || team2Details.cricket == null) {
+            isError = true;
+            isLoading = false;
+            return;
+          }
+
+          team1 = team1Details.cricket!;
+          team2 = team2Details.cricket!;
+        } else if (widget.matchType == "football") {
+
+          if (team1Details.football == null || team2Details.football == null) {
+            isError = true;
+            isLoading = false;
+            return;
+          }
+
+          team1 = team1Details.football!;
+          team2 = team2Details.football!;
+        }
+
         isLoading = false;
       });
   }
@@ -56,7 +86,7 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? Center(
+        ? const Center(
             child: CircularProgressIndicator(),
           )
         : isError
@@ -103,7 +133,7 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
           child: Row(
             children: [
               Text(
-                "Team ${team1Details.football.teamName}",
+                "Team ${team1.teamName}",
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
@@ -111,7 +141,7 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
               ),
               const Spacer(),
               Text(
-                "Team ${team2Details.football.teamName}",
+                "Team ${team2.teamName}",
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
@@ -124,15 +154,15 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
           child: ListView.builder(
             padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
             shrinkWrap: true,
-            itemCount: max(team1Details.football.players.length, team2Details.football.players.length),
+            itemCount: max(team1.players.length, team2.players.length),
             itemBuilder: (context, index) {
 
               final hasPlayerTeam1Description =
-                  index > team1Details.football.players.length - 1 ? false :
-                  team1Details.football.players[index].playerDescription.trim() != "";
+                  index > team1.players.length - 1 ? false :
+                  team1.players[index].playerDescription.trim() != "";
               final hasPlayerTeam2Description =
-                  index > team2Details.football.players.length - 1 ? false :
-                  team2Details.football.players[index].playerDescription.trim() != "";
+                  index > team2.players.length - 1 ? false :
+                  team2.players[index].playerDescription.trim() != "";
 
               final hasItemHeight = hasPlayerTeam1Description || hasPlayerTeam2Description;
 
@@ -141,7 +171,7 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    index > team1Details.football.players.length - 1 ? Container(
+                    index > team1.players.length - 1 ? Container(
                       height: 40,
                     ) :
                     Row(
@@ -156,8 +186,7 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(50),
                             child: CachedNetworkImage(
-                              imageUrl: team1Details
-                                  .football.players[index].getPlayerImage(),
+                              imageUrl: team1.players[index].getPlayerImage(),
                               placeholder: (context, url) =>
                               const CircularProgressIndicator(),
                               errorWidget: (context, url, error) =>
@@ -173,8 +202,7 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              team1Details
-                                  .football.players[index].playerName,
+                              team1.players[index].playerName,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium!
@@ -186,7 +214,7 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
                               height: 2.0,): Container(),
                             hasItemHeight ?
                             Text(
-                                team1Details.football.players[index]
+                                team1.players[index]
                                     .playerDescription,
                                 style: Theme.of(context)
                                     .textTheme
@@ -196,7 +224,7 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
                         ),
                       ],
                     ),
-                    index > team2Details.football.players.length - 1 ? Container(
+                    index > team2.players.length - 1 ? Container(
                       height: 40,
                     ) :
                     Row(
@@ -205,8 +233,7 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              team2Details
-                                  .football.players[index].playerName,
+                              team2.players[index].playerName,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium!
@@ -218,7 +245,7 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
                               height: 2.0,): Container(),
                             hasItemHeight ?
                               Text(
-                                  team2Details.football.players[index]
+                                  team2.players[index]
                                       .playerDescription,
                                   style: Theme.of(context)
                                       .textTheme
@@ -239,8 +266,7 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(50),
                             child: CachedNetworkImage(
-                              imageUrl: team2Details
-                                  .football.players[index].getPlayerImage(),
+                              imageUrl: team2.players[index].getPlayerImage(),
                               placeholder: (context, url) =>
                               const CircularProgressIndicator(),
                               errorWidget: (context, url, error) =>
