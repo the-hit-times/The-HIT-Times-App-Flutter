@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/features/live/models/team_detail.dart';
+import 'package:the_hit_times_app/globals.dart';
 import 'package:the_hit_times_app/util/cache_manager.dart';
 
 class TeamList extends StatefulWidget {
@@ -17,7 +18,7 @@ class TeamList extends StatefulWidget {
 }
 
 class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin  {
-  static const String BASE_URL = "https://tht-admin.onrender.com/api/team/";
+  static const String API_URL = "${Constants.BASE_URL}/team/";
 
   bool isLoading = true;
   bool isError = false;
@@ -36,9 +37,9 @@ class _TeamListState extends State<TeamList> with AutomaticKeepAliveClientMixin 
   // load teams information from api
   void loadTeams() async {
 
-      var team1Response = await CachedHttp.get(BASE_URL + widget.team1Code,
+      var team1Response = await CachedHttp.get(API_URL + widget.team1Code,
           headers: {"Content-Type": "application/json"});
-      var team2Response = await CachedHttp.get(BASE_URL + widget.team2Code,
+      var team2Response = await CachedHttp.get(API_URL + widget.team2Code,
           headers: {"Content-Type": "application/json"});
 
       if (team1Response.error ||

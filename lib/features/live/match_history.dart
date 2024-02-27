@@ -58,6 +58,7 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
           iconTheme: const IconThemeData(
             color: Colors.white, //change your color here
           ),
+          backgroundColor: Color.fromARGB(255, 7, 95, 115),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(80.0),
             child: Container(
