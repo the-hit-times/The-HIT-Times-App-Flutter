@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:the_hit_times_app/globals.dart';
 import 'package:the_hit_times_app/util/cache_manager.dart';
 
 import 'bookmark_service/bookmark_service.dart';
@@ -66,7 +67,7 @@ class NewsState extends State<News> {
     if (loading) return "Loading";
     loading = true;
     final String url =
-        "https://tht-test-portal.onrender.com/api/posts?limit=$limit&page=$page";
+        "${Constants.BASE_URL}/posts?limit=$limit&page=$page";
     print("Fetching... $url");
     var res = await CachedHttp.getBody(url, headers: {"Accept": "application/json"});
 
