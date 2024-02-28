@@ -109,7 +109,7 @@ class PDFViewerCachedFromUrl extends StatelessWidget {
         autoSpacing: false,
       ).cachedFromUrl(
         url,
-        placeholder: (double progress) => Center(child: Text('$progress %')),
+        placeholder: (double progress) => Center(child: CircularProgressIndicator(value: progress/100)),
         errorWidget: (dynamic error) => Center(child: Text(error.toString())),
       ),
     );
