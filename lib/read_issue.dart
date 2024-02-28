@@ -42,51 +42,49 @@ class ReadIssue extends StatelessWidget {
         title: Text('Read Issue'),
         centerTitle: true,
         bottomOpacity: 0.0,
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.white, //change your color here
         ),
       ),
       body: Align(
         alignment: Alignment.center,
-        child: Container(
-          child: ListView.builder(
-            itemCount: issues.length,
-            itemBuilder: (context, index) {
-              return Card(
-                margin: EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (_) =>  PDFViewerCachedFromUrl(
-                          url: issues[index].url,
-                          title: issues[index].title,
+        child: ListView.builder(
+          itemCount: issues.length,
+          itemBuilder: (context, index) {
+            return Card(
+              margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (_) =>  PDFViewerCachedFromUrl(
+                        url: issues[index].url,
+                        title: issues[index].title,
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 50.0,
+                  color: Colors.green,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        issues[index].title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w900,
                         ),
                       ),
-                    );
-                  },
-                  child: Container(
-                    height: 50.0,
-                    color: Colors.green,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          issues[index].title,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
                 ),
-              );
-            }
-          ),
+              ),
+            );
+          }
         ),
       ),
     );
@@ -107,6 +105,7 @@ class PDFViewerCachedFromUrl extends StatelessWidget {
       ),
       body: const PDF(
         autoSpacing: false,
+        fitPolicy: FitPolicy.WIDTH,
       ).cachedFromUrl(
         url,
         placeholder: (double progress) => Center(child: CircularProgressIndicator(value: progress/100)),
