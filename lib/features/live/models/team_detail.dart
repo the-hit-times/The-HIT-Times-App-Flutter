@@ -1,43 +1,44 @@
 class TeamDetails {
   String teamCode;
   String deptName;
-  FootballTeam football;
+  FootballTeam? football;
+  CricketTeam? cricket;
 
-  TeamDetails({required this.teamCode, required this.deptName, required this.football});
+  TeamDetails(
+      {required this.teamCode,
+      required this.deptName,
+      required this.football,
+      required this.cricket});
 
   static const FIELD_TEAM_CODE = "team_code";
   static const FIELD_DEPT_NAME = "dept_name";
   static const FIELD_FOOTBALL = "football";
+  static const FIELD_CRICKET = "cricket";
 
   factory TeamDetails.fromJson(Map<String, dynamic> json) {
     return TeamDetails(
-      teamCode: json[FIELD_TEAM_CODE],
-      deptName: json[FIELD_DEPT_NAME],
-      football: FootballTeam.fromJson(json[FIELD_FOOTBALL])
-    );
+        teamCode: json[FIELD_TEAM_CODE],
+        deptName: json[FIELD_DEPT_NAME],
+        football: (json.containsKey(FIELD_FOOTBALL))
+            ? FootballTeam.fromJson(json[FIELD_FOOTBALL])
+            : null,
+        cricket: (json.containsKey(FIELD_CRICKET))
+            ? CricketTeam.fromJson(json[FIELD_CRICKET])
+            : null);
   }
-
 }
 
-class FootballTeam {
+class BaseTeamDetails {
   String teamName;
   String teamLogo;
   List<PlayerDetails> players;
-
-  FootballTeam({required this.teamName, required this.teamLogo, required this.players});
-
 
   static const FIELD_TEAM_NAME = "team_name";
   static const FIELD_TEAM_LOGO = "team_logo";
   static const FIELD_PLAYERS = "players";
 
-  factory FootballTeam.fromJson(Map<String, dynamic> json) {
-    return FootballTeam(
-      teamName: json[FIELD_TEAM_NAME],
-      teamLogo: json[FIELD_TEAM_LOGO],
-      players: json[FIELD_PLAYERS].map<PlayerDetails>((player) => PlayerDetails.fromJson(player)).toList()
-    );
-  }
+  BaseTeamDetails(
+      {required this.teamName, required this.teamLogo, required this.players});
 
   String? getTeamLogo() {
     if (teamLogo.contains('https://drive.google.com/file')) {
@@ -46,13 +47,44 @@ class FootballTeam {
     return teamLogo;
   }
 
-
   String _getImageUrlFromDrive(String driveImageLink) {
-    String fileId = driveImageLink.substring(driveImageLink.indexOf('/d/') + 3, driveImageLink.indexOf('/view'));
+    String fileId = driveImageLink.substring(
+        driveImageLink.indexOf('/d/') + 3, driveImageLink.indexOf('/view'));
     String newLink = 'https://drive.google.com/uc?export=view&id=$fileId';
     return newLink;
   }
+}
 
+class CricketTeam extends BaseTeamDetails {
+  CricketTeam(
+      {required super.teamName,
+      required super.teamLogo,
+      required super.players});
+
+  factory CricketTeam.fromJson(Map<String, dynamic> json) {
+    return CricketTeam(
+        teamName: json[BaseTeamDetails.FIELD_TEAM_NAME],
+        teamLogo: json[BaseTeamDetails.FIELD_TEAM_LOGO],
+        players: json[BaseTeamDetails.FIELD_PLAYERS]
+            .map<PlayerDetails>((player) => PlayerDetails.fromJson(player))
+            .toList());
+  }
+}
+
+class FootballTeam extends BaseTeamDetails {
+  FootballTeam(
+      {required super.teamName,
+      required super.teamLogo,
+      required super.players});
+
+  factory FootballTeam.fromJson(Map<String, dynamic> json) {
+    return FootballTeam(
+        teamName: json[BaseTeamDetails.FIELD_TEAM_NAME],
+        teamLogo: json[BaseTeamDetails.FIELD_TEAM_LOGO],
+        players: json[BaseTeamDetails.FIELD_PLAYERS]
+            .map<PlayerDetails>((player) => PlayerDetails.fromJson(player))
+            .toList());
+  }
 }
 
 class PlayerDetails {
@@ -60,7 +92,10 @@ class PlayerDetails {
   String playerDescription;
   String playerImage;
 
-  PlayerDetails({required this.playerName, required this.playerDescription, required this.playerImage});
+  PlayerDetails(
+      {required this.playerName,
+      required this.playerDescription,
+      required this.playerImage});
 
   static const FIELD_PLAYER_NAME = "player_name";
   static const FIELD_PLAYER_DESCRIPTION = "player_description";
@@ -68,10 +103,9 @@ class PlayerDetails {
 
   factory PlayerDetails.fromJson(Map<String, dynamic> json) {
     return PlayerDetails(
-      playerName: json[FIELD_PLAYER_NAME],
-      playerDescription: json[FIELD_PLAYER_DESCRIPTION],
-      playerImage: json[FIELD_PLAYER_IMAGE]
-    );
+        playerName: json[FIELD_PLAYER_NAME],
+        playerDescription: json[FIELD_PLAYER_DESCRIPTION],
+        playerImage: json[FIELD_PLAYER_IMAGE]);
   }
 
   String getPlayerImage() {
@@ -82,9 +116,9 @@ class PlayerDetails {
   }
 
   String _getImageUrlFromDrive(String driveImageLink) {
-    String fileId = driveImageLink.substring(driveImageLink.indexOf('/d/') + 3, driveImageLink.indexOf('/view'));
+    String fileId = driveImageLink.substring(
+        driveImageLink.indexOf('/d/') + 3, driveImageLink.indexOf('/view'));
     String newLink = 'https://drive.google.com/uc?export=view&id=$fileId';
     return newLink;
   }
-
 }

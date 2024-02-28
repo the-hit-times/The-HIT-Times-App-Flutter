@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 import 'package:the_hit_times_app/display.dart';
+import 'package:the_hit_times_app/globals.dart';
 import 'package:the_hit_times_app/models/postmodel.dart';
 import 'package:the_hit_times_app/util/cache_manager.dart';
 
@@ -266,7 +267,7 @@ class _NotificationDisplayWebState extends State<NotificationDisplayWeb> {
 
   // load timeline from the database
   void _loadPost() async {
-    String url = "https://tht-admin.onrender.com/api/post/${widget.postId}";
+    String url = "${Constants.BASE_URL}/post/${widget.postId}";
     var response =
         await CachedHttp.get(url, headers: {"Accept": "application/json"});
 

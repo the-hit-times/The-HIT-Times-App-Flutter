@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/bookmark_service/bookmark_service.dart';
 import 'package:the_hit_times_app/card_ui.dart';
 import 'package:the_hit_times_app/database_helper.dart';
+import 'package:the_hit_times_app/globals.dart';
 import 'package:the_hit_times_app/models/postmodel.dart';
 import 'package:the_hit_times_app/news.dart';
 import 'package:the_hit_times_app/display.dart';
@@ -46,7 +47,7 @@ class _WeekliesState extends State<Weeklies> {
     if (loading) return "Loading";
     loading = true;
     final String url =
-        "https://tht-admin.onrender.com/api/posts/weeklies?limit=$limit&page=$page";
+        "${Constants.BASE_URL}/posts/weeklies?limit=$limit&page=$page";
     print("Fetching... $url");
     var res = await CachedHttp.getBody(url,
         headers: {"Accept": "application/json"});
@@ -251,7 +252,7 @@ class _AppXState extends State<AppX> {
     if (loading) return "Loading";
     loading = true;
     final String url =
-        "https://tht-admin.onrender.com/api/posts/appx?limit=$limit&page=$page";
+        "${Constants.BASE_URL}/posts/appx?limit=$limit&page=$page";
     print("Fetching... $url");
     var res = await CachedHttp.getBody(url,
         headers: {"Accept": "application/json"});
@@ -447,7 +448,7 @@ class _GazetteState extends State<Gazette> {
     if (loading) return "Loading";
     loading = true;
     final String url =
-        "https://tht-admin.onrender.com/api/posts/gazette?limit=$limit&page=$page";
+        "${Constants.BASE_URL}/posts/gazette?limit=$limit&page=$page";
     print("Fetching... $url");
     var res = await CachedHttp.getBody(url,
         headers: {"Accept": "application/json"});
@@ -653,7 +654,7 @@ class _ReportopolisState extends State<Reportopolis> {
     if (loading) return "Loading";
     loading = true;
     final String url =
-        "https://tht-admin.onrender.com/api/posts/reportopolis?limit=$limit&page=$page";
+        "${Constants.BASE_URL}/posts/reportopolis?limit=$limit&page=$page";
     print("Fetching... $url");
     var res = await CachedHttp.getBody(url,
         headers: {"Accept": "application/json"});

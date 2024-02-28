@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/bookmark.dart';
 import 'package:the_hit_times_app/contact_us.dart';
 import 'package:the_hit_times_app/features/live/match_history.dart';
+import 'package:the_hit_times_app/globals.dart';
 import 'package:the_hit_times_app/news.dart';
 import 'package:the_hit_times_app/smenu.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -54,7 +55,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   void loadLiveMatchCount() async {
     print("Loading live match count");
-    String url = "https://tht-admin.onrender.com/api/live/count";
+    String url = "${Constants.BASE_URL}/live/count";
     var response = await http.get(Uri.parse(url), headers: {"Accept": "application/json"});
     var count = jsonDecode(response.body)["count"];
     print("Live match count: $count");

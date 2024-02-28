@@ -2,22 +2,54 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:the_hit_times_app/features/live/models/livematch.dart';
 
-class FootballScoreCard extends StatelessWidget {
+class CricketScoreCard extends StatelessWidget {
   final LiveMatch liveMatch;
   final Function? onTap;
   final Color backgroundColor;
   final double height;
-  const FootballScoreCard({super.key, required this.liveMatch, this.onTap, this.backgroundColor = Colors.black, this.height = 150.0});
+  const CricketScoreCard({super.key, required this.liveMatch, this.onTap, this.backgroundColor = Colors.black, this.height = 150.0});
+
+  TextSpan getTeamScore(String teamScore) {
+    String teamRuns = teamScore.split("/")[0];
+    String teamWickets = teamScore.split("/")[1];
+
+    return TextSpan(
+      children: [
+        TextSpan(
+          text: teamRuns,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const TextSpan(
+          text: " / ",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        TextSpan(
+          text: teamWickets,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    final team1Logo = liveMatch.team1?.getTeamFootballLogo();
-    final team2Logo = liveMatch.team2?.getTeamFootballLogo();
+    final team1Logo = liveMatch.team1?.getTeamCricketLogo();
+    final team2Logo = liveMatch.team2?.getTeamCricketLogo();
 
-    // check if the match is penalty shootout
-    final isPenalty = (liveMatch.team1?.teamPenalty != null && liveMatch.team2?.teamPenalty != null)
-        && (liveMatch.team1?.teamPenalty != "0" || liveMatch.team2?.teamPenalty != "0") &&
-        (liveMatch.team1?.teamScore == liveMatch.team2?.teamScore);
+
 
     return Material(
       color: backgroundColor,
@@ -26,7 +58,6 @@ class FootballScoreCard extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(5.0),
           onTap: () {
-            debugPrint("Tapped");
             if (onTap != null) {
               onTap!();
             }
@@ -38,7 +69,7 @@ class FootballScoreCard extends StatelessWidget {
             height: height,
             child: Stack(
               children: [
-                liveMatch.isLive! ? Positioned(
+                liveMatch.isLive! ? const Positioned(
                   top: 18,
                   right: 18,
                   child: Badge(
@@ -47,7 +78,7 @@ class FootballScoreCard extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                ): Text(""),
+                ): const Text(""),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -84,16 +115,15 @@ class FootballScoreCard extends StatelessWidget {
                       ),
                       Flexible(
                         flex: 1,
-                        child: Container(
+                        child: SizedBox(
                           width: double.infinity,
                           child: Center(
-                              child: Text(
-                            liveMatch.team1!.teamScore.toString(),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold),
-                          )),
+                              child: RichText(
+                                text: getTeamScore(
+                                  liveMatch.team1!.teamScore.toString()
+                                ),
+                              )
+                          ),
                         ),
                       ),
                       Flexible(
@@ -121,38 +151,24 @@ class FootballScoreCard extends StatelessWidget {
                                   style: TextStyle( color: Colors.white, fontSize: 12,
                                       fontWeight: FontWeight.w300),
                                 ),
-                                isPenalty ?
-                                Container(
-                                  margin: EdgeInsets.only(top: 10.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("Penalty: ", style: TextStyle(color: Colors.white),),
-                                      Text( "${liveMatch.team1!.teamPenalty.toString()}-${liveMatch.team2!.teamPenalty.toString()}"
-                                      , style: TextStyle(color: Colors.white),),
-                                    ],
-                                  ),
-                                ) : SizedBox(height: 0.0,),
                               ],
                             )),
                       ),
                       Flexible(
                         flex: 1,
-                        child: Container(
+                        child: SizedBox(
                           width: double.infinity,
                           child: Center(
-                              child: Text(
-                            liveMatch.team2!.teamScore.toString(),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold),
-                          )),
+                              child:  RichText(
+                                text: getTeamScore(
+                                    liveMatch.team2!.teamScore.toString()
+                                ),
+                              )),
                         ),
                       ),
                       Flexible(
                         flex: 1,
-                        child: Container(
+                        child: SizedBox(
                           width: 80,
                           child: Wrap(
                             direction: Axis.vertical,

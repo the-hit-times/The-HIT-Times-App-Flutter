@@ -10,10 +10,22 @@ class LiveMatchRepo {
   late final _liveSessionRef;
 
    LiveMatchRepo() {
-     _liveSessionRef = _db.collection(_liveSessionCollection).withConverter(
+     _liveSessionRef = _db.collection(_liveSessionCollection).where(LiveMatch.FIELD_MATCH_TYPE,
+       isEqualTo: "football"
+     ).withConverter(
         fromFirestore: LiveMatch.fromFirestore,
         toFirestore: (LiveMatch liveMatch, options) => liveMatch.toFirestore()
     );
+  }
+
+  getCrickLiveMatches() {
+    return _db.collection(_liveSessionCollection).where(LiveMatch.FIELD_MATCH_TYPE,
+        isEqualTo: "cricket"
+    ).withConverter(
+        fromFirestore: LiveMatch.fromFirestore,
+        toFirestore: (LiveMatch liveMatch, options) => liveMatch.toFirestore()
+    ).orderBy(LiveMatch.FIELD_MATCH_LIVE, descending: true)
+        .orderBy(LiveMatch.FIELD_MATCH_DATE, descending: true);
   }
 
    getLiveMatches() {
