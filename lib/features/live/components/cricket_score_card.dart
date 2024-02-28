@@ -88,7 +88,7 @@ class CricketScoreCard extends StatelessWidget {
                       Flexible(
                         flex: 1,
                         child: Container(
-                          width: double.infinity,
+                          width: 80,
                           child: Wrap(
                             direction: Axis.vertical,
                             alignment: WrapAlignment.center,
@@ -169,7 +169,7 @@ class CricketScoreCard extends StatelessWidget {
                       Flexible(
                         flex: 1,
                         child: SizedBox(
-                          width: double.infinity,
+                          width: 80,
                           child: Wrap(
                             direction: Axis.vertical,
                             alignment: WrapAlignment.center,

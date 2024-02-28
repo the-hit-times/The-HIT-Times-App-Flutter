@@ -44,21 +44,20 @@ class Team {
     "112": "https://drive.google.com/file/d/1wLghT_Sf2DPckPFIjVBtuP7lCj0BV7ln/view?usp=drive_link", // MASTERS
   };
 
-  // TODO: Not yet implemented
   final Map _codeToCricketImage = {
-    "100": null, // CSE
-    "101": null, // IT
-    "102": null, // ECE
-    "103": null, // AEIE
-    "104": null, // EE
-    "105": null, // MECH
-    "106": null, // CIVIL
-    "107": null, // CHEMICAL
-    "108": null, // BT/FT+AGE
-    "109": null, // CSE CS
-    "110": null, // CSE DS
-    "111": null, // CSE AIML
-    "112": null, // MASTERS
+    "100": "https://drive.google.com/file/d/1WodEFgrzjW_jKnXFS1LSlDNutgf_fCZq/view?usp=drive_link", // CSE
+    "101": "https://drive.google.com/file/d/1oYo2eJx8ndP9BwsqTE4LHrmWAnqL79qw/view?usp=drive_link", // IT
+    "102": "https://drive.google.com/file/d/1TuxonuWMRJJQ1n2A5ezQSDiU4czoV0eU/view?usp=drive_link", // ECE
+    "103": "https://drive.google.com/file/d/1vBkpkJpktYEJlOWrGmYpdg3Qbs5FTp_n/view?usp=drive_link", // AEIE
+    "104": "https://drive.google.com/file/d/1j0UIualNr-vO-WGsjtfFjtNA7AOnd7pL/view?usp=drive_link", // EE
+    "105": "https://drive.google.com/file/d/1b2Cu-t2OeofAyvvRgDITJPIA72NZg64s/view?usp=drive_link", // MECH
+    "106": "https://drive.google.com/file/d/1NL2UbiBjn4YD85IPklaHzK8dDYTCA4AC/view?usp=drive_link", // CIVIL
+    "107": "https://drive.google.com/file/d/1vyvxY2fJ0aXSFqKhAC4off-Fqhn6F15q/view?usp=drive_link", // CHEMICAL
+    "108": "https://drive.google.com/file/d/1t7ukG6SCJNX27PInnRiYPxaBvu9ZZtb8/view?usp=drive_link", // BT/FT+AGE
+    "109": "https://drive.google.com/file/d/1nlYJsd2SzSSelbAx0_E7ew0dM0peYzEP/view?usp=drive_link", // CSE CS
+    "110": "https://drive.google.com/file/d/1AjX32UYvnPqf_RsI4GgALpqgWdJVSGMq/view?usp=drive_link", // CSE DS
+    "111": "https://drive.google.com/file/d/1N3SXswlClxPU5Cu3V56BMRVD3pwPUDhI/view?usp=drive_link", // CSE AIML
+    "112": "https://drive.google.com/file/d/134MS61GXJvhXF0hbHp65DJvQ86jc5b1q/view?usp=drive_link", // MASTERS
   };
 
   String getTeamName() {
