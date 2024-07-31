@@ -39,7 +39,7 @@ class AboutUs extends StatelessWidget {
       child: InkWell(
         onTap: (){
           launch(
-              'https://sites.google.com/view/thtkhabri',
+              'https://www.thehittimes.com/privacy-policy',
             forceWebView: true,
             //enableJavaScript: true,
             forceSafariVC: true
