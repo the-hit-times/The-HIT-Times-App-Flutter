@@ -223,9 +223,8 @@ class ContactUsState extends State<ContactUs> {
               margin: EdgeInsets.only(left: 20.0, right: 20.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  shape: StadiumBorder(),
+                  shape: StadiumBorder(), backgroundColor: Color.fromARGB(255, 4, 114, 138),
                   padding: EdgeInsets.all(5),
-                  primary: Color.fromARGB(255, 4, 114, 138),
                   minimumSize: const Size.fromHeight(50), // NEW
                 ),
                 onPressed: _isDisable() ? null : this.submit,

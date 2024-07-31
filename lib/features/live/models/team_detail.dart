@@ -63,8 +63,8 @@ class CricketTeam extends BaseTeamDetails {
 
   factory CricketTeam.fromJson(Map<String, dynamic> json) {
     return CricketTeam(
-        teamName: json[BaseTeamDetails.FIELD_TEAM_NAME],
-        teamLogo: json[BaseTeamDetails.FIELD_TEAM_LOGO],
+        teamName: json[BaseTeamDetails.FIELD_TEAM_NAME] ?? "",
+        teamLogo: json[BaseTeamDetails.FIELD_TEAM_LOGO] ?? "",
         players: json[BaseTeamDetails.FIELD_PLAYERS]
             .map<PlayerDetails>((player) => PlayerDetails.fromJson(player))
             .toList());
@@ -116,9 +116,12 @@ class PlayerDetails {
   }
 
   String _getImageUrlFromDrive(String driveImageLink) {
-    String fileId = driveImageLink.substring(
-        driveImageLink.indexOf('/d/') + 3, driveImageLink.indexOf('/view'));
-    String newLink = 'https://drive.google.com/uc?export=view&id=$fileId';
-    return newLink;
+    final googleDriveMatch = RegExp(r'https:\/\/drive\.google\.com\/(?:file\/d\/|open\?id=)([^\/&]+)')
+        .firstMatch(driveImageLink);
+
+    final extractedUrl = googleDriveMatch != null
+        ? 'https://drive.google.com/uc?export=view&id=${googleDriveMatch.group(1)}'
+        : driveImageLink;
+    return extractedUrl;
   }
 }

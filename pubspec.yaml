@@ -38,7 +38,7 @@ dependencies:
   cached_network_image: ^3.2.2
   url_launcher: ^6.1.5
   change_app_package_name: ^1.1.0
-  intl: ^0.18.0
+  intl: 0.19.0
   curved_navigation_bar: ^1.0.3
   reading_time: ^2.0.0
   firebase_messaging: ^14.2.5
@@ -52,7 +52,7 @@ dependencies:
   connectivity_plus: ^4.0.2
   cloud_firestore: ^4.9.1
   firebase_ui_firestore: ^1.5.10
-  screenshot: ^2.1.0
+  screenshot: ^3.0.0
   share_plus: ^7.0.2
   path_provider: ^2.0.15
   flutter_cached_pdfview: ^0.4.2

@@ -304,7 +304,7 @@ class _NotificationDisplayWebState extends State<NotificationDisplayWeb> {
     return isLoading
         ? Scaffold(
         appBar: AppBar(
-          title: Text("The Hit Times"),
+          title: Text("The HIT Times"),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
@@ -316,7 +316,7 @@ class _NotificationDisplayWebState extends State<NotificationDisplayWeb> {
         : failedLoading
             ? Scaffold(
                 appBar: AppBar(
-                  title: Text("The Hit Times"),
+                  title: Text("The HIT Times"),
                   leading: IconButton(
                     icon: Icon(Icons.arrow_back),
                     onPressed: () {
