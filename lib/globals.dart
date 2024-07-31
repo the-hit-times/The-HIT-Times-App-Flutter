@@ -5,5 +5,5 @@ String noti_body = 'Notification will be displayed here';
 String noti_date = '';
 
 class Constants {
-  static const String BASE_URL = "https://www.thehittimes.com//api/v1";
+  static const String BASE_URL = "https://www.thehittimes.com/api/v1";
 }
