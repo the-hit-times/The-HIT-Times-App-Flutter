@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.2.0+3
+version: 4.0.0+29
 
 environment:
   sdk: ">=2.17.6 <3.0.0"
@@ -30,7 +30,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -39,12 +38,24 @@ dependencies:
   cached_network_image: ^3.2.2
   url_launcher: ^6.1.5
   change_app_package_name: ^1.1.0
-
-  # For Notification
+  intl: 0.19.0
+  curved_navigation_bar: ^1.0.3
+  reading_time: ^2.0.0
   firebase_messaging: ^14.2.5
-  firebase_core: ^2.7.0
+  firebase_core: ^2.14.0
   flutter_local_notifications: ^9.2.0
   http: ^0.13.5
+  emailjs: ^1.1.0
+  shared_preferences: ^2.0.18
+  flutter_html: ^3.0.0-beta.2
+  flutter_cache_manager: ^3.3.1
+  connectivity_plus: ^4.0.2
+  cloud_firestore: ^4.9.1
+  firebase_ui_firestore: ^1.5.10
+  screenshot: ^3.0.0
+  share_plus: ^7.0.2
+  path_provider: ^2.0.15
+  flutter_cached_pdfview: ^0.4.2
 
 dev_dependencies:
   flutter_test:
@@ -62,7 +73,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -77,6 +87,9 @@ flutter:
     - assets/images/read_issue.jpeg
     - assets/images/weeklies.jpeg
     - assets/images/exclusive.png
+    - assets/images/logo.jpeg
+    - assets/images/gazette.png
+    - assets/images/reportopolis.png
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
@@ -93,18 +106,18 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: Anson
-       fonts:
-         - asset: fonts/Anson-Regular.otf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-     - family: Cambo
-       fonts:
-         - asset: fonts/Cambo-Regular.otf
+    - family: Anson
+      fonts:
+        - asset: fonts/Anson-Regular.otf
+    #       - asset: fonts/Schyler-Italic.ttf
+    #         style: italic
+    - family: Cambo
+      fonts:
+        - asset: fonts/Cambo-Regular.otf
 
-     - family: Exo
-       fonts:
-         - asset: fonts/Exo2.0-Bold.otf
+    - family: Exo
+      fonts:
+        - asset: fonts/Exo2.0-Bold.otf
   # fonts:
   #   - family: Schyler
   #     fonts:

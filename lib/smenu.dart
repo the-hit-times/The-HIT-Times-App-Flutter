@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_hit_times_app/notification.dart';
+import 'package:the_hit_times_app/notify.dart';
 import 'package:the_hit_times_app/read_issue.dart';
 import 'weeklie.dart';
 import 'about_us.dart';
@@ -8,50 +8,48 @@ import 'globals.dart' as globals;
 // import 'notification.dart';
 
 class SMenu extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
         fourGrid(),
         Container(
-          margin: EdgeInsets.only(left:10.0,right:10.0,top: 8.0,bottom: 8.0),
-          height: 250.0,
+          padding: EdgeInsets.all(10),
+          margin: EdgeInsets.only(left: 5.0, right: 5.0, top: 8.0, bottom: 8.0),
+          height: 200.0,
           width: double.infinity,
-
           child: InkWell(
-            onTap: (){Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => Scaffold(
-                    appBar: AppBar(
-                      title: Text("The HIT Times"),
-                      centerTitle: true,
-                      iconTheme: IconThemeData(
-                        color: Colors.white, //change your color here
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => Scaffold(
+                      appBar: AppBar(
+                        title: Text("About Us"),
+                        centerTitle: true,
+                        iconTheme: IconThemeData(
+                          color: Colors.white, //change your color here
+                        ),
                       ),
-                    ),
-                    body: AboutUs()
-                )/*Placeholder()*/
-            ));},
+                      body: AboutUs()) /*Placeholder()*/
+                  ));
+            },
             child: Stack(
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: ExactAssetImage('assets/images/about_us3.png'),
-                      fit: BoxFit.fill,
-                      colorFilter: ColorFilter.mode(
-                        Colors.black26,
-                        BlendMode.darken,
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      image: DecorationImage(
+                        image: ExactAssetImage('assets/images/about_us3.png'),
+                        fit: BoxFit.fill,
+                        colorFilter: ColorFilter.mode(
+                          Colors.black26,
+                          BlendMode.darken,
+                        ),
                       ),
-                    ),
-                    color: Colors.amber
-                  ),
+                      color: Colors.amber),
                 ),
                 Align(
-                    alignment: Alignment.bottomLeft,
-                    child: bottomTitle(
-                        caption : 'About Us'
-                    ),
+                  alignment: Alignment.bottomLeft,
+                  child: bottomTitle(caption: 'About Us'),
                 ),
               ],
             ),
@@ -61,7 +59,6 @@ class SMenu extends StatelessWidget {
     );
   }
 }
-
 
 class bottomTitle extends StatelessWidget {
   bottomTitle({required this.caption});
@@ -74,28 +71,33 @@ class bottomTitle extends StatelessWidget {
       width: double.infinity,
       margin: EdgeInsets.all(0.0),
       //color: Colors.black12,
-      child:Container(
+      child: Container(
         margin: EdgeInsets.only(left: 10.0),
-        child: caption.length <13 ? Text( caption,
-          style:TextStyle(color: Colors.white,
-            fontSize: 20.0,
-            fontWeight: FontWeight.w800,
-          ),
-          maxLines: 1,
-        ):
-        Text( caption,
-          style:TextStyle(color: Colors.white,
-            fontSize: 18.0,
-            fontWeight: FontWeight.w800,
-          ),
-          maxLines: 1,
-        ),
+        child: caption.length < 13
+            ? Text(
+                caption,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w800,
+                ),
+                maxLines: 1,
+              )
+            : Text(
+                caption,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w800,
+                ),
+                maxLines: 1,
+              ),
       ),
     );
   }
 }
 
-class fourGrid extends StatelessWidget{
+class fourGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -105,90 +107,74 @@ class fourGrid extends StatelessWidget{
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(top: 5.0,right: 2.0,bottom: 5.0,left: 0.0),
+              padding: EdgeInsets.all(5),
               height: MediaQuery.of(context).size.width * 0.5,
               width: MediaQuery.of(context).size.width * 0.47,
-
               child: InkWell(
-                onTap: (){Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => Container(
-                      // color: Colors.amber
-                        child: DispNoti(
-                          date: globals.noti_date,
-                          body: globals.noti_body,
-                          title: globals.noti_title,
-                        )
-                    )/*Placeholder()*/
-                ));
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => DispNoti()));
                 },
                 child: Stack(
                   children: <Widget>[
                     Container(
                       decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
                         image: DecorationImage(
-                          image: ExactAssetImage('assets/images/notifications.png'),
+                          image: ExactAssetImage(
+                              'assets/images/notifications.png'),
                           fit: BoxFit.cover,
                           colorFilter: ColorFilter.mode(
-                              Colors.black26,
-                              BlendMode.darken
-                          ),
+                              Colors.black26, BlendMode.darken),
                         ),
                       ),
                     ),
                     Align(
                         alignment: Alignment.bottomLeft,
-                        child: bottomTitle(
-                            caption : 'Notifications'
-                        )
-                    ),
+                        child: bottomTitle(caption: 'Notifications')),
                   ],
                 ),
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 5.0,right: 0.0,bottom: 5.0,left: 2.0),
+              padding: EdgeInsets.all(5),
               height: MediaQuery.of(context).size.width * 0.5,
               width: MediaQuery.of(context).size.width * 0.47,
-
               child: InkWell(
-                onTap: (){Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => Scaffold(
-                        appBar: AppBar(
-                          title: Text("The HIT Times"),
-                          centerTitle: true,
-                          iconTheme: IconThemeData(
-                            color: Colors.white, //change your color here
-                          ),
-                        ),
-                        body:AppX(),
-                    )
-                ));
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => Scaffold(
+                            appBar: AppBar(
+                              title: Text("App Exclusive"),
+                              centerTitle: true,
+                              iconTheme: IconThemeData(
+                                color: Colors.white, //change your color here
+                              ),
+                            ),
+                            body: AppX(),
+                          )));
                 },
                 child: Stack(
                   children: <Widget>[
                     Container(
                       decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
                         image: DecorationImage(
                           image: ExactAssetImage('assets/images/exclusive.png'),
                           fit: BoxFit.fill,
                           alignment: Alignment.center,
                           colorFilter: ColorFilter.mode(
-                              Colors.black26,
-                              BlendMode.darken
-                          ),
+                              Colors.black26, BlendMode.darken),
                         ),
                       ),
                     ),
                     Align(
                         alignment: Alignment.bottomLeft,
-                        child: bottomTitle(
-                            caption : 'App Exclusive'
-                        )
-                    ),
+                        child: bottomTitle(caption: 'App Exclusive')),
                   ],
                 ),
               ),
@@ -196,82 +182,157 @@ class fourGrid extends StatelessWidget{
           ],
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(top: 5.0,right: 2.0,bottom: 5.0,left: 0.0),
+              padding: EdgeInsets.all(5),
               height: MediaQuery.of(context).size.width * 0.5,
               width: MediaQuery.of(context).size.width * 0.47,
-
               child: InkWell(
-                onTap: (){Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => Scaffold(
-                        appBar: AppBar(
-                          title: Text("The HIT Times"),
-                          centerTitle: true,
-                          iconTheme: IconThemeData(
-                            color: Colors.white, //change your color here
-                          ),
-                        ),
-                        body:Weeklies()
-                    )/*Placeholder()*/
-                ));
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => Scaffold(
+                            appBar: AppBar(
+                              title: Text("Gazette"),
+                              centerTitle: true,
+                              iconTheme: IconThemeData(
+                                color: Colors.white, //change your color here
+                              ),
+                            ),
+                            body: Gazette(),
+                          )));
                 },
                 child: Stack(
                   children: <Widget>[
                     Container(
                       decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
                         image: DecorationImage(
-                          image: ExactAssetImage('assets/images/weeklies.jpeg'),
-                          fit: BoxFit.cover,
+                          image: ExactAssetImage('assets/images/gazette.png'),
+                          fit: BoxFit.fill,
+                          alignment: Alignment.center,
                           colorFilter: ColorFilter.mode(
-                              Colors.black26,
-                              BlendMode.darken
-                          ),
+                              Colors.black26, BlendMode.darken),
                         ),
                       ),
                     ),
                     Align(
                         alignment: Alignment.bottomLeft,
-                        child: bottomTitle(
-                            caption : 'Weeklies'
-                        )
-                    ),
+                        child: bottomTitle(caption: 'Gazette')),
                   ],
                 ),
               ),
             ),
-
             Container(
-              margin: EdgeInsets.only(top: 5.0,right: 0.0,bottom: 5.0,left: 2.0),
+              padding: EdgeInsets.all(5),
               height: MediaQuery.of(context).size.width * 0.5,
               width: MediaQuery.of(context).size.width * 0.47,
-
               child: InkWell(
-                onTap: (){Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => ReadIssue()
-                ));},
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => Scaffold(
+                            appBar: AppBar(
+                              title: Text("Reportopolis"),
+                              centerTitle: true,
+                              iconTheme: IconThemeData(
+                                color: Colors.white, //change your color here
+                              ),
+                            ),
+                            body: Reportopolis(),
+                          )));
+                },
                 child: Stack(
                   children: <Widget>[
                     Container(
                       decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
                         image: DecorationImage(
-                          image: ExactAssetImage('assets/images/read_issue.jpeg'),
-                          fit: BoxFit.cover,
+                          image: ExactAssetImage('assets/images/reportopolis.png'),
+                          fit: BoxFit.fill,
+                          alignment: Alignment.center,
                           colorFilter: ColorFilter.mode(
-                              Colors.black26,
-                              BlendMode.darken
-                          ),
+                              Colors.black26, BlendMode.darken),
                         ),
                       ),
                     ),
                     Align(
-                      alignment: Alignment.bottomLeft,
-                      child: bottomTitle(
-                        caption : 'Read Issue'
-                      )
+                        alignment: Alignment.bottomLeft,
+                        child: bottomTitle(caption: 'Reportopolis')),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(5),
+              height: MediaQuery.of(context).size.width * 0.5,
+              width: MediaQuery.of(context).size.width * 0.47,
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => Scaffold(
+                          appBar: AppBar(
+                            title: Text("Weeklies"),
+                            centerTitle: true,
+                            iconTheme: IconThemeData(
+                              color: Colors.white, //change your color here
+                            ),
+                          ),
+                          body: Weeklies()) /*Placeholder()*/
+                      ));
+                },
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        image: DecorationImage(
+                          image: ExactAssetImage('assets/images/weeklies.jpeg'),
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                              Colors.black26, BlendMode.darken),
+                        ),
+                      ),
                     ),
+                    Align(
+                        alignment: Alignment.bottomLeft,
+                        child: bottomTitle(caption: 'Weeklies')),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(5),
+              height: MediaQuery.of(context).size.width * 0.5,
+              width: MediaQuery.of(context).size.width * 0.47,
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => ReadIssue()));
+                },
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        image: DecorationImage(
+                          image:
+                              ExactAssetImage('assets/images/read_issue.jpeg'),
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                              Colors.black26, BlendMode.darken),
+                        ),
+                      ),
+                    ),
+                    Align(
+                        alignment: Alignment.bottomLeft,
+                        child: bottomTitle(caption: 'Read Issue')),
                   ],
                 ),
               ),
