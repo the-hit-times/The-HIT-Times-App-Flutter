@@ -1,11 +1,17 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:the_hit_times_app/bookmark.dart';
 import 'package:the_hit_times_app/contact_us.dart';
+import 'package:the_hit_times_app/features/live/match_history.dart';
+import 'package:the_hit_times_app/globals.dart';
 import 'package:the_hit_times_app/news.dart';
-import 'package:the_hit_times_app/notification_service/notification_service.dart';
 import 'package:the_hit_times_app/smenu.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:the_hit_times_app/notification_service/notification_service.dart';
 // import 'notification.dart';
-import 'bottom_nav_gallery.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:http/http.dart' as http;
 
 
 class MainPage extends StatefulWidget {
@@ -13,75 +19,29 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
-
+class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   // FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   int _currentIndex = 1;
+  int matchCount = 0;
 
   BottomNavigationBarType _type = BottomNavigationBarType.shifting;
-  late List<NavigationIconView> _navigationViews;
   late PageController _pageController;
-
 
   @override
   void initState() {
     super.initState();
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      NotificationService().show(message);
-    });
-
-    _navigationViews = <NavigationIconView>[
-      NavigationIconView(
-        icon: IconTheme(
-            data: IconThemeData(
-                color: Color(0xFFdff9fb)),
-            child: Icon(Icons.menu)
-        ),
-        title: 'Menu',
-        color: Color(0xFF000000),
-        vsync: this,
-      ),
-      NavigationIconView(
-        icon: IconTheme(
-            data: IconThemeData(
-                color: Color(0xFFdff9fb)),
-            child: Icon(Icons.assignment)
-        ),
-        title: 'News',
-        color: Color(0xFF000000),
-        vsync: this,
-      ),
-      NavigationIconView(
-        icon: IconTheme(
-            data: IconThemeData(
-                color: Color(0xFFdff9fb)),
-            child: Icon(Icons.info_outline)
-        ),
-        title: 'Contact Us',
-        color: Color(0xFF000000),
-        vsync: this,
-      ),
-    ];
-
-    for (NavigationIconView view in _navigationViews)
-      view.controller.addListener(_rebuild);
-
-    _navigationViews[_currentIndex].controller.value = 1.0;
-
     _pageController = PageController(initialPage: _currentIndex);
+    loadLiveMatchCount();
   }
 
   @override
   void dispose() {
-    for (NavigationIconView view in _navigationViews)
-      view.controller.dispose();
     _pageController.dispose();
     super.dispose();
   }
 
-  void campusNews(){
+  void campusNews() {
     setState(() {
       this._currentIndex = 1;
     });
@@ -93,69 +53,111 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
     });
   }
 
+  void loadLiveMatchCount() async {
+    print("Loading live match count");
+    String url = "${Constants.BASE_URL}/live/count";
+    var response = await http.get(Uri.parse(url), headers: {"Accept": "application/json"});
+    var count = jsonDecode(response.body)["count"];
+    print("Live match count: $count");
+    setState(() {
+      matchCount = count;
+    });
+  }
+
+  void _onHorizontalDrag(DragEndDetails details) {
+    if (details.primaryVelocity == 0)
+      return; // user have just tapped on screen (no dragging)
+
+    if (details.primaryVelocity!.compareTo(0) == -1) {
+      print('dragged from left');
+      print(_currentIndex);
+      setState(() {
+        if (_currentIndex < 2) {
+          _currentIndex++;
+          FocusScope.of(context)?.unfocus();
+        }
+      });
+    } else {
+      print('dragged from right');
+      print(_currentIndex);
+      setState(() {
+        if (_currentIndex > 0) _currentIndex--;
+        FocusScope.of(context)?.unfocus();
+      });
+    }
+  }
+
   void onPageChanged(int page) {
     setState(() {
       this._currentIndex = page;
     });
   }
 
-  void _onHorizontalDrag(DragEndDetails details) {
-    if(details.primaryVelocity == 0) return; // user have just tapped on screen (no dragging)
-
-    if (details.primaryVelocity!.compareTo(0) == -1) {
-      print('dragged from left');
-      print(_currentIndex);
-      setState((){
-        if(_currentIndex<2) {
-          _currentIndex++;
-        }
-      });
-    }
-    else {
-      print('dragged from right');
-      print(_currentIndex);
-      setState((){
-        if(_currentIndex>0)
-          _currentIndex--;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final BottomNavigationBar botNavBar = BottomNavigationBar(
-      items: _navigationViews
-          .map((NavigationIconView navigationView) => navigationView.item)
-          .toList(),
-      currentIndex: _currentIndex,
-      type: _type,
-      onTap: (int index) {
-        setState(() {
-          _navigationViews[_currentIndex].controller.reverse();
-          _currentIndex = index;
-          _navigationViews[_currentIndex].controller.forward();
-        });
-      },
-    );
-
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         title: const Text('The HIT Times'),
+        leading: Container(
+          padding: EdgeInsets.all(5),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: Image.asset(
+              "assets/images/logo.jpeg",
+              fit: BoxFit.fill,
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            padding: EdgeInsets.zero,
+            icon: matchCount > 0 ?  Badge(
+              label: Text("$matchCount"),
+              child: Icon(Icons.live_tv),
+            ): Icon(Icons.live_tv),
+            tooltip: 'Live',
+            onPressed: () async {
+              Navigator.of(context)
+                  .pushNamed(MatchHistoryScreen.ROUTE_NAME)
+                  .then((value) => {setState(() {})});
+            },
+          ),
+          IconButton(
+            padding: EdgeInsets.zero,
+            icon: const Icon(Icons.favorite),
+            tooltip: 'Favourites',
+            onPressed: () async {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(
+                      builder: (BuildContext context) => Container(
+                          // color: Colors.amber
+                          child: BookMarkPage()) /*Placeholder()*/
+                      ))
+                  .then((value) => {setState(() {})});
+            },
+          )
+        ],
         centerTitle: true,
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
         ),
       ),
-
       body: GestureDetector(
-        onHorizontalDragEnd: (DragEndDetails details) => _onHorizontalDrag(details),
+        onHorizontalDragEnd: (DragEndDetails details) =>
+            _onHorizontalDrag(details),
         child: Stack(
+          // children: [
+          //   _currentIndex == 0 ? Container(child: SMenu()) : Container(),
+          //   _currentIndex == 1 ? Container(child: News()) : Container(),
+          //   _currentIndex == 2 ? Container(child: ContactUs()) : Container()
+          // ],
           children: <Widget>[
             Offstage(
               offstage: _currentIndex != 0,
               child: TickerMode(
                 enabled: _currentIndex == 0,
-                child: Container(child : SMenu()),
+                child: Container(child: SMenu()),
               ),
             ),
             Offstage(
@@ -163,7 +165,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
               child: TickerMode(
                 enabled: _currentIndex == 1,
                 child: Container(
-                    child: News()
+                  child: News(),
                 ),
               ),
             ),
@@ -172,24 +174,30 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
               child: TickerMode(
                 enabled: _currentIndex == 2,
                 child: Container(
-                  /*decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: FractionalOffset.topCenter,
-                        end: FractionalOffset.bottomCenter,
-                        colors: [const Color(0xFFddd6f3), const Color(0xFFffffff), const Color(0xFF9bc5c3)], // whitish to gray
-                        stops: [0.0,0.3,1.0],
-                        tileMode: TileMode.mirror, // repeats the gradient over the canvas
-                      ),
-                    ),*/
                     height: MediaQuery.of(context).size.height,
-                    child: ContactUs()
-                ),
+                    child: ContactUs()),
               ),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: botNavBar,
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: Colors.transparent,
+        color: Color.fromARGB(255, 7, 95, 115),
+        height: 50,
+        index: _currentIndex,
+        items: <Widget>[
+          Icon(Icons.menu, size: 30, color: Colors.white),
+          Icon(Icons.newspaper, size: 30, color: Colors.white),
+          Icon(Icons.mail_outline, size: 30, color: Colors.white),
+        ],
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+            FocusScope.of(context)?.unfocus();
+          });
+        },
+      ),
     );
   }
 }
