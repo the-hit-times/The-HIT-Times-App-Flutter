@@ -8,10 +8,8 @@ class BookMarkService {
 
   Future<List<PostModel>> getLocalNews() async {
     final prefs = await SharedPreferences.getInstance();
-    localnews = prefs
-        .getStringList("news")!
-        .map((e) => PostModel.fromJson(json.decode(e)))
-        .toList();
+    var x = prefs.getStringList("news") ?? [];
+    localnews = x.map((e) => PostModel.fromJson(json.decode(e))).toList();
     return localnews;
   }
 
