@@ -6,16 +6,17 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DisplayPost extends StatelessWidget {
-  const DisplayPost(
-      {super.key,
-      required this.pIndex,
-      required this.body,
-      required this.title,
-      required this.description,
-      required this.imgUrl,
-      required this.date,
-      required this.category,
-      required this.htmlBody});
+  const DisplayPost({
+    super.key,
+    required this.pIndex,
+    required this.body,
+    required this.title,
+    required this.description,
+    required this.imgUrl,
+    required this.date,
+    required this.category,
+    required this.htmlBody,
+  });
 
   final int pIndex;
   final String body;
@@ -49,18 +50,19 @@ class DisplayPost extends StatelessWidget {
 }
 
 class SliverAppBarBldr extends StatelessWidget {
-  const SliverAppBarBldr(
-      {super.key,
-      required this.imgUrl,
-      required this.title,
-      required this.description});
+  const SliverAppBarBldr({
+    super.key,
+    required this.imgUrl,
+    required this.title,
+    required this.description,
+  });
+
   final String imgUrl;
   final String description;
   final String title;
 
   @override
   Widget build(BuildContext context) {
-    // ignore: unnecessary_new
     return SliverAppBar(
       toolbarHeight: 100,
       title: Row(
@@ -108,7 +110,7 @@ class SliverAppBarBldr extends StatelessWidget {
                       color: const Color.fromARGB(255, 156, 223, 239),
                       backgroundColor: const Color.fromRGBO(37, 45, 59, 1),
                     ),
-              )
+              ),
             ],
           ),
         ),
@@ -190,14 +192,14 @@ class FullScreen extends StatelessWidget {
 }
 
 class SliverListBldr extends StatelessWidget {
-  const SliverListBldr(
-      {Key? key,
-      required this.body,
-      required this.title,
-      required this.description,
-      required this.date,
-      required this.htmlBody})
-      : super(key: key);
+  const SliverListBldr({
+    Key? key,
+    required this.body,
+    required this.title,
+    required this.description,
+    required this.date,
+    required this.htmlBody,
+  }) : super(key: key);
 
   final String body;
   final String title;
@@ -205,8 +207,6 @@ class SliverListBldr extends StatelessWidget {
   final String date;
   final String? htmlBody;
 
-  /// Launches any url in browser, We are this method because
-  /// launch() function is deprecated.
   Future<void> _launchInBrowser(Uri url) async {
     if (!await launchUrl(
       url,
@@ -219,13 +219,10 @@ class SliverListBldr extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget getValidContent() {
-      if (htmlBody != null && htmlBody != "") {
+      if (htmlBody != null && htmlBody!.isNotEmpty) {
         return Html(
           data: htmlBody!,
           style: {
-            // This sets the color of the text to white to all the elements
-            // eg; p, a, div, etc.
-            // just like a css selector.
             "body": Style(
               color: Colors.white,
               fontSize: FontSize(15.0),
@@ -233,7 +230,7 @@ class SliverListBldr extends StatelessWidget {
             ),
             "a": Style(
               color: Colors.blue,
-            )
+            ),
           },
           onLinkTap: (
             String? url,
@@ -258,24 +255,26 @@ class SliverListBldr extends StatelessWidget {
 
     return SliverToBoxAdapter(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             title,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 22.0,
+              fontSize: 24.0,
               backgroundColor: Color.fromRGBO(37, 45, 59, 1),
               color: Color.fromARGB(255, 4, 201, 245),
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
             ),
             maxLines: 3,
+            overflow: TextOverflow.ellipsis,
           ),
           Container(
             margin: const EdgeInsets.only(top: 10),
             child: Text(
               DateFormat('yyyy-MM-dd').format(DateTime.parse(date)),
               style: const TextStyle(
-                fontSize: 12.0,
+                fontSize: 14.0,
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
               ),
@@ -283,13 +282,9 @@ class SliverListBldr extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          Container(
-            padding: const EdgeInsets.only(
-                left: 12.0, right: 12.0, bottom: 12.0, top: 12.0),
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: getValidContent(),
-            ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: getValidContent(),
           ),
           const SizedBox(
             height: 30,
