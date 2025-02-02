@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:intl/intl.dart';
 import 'package:html/dom.dart' as html;
-import 'package:the_hit_times_app/util/cache_manager.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DisplayPost extends StatelessWidget {
-  DisplayPost(
-      {required this.pIndex,
+  const DisplayPost(
+      {super.key,
+      required this.pIndex,
       required this.body,
       required this.title,
       required this.description,
@@ -26,7 +26,6 @@ class DisplayPost extends StatelessWidget {
   final String description;
   final int category;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +37,11 @@ class DisplayPost extends StatelessWidget {
             description: description,
           ),
           SliverListBldr(
-              body: body, htmlBody: htmlBody, title: title, description: description, date: date)
+              body: body,
+              htmlBody: htmlBody,
+              title: title,
+              description: description,
+              date: date)
         ],
       ),
     );
@@ -65,7 +68,7 @@ class SliverAppBarBldr extends StatelessWidget {
           CircleAvatar(
             backgroundColor: Colors.transparent,
             child: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back,
                 color: Colors.white,
               ),
@@ -77,9 +80,9 @@ class SliverAppBarBldr extends StatelessWidget {
         ],
       ),
       bottom: PreferredSize(
-        preferredSize: Size.fromHeight(0),
+        preferredSize: const Size.fromHeight(0),
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Color.fromRGBO(37, 45, 59, 1),
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20), topRight: Radius.circular(20)),
@@ -90,23 +93,21 @@ class SliverAppBarBldr extends StatelessWidget {
                     blurRadius: 15,
                     offset: Offset(0, -12))
               ]),
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           width: double.maxFinite,
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 description,
                 textAlign: TextAlign.center,
-                style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium!
-                      .copyWith(height: 1.5, 
-                      color: Color.fromARGB(255, 156, 223, 239),
-                      backgroundColor: Color.fromRGBO(37, 45, 59, 1),
-                      ),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      height: 1.5,
+                      color: const Color.fromARGB(255, 156, 223, 239),
+                      backgroundColor: const Color.fromRGBO(37, 45, 59, 1),
+                    ),
               )
             ],
           ),
@@ -120,14 +121,14 @@ class SliverAppBarBldr extends StatelessWidget {
       stretch: true,
       expandedHeight: MediaQuery.of(context).size.height / 1.5,
       flexibleSpace: FlexibleSpaceBar(
-        stretchModes: [StretchMode.zoomBackground],
-        background: InkWell( 
+        stretchModes: const [StretchMode.zoomBackground],
+        background: InkWell(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (_) {
-            return FullScreen(imgUrl: imgUrl);
-          }));
+              return FullScreen(imgUrl: imgUrl);
+            }));
           },
-          child : CachedNetworkImage(
+          child: CachedNetworkImage(
             imageUrl: imgUrl,
             fit: BoxFit.cover,
             placeholder: (context, url) => Container(
@@ -136,7 +137,10 @@ class SliverAppBarBldr extends StatelessWidget {
                 child: CircularProgressIndicator(),
               ),
             ),
-            errorWidget: (context, url, error) => Icon(Icons.error, color: Colors.white,),
+            errorWidget: (context, url, error) => const Icon(
+              Icons.error,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
@@ -145,9 +149,10 @@ class SliverAppBarBldr extends StatelessWidget {
 }
 
 class FullScreen extends StatelessWidget {
-  const FullScreen(
-      {
-      required this.imgUrl,});
+  const FullScreen({
+    super.key,
+    required this.imgUrl,
+  });
 
   final String imgUrl;
 
@@ -160,19 +165,19 @@ class FullScreen extends StatelessWidget {
             tag: 'image',
             child: Image.network(
               imgUrl,
-                  fit: BoxFit.fill,
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                            : null,
-                      ),
-                    );
-                  },
+              fit: BoxFit.fill,
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
             ),
           ),
         ),
@@ -191,8 +196,7 @@ class SliverListBldr extends StatelessWidget {
       required this.title,
       required this.description,
       required this.date,
-      required this.htmlBody
-      })
+      required this.htmlBody})
       : super(key: key);
 
   final String body;
@@ -212,41 +216,41 @@ class SliverListBldr extends StatelessWidget {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     Widget getValidContent() {
-      if ( htmlBody != null && htmlBody != "") {
+      if (htmlBody != null && htmlBody != "") {
         return Html(
           data: htmlBody!,
           style: {
             // This sets the color of the text to white to all the elements
             // eg; p, a, div, etc.
             // just like a css selector.
-            "body" : Style(
+            "body": Style(
               color: Colors.white,
               fontSize: FontSize(15.0),
               fontFamily: "Cambo",
             ),
-            "a" : Style(
+            "a": Style(
               color: Colors.blue,
             )
           },
-          onLinkTap:  (String? url, Map<String, String> attributes, html.Element? element,) {
+          onLinkTap: (
+            String? url,
+            Map<String, String> attributes,
+            html.Element? element,
+          ) {
             if (url != null) {
               _launchInBrowser(Uri.parse(url));
             }
           },
         );
-
       }
       return Text(
         body,
-        style: Theme.of(context)
-            .textTheme
-            .bodyLarge!
-            .copyWith(height: 1.5, color: Colors.white,
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            height: 1.5,
+            color: Colors.white,
             fontSize: 15.0,
             fontFamily: "Cambo"),
       );
@@ -258,7 +262,7 @@ class SliverListBldr extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 22.0,
               backgroundColor: Color.fromRGBO(37, 45, 59, 1),
               color: Color.fromARGB(255, 4, 201, 245),
@@ -267,10 +271,10 @@ class SliverListBldr extends StatelessWidget {
             maxLines: 3,
           ),
           Container(
-            margin: EdgeInsets.only(top: 10),
+            margin: const EdgeInsets.only(top: 10),
             child: Text(
-              '${DateFormat('yyyy-MM-dd').format(DateTime.parse(date))}',
-              style: TextStyle(
+              DateFormat('yyyy-MM-dd').format(DateTime.parse(date)),
+              style: const TextStyle(
                 fontSize: 12.0,
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
@@ -280,15 +284,15 @@ class SliverListBldr extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
                 left: 12.0, right: 12.0, bottom: 12.0, top: 12.0),
             child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: getValidContent(),
             ),
           ),
-          SizedBox(
-              height: 30,
+          const SizedBox(
+            height: 30,
           ),
         ],
       ),

@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:intl/intl.dart';
-
+import 'package:flutter/material.dart';
 import 'package:reading_time/reading_time.dart';
 import 'package:the_hit_times_app/models/postmodel.dart';
-import 'package:the_hit_times_app/news.dart';
 
 class CusCard extends StatelessWidget {
   final String id;
@@ -20,7 +17,8 @@ class CusCard extends StatelessWidget {
   final ValueChanged<PostModel> add;
   final ValueChanged<PostModel> delete;
 
-  CusCard({
+  const CusCard({
+    super.key,
     required this.id,
     required this.title,
     required this.description,
@@ -51,115 +49,116 @@ class CusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
-        margin: EdgeInsets.all(5.0),
-        height: 200.0,
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-                child: Container(
-              margin: EdgeInsets.all(7),
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black45,
+            blurRadius: 6.0,
+            spreadRadius: 1.0,
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.all(10),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(5.0),
+                borderRadius: BorderRadius.circular(10.0),
                 child: CachedNetworkImage(
                   imageUrl: link,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Container(
                     color: Colors.black12,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: const Center(child: CircularProgressIndicator()),
                   ),
-                  errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.white,),
+                  errorWidget: (context, url, error) => const Icon(
+                    Icons.error,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            )),
-            Expanded(
-                child: Container(
-                    margin: EdgeInsets.all(15),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: Text(
-                                title,
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            Expanded(
-                              child: IconButton(
-                                color: Colors.white,
-                                icon: bookmarked
-                                    ? const Icon(
-                                        Icons.favorite,
-                                        color: Colors.red,
-                                      )
-                                    : const Icon(Icons.favorite_outline),
-                                onPressed: () {
-                                  handelBookmark();
-                                },
-                              ),
-                            )
-                          ],
-                        ),
-                        Text(
-                          description,
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            color: Colors.white54,
+            ),
+          ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.white,
                             fontWeight: FontWeight.w600,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
                         ),
-                        body.isNotEmpty ? Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: Text(
-                            body,
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ): Container(),
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: Text(
-                            body.isNotEmpty ? readingTime(body).msg : "Nothing to read",
-                            style: TextStyle(
-                              fontSize: 10.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                      ),
+                      IconButton(
+                        color: Colors.white,
+                        icon: bookmarked
+                            ? const Icon(Icons.favorite, color: Colors.red)
+                            : const Icon(Icons.favorite_outline),
+                        onPressed: handelBookmark,
+                      ),
+                    ],
+                  ),
+                  Text(
+                    description,
+                    style: const TextStyle(
+                      fontSize: 14.0,
+                      color: Colors.white70,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (body.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        body,
+                        style: const TextStyle(
+                          fontSize: 13.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          height: 1.5,
                         ),
-                      ],
-                    )))
-          ],
-        ));
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      body.isNotEmpty
+                          ? readingTime(body).msg
+                          : "Nothing to read",
+                      style: const TextStyle(
+                        fontSize: 10.0,
+                        color: Colors.white70,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -171,22 +170,22 @@ class NotiCard extends StatelessWidget {
   final String date;
   final VoidCallback onClear;
 
-  NotiCard(
-      {required this.imgUrl,
+  const NotiCard(
+      {super.key,
+      required this.imgUrl,
       required this.title,
       required this.description,
       required this.body,
       required this.date,
-      required this.onClear
-      });
+      required this.onClear});
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-        margin: EdgeInsets.all(5.0),
+        margin: const EdgeInsets.all(5.0),
         height: 90.0,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.all(Radius.circular(5)),
         ),
@@ -197,7 +196,7 @@ class NotiCard extends StatelessWidget {
             Expanded(
                 child: Container(
               child: ClipRRect(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(5),
                     bottomLeft: Radius.circular(5)),
                 child: CachedNetworkImage(
@@ -205,25 +204,28 @@ class NotiCard extends StatelessWidget {
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Container(
                     color: Colors.black12,
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   ),
-                  errorWidget: (context, url, error) => Icon(Icons.error, color: Colors.white,),
+                  errorWidget: (context, url, error) => const Icon(
+                    Icons.error,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             )),
             Expanded(
                 flex: 2,
                 child: Container(
-                    margin: EdgeInsets.fromLTRB(15, 15, 15, 15),
+                    margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           title,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 15.0,
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
@@ -233,7 +235,7 @@ class NotiCard extends StatelessWidget {
                         ),
                         Text(
                           description,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 15.0,
                             color: Colors.white54,
                             fontWeight: FontWeight.w600,
@@ -243,10 +245,10 @@ class NotiCard extends StatelessWidget {
                           textAlign: TextAlign.center,
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 10),
+                          margin: const EdgeInsets.only(top: 10),
                           child: Text(
-                            '${date.substring(0, 10)}',
-                            style: TextStyle(
+                            date.substring(0, 10),
+                            style: const TextStyle(
                               fontSize: 10.0,
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
@@ -257,10 +259,13 @@ class NotiCard extends StatelessWidget {
                         ),
                       ],
                     ))),
-                    IconButton(
-                      onPressed: onClear,
-                      icon: Icon(Icons.clear, color: Colors.white,),
-                    )
+            IconButton(
+              onPressed: onClear,
+              icon: const Icon(
+                Icons.clear,
+                color: Colors.white,
+              ),
+            )
           ],
         ));
   }
