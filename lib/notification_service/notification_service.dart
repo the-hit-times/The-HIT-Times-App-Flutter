@@ -1,24 +1,23 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:the_hit_times_app/database_helper.dart';
-import 'package:the_hit_times_app/features/live/match_history.dart';
-import 'package:the_hit_times_app/features/live/models/livematch.dart';
-import 'package:the_hit_times_app/features/live/match_screen.dart';
-import 'package:the_hit_times_app/models/notification.dart' as NotificationModel;
-import 'package:sqflite/sqflite.dart';
-import 'package:the_hit_times_app/notidisplay.dart';
-import 'package:the_hit_times_app/notify.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
+import 'package:the_hit_times_app/database_helper.dart';
+import 'package:the_hit_times_app/features/live/match_screen.dart';
+import 'package:the_hit_times_app/features/live/models/livematch.dart';
+import 'package:the_hit_times_app/models/notification.dart'
+    as NotificationModel;
+import 'package:the_hit_times_app/notidisplay.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  FlutterLocalNotificationsPlugin get notificationsPlugin => _notificationsPlugin;
+  FlutterLocalNotificationsPlugin get notificationsPlugin =>
+      _notificationsPlugin;
 
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
@@ -27,8 +26,8 @@ class NotificationService {
   static late GlobalKey<NavigatorState> _navigatorKey;
 
   //  Initialise Flutter Local Notifications Plugin with AndroidInitializationSettings
-  static void initialize({required GlobalKey<NavigatorState> navigatorKey}) async {
-
+  static void initialize(
+      {required GlobalKey<NavigatorState> navigatorKey}) async {
     final NotificationAppLaunchDetails? notificationAppLaunchDetails =
         await _notificationsPlugin.getNotificationAppLaunchDetails();
 
@@ -36,8 +35,16 @@ class NotificationService {
         InitializationSettings(
       android: AndroidInitializationSettings("@drawable/notification_icon"),
     );
+
     _navigatorKey = navigatorKey;
-    _notificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
+
+    // Pass the onSelectNotification function as the callback
+    await _notificationsPlugin.initialize(
+      initializationSettings,
+      // onSelectNotification:
+      //     onSelectNotification, // <-- Here you pass the function
+    );
+
     _requestNotificationPermission();
     _subscribeToTopics();
   }
@@ -50,12 +57,16 @@ class NotificationService {
       var data = jsonDecode(payload);
       switch (data["type"]) {
         case "POST":
-          _navigatorKey.currentState!.push(MaterialPageRoute(builder: (context) => NotificationDisplayWeb(postId: data["id"],)));
+          _navigatorKey.currentState!.push(MaterialPageRoute(
+              builder: (context) => NotificationDisplayWeb(
+                    postId: data["id"],
+                  )));
           break;
         case "LIVE":
-          _navigatorKey.currentState!.push(
-              MaterialPageRoute(builder: (context) => MatchScreen( matchId: data["id"],))
-          );
+          _navigatorKey.currentState!.push(MaterialPageRoute(
+              builder: (context) => MatchScreen(
+                    matchId: data["id"],
+                  )));
           break;
       }
     }
@@ -88,11 +99,11 @@ class NotificationService {
     final http.Response response =
         await http.get(Uri.parse(message.notification!.android!.imageUrl!));
 
-        print(" hi ${message.notification!.android!.imageUrl!}");
-        print(" hi2 ${message.notification!.title}");
-        print(" hi3 ${message.notification!.body}");
+    print(" hi ${message.notification!.android!.imageUrl!}");
+    print(" hi2 ${message.notification!.title}");
+    print(" hi3 ${message.notification!.body}");
 
-        storeNotificationInDatabase(message);
+    storeNotificationInDatabase(message);
 
     var bigPictureStyleInformation = BigPictureStyleInformation(
         ByteArrayAndroidBitmap.fromBase64String(
@@ -106,10 +117,7 @@ class NotificationService {
           styleInformation: bigPictureStyleInformation),
     );
 
-    var payload = jsonEncode({
-      "id": message.data["postId"],
-      "type": "POST"
-    });
+    var payload = jsonEncode({"id": message.data["postId"], "type": "POST"});
 
     await _notificationsPlugin.show(
       _notificationIDGenerator(),
@@ -121,14 +129,13 @@ class NotificationService {
   }
 
   static void storeNotificationInDatabase(RemoteMessage message) async {
-    await NotificationDatabase.instance.create(
-        NotificationModel.Notification(
-          imageUrl: message.notification!.android!.imageUrl!,
-          title: message.notification!.title!,
-          description: message.notification!.body!,
-          createdTime:  DateTime.now(),
-          postId: message.data["postId"],)
-    );
+    await NotificationDatabase.instance.create(NotificationModel.Notification(
+      imageUrl: message.notification!.android!.imageUrl!,
+      title: message.notification!.title!,
+      description: message.notification!.body!,
+      createdTime: DateTime.now(),
+      postId: message.data["postId"],
+    ));
   }
 
   static void liveNotification(RemoteMessage message) async {
@@ -136,11 +143,10 @@ class NotificationService {
     // await http.get(Uri.parse(message.notification!.android!.imageUrl!));
     print(message.data.toString());
 
-    var matchInfo =  LiveMatch.fromNotification(message);
+    var matchInfo = LiveMatch.fromNotification(message);
     print(matchInfo.toFirestore().toString());
 
-
-   /* var bigPictureStyleInformation = BigPictureStyleInformation(
+    /* var bigPictureStyleInformation = BigPictureStyleInformation(
         ByteArrayAndroidBitmap.fromBase64String(
             base64Encode(response.bodyBytes)));*/
 
@@ -152,48 +158,44 @@ class NotificationService {
     var team1Penalty = matchInfo.team1?.teamPenalty;
     var team2Penalty = matchInfo.team2?.teamPenalty;
 
-    var hasPenalty = ( team1Penalty != null && team2Penalty != null)
-        && (team1Penalty != "0" || team2Penalty != "0")
-        && team1Score == team2Score;
+    var hasPenalty = (team1Penalty != null && team2Penalty != null) &&
+        (team1Penalty != "0" || team2Penalty != "0") &&
+        team1Score == team2Score;
 
-    var title = "<b>${team1Name} vs ${team2Name}</b>";
-    var messageBody = "${team1Score} vs ${team2Score}<br>";
+    var title = "<b>$team1Name vs $team2Name</b>";
+    var messageBody = "$team1Score vs $team2Score<br>";
     if (hasPenalty) {
       messageBody += "<br>Penalty Shootout: <br>";
-      messageBody += "${team1Penalty} vs ${team2Penalty}<br>";
+      messageBody += "$team1Penalty vs $team2Penalty<br>";
     }
     if (timelineMessage != null) {
       messageBody += "<br>";
       messageBody += timelineMessage;
     }
 
-
-
     NotificationDetails notificationDetails = NotificationDetails(
-      android: AndroidNotificationDetails(
-          "Live Notification", "Live updates for HIT football, cricket and various other matches.",
+      android: AndroidNotificationDetails("Live Notification",
+          "Live updates for HIT football, cricket and various other matches.",
           importance: Importance.max,
           priority: Priority.high,
           styleInformation: BigTextStyleInformation(
-            messageBody, htmlFormatBigText: true,
-              htmlFormatTitle:true ,
-              htmlFormatContent:true ,
-              contentTitle: title,
-              htmlFormatContentTitle: true,
+            messageBody,
+            htmlFormatBigText: true,
+            htmlFormatTitle: true,
+            htmlFormatContent: true,
+            contentTitle: title,
+            htmlFormatContentTitle: true,
           )),
     );
 
-    var payload = jsonEncode({
-      "id": matchInfo.id,
-      "type": "LIVE"
-    });
+    var payload = jsonEncode({"id": matchInfo.id, "type": "LIVE"});
 
-   await _notificationsPlugin.show(
+    await _notificationsPlugin.show(
       LIVE_NOTIFICATION_ID,
       title,
-     messageBody,
+      messageBody,
       notificationDetails,
-     payload: payload,
+      payload: payload,
     );
   }
 
@@ -202,9 +204,8 @@ class NotificationService {
   /// instead of its getting overriden by new post notification.
   static int _notificationIDGenerator() {
     final random = Random();
-    const MIN_ID = 100;
-    const MAX_ID = 10000;
-    return MIN_ID + random.nextInt(MAX_ID);
+    const minId = 100;
+    const maxId = 10000;
+    return minId + random.nextInt(maxId);
   }
-
 }

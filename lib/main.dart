@@ -1,63 +1,62 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+// Firebase Imports
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:the_hit_times_app/features/live/match_history.dart';
 import 'package:the_hit_times_app/homepage.dart';
 
-// Firebase Imports
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'database_helper.dart';
 import 'features/live/match_screen.dart';
 import 'firebase_options.dart';
 import 'notidisplay.dart';
 import 'notification_service/notification_service.dart';
-import 'package:the_hit_times_app/models/notification.dart' as NotificationModel;
-
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-
 // Whenever a notification is received in background, this function is called.
-// Don't move this function to another file. It needs to at the top level to function properly.
+// Don't move this function to another file. It needs to be at the top level to function properly.
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   var notificationType = message.data["type"];
   print("Notification Type: $notificationType");
-  NotificationService.initialize(
-      navigatorKey: navigatorKey
-  );
+  NotificationService.initialize(navigatorKey: navigatorKey);
   if (notificationType == "LIVE") {
     NotificationService.liveNotification(message);
   } else {
-    print("creating a notification database" );
-    NotificationService.storeNotificationInDatabase(message); // Store notification in database
+    print("creating a notification database");
+    NotificationService.storeNotificationInDatabase(
+        message); // Store notification in database
   }
 }
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initializes Firebase for other services like cloud messaging.
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  NotificationService.initialize(
-      navigatorKey: navigatorKey
-  );
+  // Initialize Firebase only if it's not initialized yet
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    print("Firebase is already initialized: $e");
+  }
+
+  // Initialize Notification Service
+  NotificationService.initialize(navigatorKey: navigatorKey);
 
   String? selectedNotificationPayload;
 
-  final NotificationAppLaunchDetails? notificationAppLaunchDetails = await
-  NotificationService().notificationsPlugin.getNotificationAppLaunchDetails();
+  final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+      await NotificationService()
+          .notificationsPlugin
+          .getNotificationAppLaunchDetails();
   if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
     selectedNotificationPayload =
-        notificationAppLaunchDetails!.payload;
-
+        notificationAppLaunchDetails!.notificationResponse?.payload;
   }
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     var notificationType = message.data["type"];
@@ -67,6 +66,7 @@ void main() async {
       NotificationService.show(message);
     }
   });
+
   runApp(MyApp(
     selectedNotificationPayload: selectedNotificationPayload,
   ));
@@ -86,21 +86,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'The HIT Times',
       theme: ThemeData(
-        scaffoldBackgroundColor: Color.fromRGBO(37, 45, 59, 1),
+        scaffoldBackgroundColor: const Color.fromRGBO(37, 45, 59, 1),
         primarySwatch: Colors.teal,
-        useMaterial3: false,  // App uses material 2 design system, enabling it will lead to theme issues on different devices.
+        useMaterial3:
+            false, // App uses material 2 design system, enabling it will lead to theme issues on different devices.
         appBarTheme: const AppBarTheme(
             iconTheme: IconThemeData(color: Colors.white),
             foregroundColor: Colors.white,
@@ -125,12 +122,16 @@ class _MyAppState extends State<MyApp> {
         print("Data: $data");
         switch (data["type"]) {
           case "POST":
-            navigatorKey.currentState?.push(MaterialPageRoute(builder: (context) => NotificationDisplayWeb(postId: data["id"],)));
+            navigatorKey.currentState?.push(MaterialPageRoute(
+                builder: (context) => NotificationDisplayWeb(
+                      postId: data["id"],
+                    )));
             break;
           case "LIVE":
-            navigatorKey.currentState?.push(
-                MaterialPageRoute(builder: (context) => MatchScreen( matchId: data["id"],))
-            );
+            navigatorKey.currentState?.push(MaterialPageRoute(
+                builder: (context) => MatchScreen(
+                      matchId: data["id"],
+                    )));
             break;
         }
       }
