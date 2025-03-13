@@ -1,4 +1,4 @@
-package com.thehittimes.tht
+package com.example.getitdone
 
 import io.flutter.embedding.android.FlutterActivity
 

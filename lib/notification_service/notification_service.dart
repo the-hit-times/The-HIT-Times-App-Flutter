@@ -25,7 +25,6 @@ class NotificationService {
 
   static late GlobalKey<NavigatorState> _navigatorKey;
 
-  //  Initialise Flutter Local Notifications Plugin with AndroidInitializationSettings
   static void initialize(
       {required GlobalKey<NavigatorState> navigatorKey}) async {
     final NotificationAppLaunchDetails? notificationAppLaunchDetails =
@@ -38,20 +37,15 @@ class NotificationService {
 
     _navigatorKey = navigatorKey;
 
-    // Pass the onSelectNotification function as the callback
     await _notificationsPlugin.initialize(
       initializationSettings,
-      // onSelectNotification:
-      //     onSelectNotification, // <-- Here you pass the function
     );
 
     _requestNotificationPermission();
     _subscribeToTopics();
+    printFCMToken();
   }
 
-  /// When a notification is tapped, this method is called.
-  /// It is responsible for navigating to the respective screen
-  /// based on the notification type.
   static Future<dynamic> onSelectNotification(payload) async {
     if (payload != null) {
       var data = jsonDecode(payload);
@@ -72,7 +66,6 @@ class NotificationService {
     }
   }
 
-  // Request notification permission for android 13 and iOS devices
   static void _requestNotificationPermission() async {
     NotificationSettings settings = await _messaging.requestPermission(
       alert: true,
@@ -86,22 +79,14 @@ class NotificationService {
     print('User granted permission: ${settings.authorizationStatus}');
   }
 
-  // Subscribes to topics to receive notification
-  // when a notification is broadcast from backend.
   static void _subscribeToTopics() async {
     await _messaging.subscribeToTopic("live_notification");
     await _messaging.subscribeToTopic("posts_notification");
   }
 
-  // Display a notification when app is in foreground
-  // with the help of Flutter Local Notification Plugin
   static void show(RemoteMessage message) async {
     final http.Response response =
         await http.get(Uri.parse(message.notification!.android!.imageUrl!));
-
-    print(" hi ${message.notification!.android!.imageUrl!}");
-    print(" hi2 ${message.notification!.title}");
-    print(" hi3 ${message.notification!.body}");
 
     storeNotificationInDatabase(message);
 
@@ -139,16 +124,7 @@ class NotificationService {
   }
 
   static void liveNotification(RemoteMessage message) async {
-    // final http.Response response =
-    // await http.get(Uri.parse(message.notification!.android!.imageUrl!));
-    print(message.data.toString());
-
     var matchInfo = LiveMatch.fromNotification(message);
-    print(matchInfo.toFirestore().toString());
-
-    /* var bigPictureStyleInformation = BigPictureStyleInformation(
-        ByteArrayAndroidBitmap.fromBase64String(
-            base64Encode(response.bodyBytes)));*/
 
     var timelineMessage = jsonDecode(message.data["data"])["timeline_message"];
     var team1Name = matchInfo.team1?.getTeamName();
@@ -199,13 +175,15 @@ class NotificationService {
     );
   }
 
-  /// It is responsible for generating random ids for the post such that
-  /// if two posts are posted at same time, two independent notifications
-  /// instead of its getting overriden by new post notification.
   static int _notificationIDGenerator() {
     final random = Random();
     const minId = 100;
     const maxId = 10000;
     return minId + random.nextInt(maxId);
+  }
+
+  static void printFCMToken() async {
+    String? token = await _messaging.getToken();
+    debugPrint('FCM Token: $token');
   }
 }
