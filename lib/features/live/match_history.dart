@@ -12,9 +12,9 @@ import 'components/cricket_score_card.dart';
 import 'components/football_score_card.dart';
 
 class MatchHistoryScreen extends StatefulWidget {
-  static const ROUTE_NAME = "/live-screen";
+  static const String ROUTE_NAME = "/live-screen";
 
-  const MatchHistoryScreen({Key? key}) : super(key: key);
+  const MatchHistoryScreen({super.key});
 
   @override
   State<MatchHistoryScreen> createState() => _MatchHistoryScreenState();
@@ -25,28 +25,28 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
   bool _isOffline = false;
   int? _selectedYear;
   late List<int> _years;
+  String? _errorMessage;
 
-  void _isDeviceOffline() async {
-    final connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.none) {
+  Future<void> _checkConnectivity() async {
+    try {
+      final connectivityResult = await Connectivity().checkConnectivity();
       setState(() {
-        _isOffline = true;
+        _isOffline = connectivityResult == ConnectivityResult.none;
       });
-    } else {
+    } catch (e) {
       setState(() {
-        _isOffline = false;
+        _errorMessage = 'Failed to check connectivity: $e';
       });
     }
   }
 
   @override
   void initState() {
-    _isDeviceOffline();
-    // Generate years list (e.g., last 5 years)
-    int currentYear = DateTime.now().year;
-    _years = List.generate(5, (index) => currentYear - index);
-    _selectedYear = currentYear; // Default to current year
     super.initState();
+    _checkConnectivity();
+    final currentYear = DateTime.now().year;
+    _years = List.generate(5, (index) => currentYear - index);
+    _selectedYear = currentYear;
   }
 
   @override
@@ -65,9 +65,9 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
                 dropdownColor: const Color.fromARGB(255, 7, 95, 115),
                 style: const TextStyle(color: Colors.white),
                 onChanged: (int? newValue) {
-                  setState(() {
-                    _selectedYear = newValue;
-                  });
+                  if (newValue != null) {
+                    setState(() => _selectedYear = newValue);
+                  }
                 },
                 items: _years.map<DropdownMenuItem<int>>((int year) {
                   return DropdownMenuItem<int>(
@@ -88,202 +88,156 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
           centerTitle: true,
           iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: const Color.fromARGB(255, 7, 95, 115),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(80.0),
-            child: Container(
-              child: const TabBar(
-                indicatorWeight: 3.0,
-                indicatorColor: Colors.white,
-                tabs: [
-                  Tab(
-                    icon: Icon(Icons.sports_soccer),
-                    child: Text("Football"),
-                  ),
-                  Tab(
-                    icon: Icon(Icons.sports_cricket),
-                    child: Text("Cricket"),
-                  ),
-                ],
-              ),
+          bottom: const PreferredSize(
+            preferredSize: Size.fromHeight(80.0),
+            child: TabBar(
+              indicatorWeight: 3.0,
+              indicatorColor: Colors.white,
+              tabs: [
+                Tab(icon: Icon(Icons.sports_soccer), text: "Football"),
+                Tab(icon: Icon(Icons.sports_cricket), text: "Cricket"),
+              ],
             ),
           ),
         ),
         body: Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: SafeArea(
-            child: _isOffline
-                ? Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const AnimatedIconWidget(),
-                        const SizedBox(height: 8.0),
-                        Text(
-                          "No Internet Connection",
-                          style:
-                              Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: Colors.grey,
-                                  ),
-                        ),
-                        const SizedBox(height: 8.0),
-                        FilledButton.icon(
-                          onPressed: _isDeviceOffline,
-                          icon: const Icon(Icons.refresh),
-                          label: const Text("Retry"),
-                        )
-                      ],
-                    ),
-                  )
-                : TabBarView(
-                    children: [
-                      FirestoreListView<LiveMatch>(
-                        emptyBuilder: (context) {
-                          return Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const AnimatedIconWidget(),
-                                const SizedBox(height: 8.0),
-                                Text(
-                                  "No Live Matches",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        pageSize: 4,
-                        query: _liveMatchRepo.getLiveMatches().where(
-                            LiveMatch.FIELD_MATCH_DATE,
-                            isGreaterThanOrEqualTo:
-                                Timestamp.fromDate(DateTime(_selectedYear!)),
-                            isLessThan: Timestamp.fromDate(
-                                DateTime(_selectedYear! + 1))),
-                        itemBuilder: (context, doc) {
-                          final match = doc.data();
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8, right: 8, bottom: 8),
-                            child: FootballScoreCard(
-                              liveMatch: match,
-                              onTap: () {
-                                Navigator.of(context).pushNamed(
-                                    MatchScreen.ROUTE_NAME,
-                                    arguments:
-                                        MatchScreenArguments(id: match.id!));
-                              },
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const AnimatedIconWidget(),
-                                const SizedBox(height: 8.0),
-                                Text(
-                                  "Failed to load live matches: $error",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                      FirestoreListView<LiveMatch>(
-                        emptyBuilder: (context) {
-                          return Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const AnimatedIconWidget(),
-                                const SizedBox(height: 8.0),
-                                Text(
-                                  "No Live Matches",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        pageSize: 4,
-                        query: _liveMatchRepo.getCrickLiveMatches().where(
-                            LiveMatch.FIELD_MATCH_DATE,
-                            isGreaterThanOrEqualTo:
-                                Timestamp.fromDate(DateTime(_selectedYear!)),
-                            isLessThan: Timestamp.fromDate(
-                                DateTime(_selectedYear! + 1))),
-                        itemBuilder: (context, doc) {
-                          final match = doc.data();
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8, right: 8, bottom: 8),
-                            child: CricketScoreCard(
-                              liveMatch: match,
-                              onTap: () {
-                                Navigator.of(context).pushNamed(
-                                    MatchScreen.ROUTE_NAME,
-                                    arguments:
-                                        MatchScreenArguments(id: match.id!));
-                              },
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const AnimatedIconWidget(),
-                                const SizedBox(height: 8.0),
-                                Text(
-                                  "Failed to load live matches: $error",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+            child: _buildBody(),
           ),
         ),
       ),
     );
   }
+
+  Widget _buildBody() {
+    if (_errorMessage != null) {
+      return _buildErrorWidget(_errorMessage!);
+    }
+    if (_isOffline) {
+      return _buildOfflineWidget();
+    }
+    return TabBarView(
+      children: [
+        _buildMatchList(_liveMatchRepo.getLiveMatches(), isFootball: true),
+        _buildMatchList(_liveMatchRepo.getCrickLiveMatches(),
+            isFootball: false),
+      ],
+    );
+  }
+
+  Widget _buildOfflineWidget() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const AnimatedIconWidget(),
+          const SizedBox(height: 8.0),
+          Text(
+            "No Internet Connection",
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge
+                ?.copyWith(color: Colors.grey),
+          ),
+          const SizedBox(height: 8.0),
+          FilledButton.icon(
+            onPressed: _checkConnectivity,
+            icon: const Icon(Icons.refresh),
+            label: const Text("Retry"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMatchList(Query<LiveMatch> baseQuery,
+      {required bool isFootball}) {
+    return FirestoreListView<LiveMatch>(
+      pageSize: 4,
+      query: baseQuery.where(
+        LiveMatch.FIELD_MATCH_DATE,
+        isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime(_selectedYear!)),
+        isLessThan: Timestamp.fromDate(DateTime(_selectedYear! + 1)),
+      ),
+      itemBuilder: (context, doc) {
+        final match = doc.data();
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          child: isFootball
+              ? FootballScoreCard(
+                  liveMatch: match,
+                  onTap: () => _navigateToMatchScreen(match.id!),
+                )
+              : CricketScoreCard(
+                  liveMatch: match,
+                  onTap: () => _navigateToMatchScreen(match.id!),
+                ),
+        );
+      },
+      emptyBuilder: (_) => _buildEmptyWidget(),
+      errorBuilder: (_, error, __) => _buildErrorWidget(error.toString()),
+    );
+  }
+
+  Widget _buildEmptyWidget() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const AnimatedIconWidget(),
+          const SizedBox(height: 8.0),
+          Text(
+            "No Live Matches",
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: Colors.white),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorWidget(String error) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const AnimatedIconWidget(),
+          const SizedBox(height: 8.0),
+          Text(
+            "Error: $error",
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge
+                ?.copyWith(color: Colors.grey),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _navigateToMatchScreen(String matchId) {
+    Navigator.of(context).pushNamed(
+      MatchScreen.ROUTE_NAME,
+      arguments: MatchScreenArguments(id: matchId),
+    );
+  }
 }
 
 class AnimatedIconWidget extends StatefulWidget {
-  const AnimatedIconWidget({Key? key}) : super(key: key);
+  const AnimatedIconWidget({super.key});
 
   @override
   State<AnimatedIconWidget> createState() => _AnimatedIconWidgetState();
 }
 
 class _AnimatedIconWidgetState extends State<AnimatedIconWidget> {
-  int index = 0;
+  int _index = 0;
   Timer? _timer;
-
-  dynamic icons = [
+  static const List<IconData> _icons = [
     Icons.sports_soccer,
     Icons.sports_basketball,
     Icons.sports_cricket,
@@ -292,10 +246,10 @@ class _AnimatedIconWidgetState extends State<AnimatedIconWidget> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        index = (index + 1) % 3;
-      });
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) {
+        setState(() => _index = (_index + 1) % _icons.length);
+      }
     });
   }
 
@@ -309,18 +263,14 @@ class _AnimatedIconWidgetState extends State<AnimatedIconWidget> {
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 500),
+      transitionBuilder: (child, animation) =>
+          ScaleTransition(scale: animation, child: child),
       child: Icon(
-        icons[index],
-        key: ValueKey<int>(index),
+        _icons[_index],
+        key: ValueKey<int>(_index),
         size: 60.0,
         color: Colors.grey,
       ),
-      transitionBuilder: (child, animation) {
-        return ScaleTransition(
-          scale: animation,
-          child: child,
-        );
-      },
     );
   }
 }
