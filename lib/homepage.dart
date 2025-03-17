@@ -10,6 +10,7 @@ import 'package:the_hit_times_app/features/live/match_history.dart';
 import 'package:the_hit_times_app/globals.dart';
 import 'package:the_hit_times_app/news.dart';
 import 'package:the_hit_times_app/smenu.dart';
+import 'package:the_hit_times_app/util/popup_manager.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -19,8 +20,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
-  // FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-
   int _currentIndex = 1;
   int matchCount = 0;
 
@@ -32,6 +31,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
     loadLiveMatchCount();
+
+    // Show popup after widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      PopupManager.showPopupIfNeeded(context);
+    });
   }
 
   @override
@@ -132,28 +136,21 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             onPressed: () async {
               Navigator.of(context)
                   .push(MaterialPageRoute(
-                      builder: (BuildContext context) => Container(
-                          // color: Colors.amber
-                          child: const BookMarkPage()) /*Placeholder()*/
-                      ))
+                      builder: (BuildContext context) =>
+                          Container(child: const BookMarkPage())))
                   .then((value) => {setState(() {})});
             },
           )
         ],
         centerTitle: true,
         iconTheme: const IconThemeData(
-          color: Colors.white, //change your color here
+          color: Colors.white,
         ),
       ),
       body: GestureDetector(
         onHorizontalDragEnd: (DragEndDetails details) =>
             _onHorizontalDrag(details),
         child: Stack(
-          // children: [
-          //   _currentIndex == 0 ? Container(child: SMenu()) : Container(),
-          //   _currentIndex == 1 ? Container(child: News()) : Container(),
-          //   _currentIndex == 2 ? Container(child: ContactUs()) : Container()
-          // ],
           children: <Widget>[
             Offstage(
               offstage: _currentIndex != 0,
@@ -167,7 +164,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               child: TickerMode(
                 enabled: _currentIndex == 1,
                 child: Container(
-                  child: News(),
+                  child: const News(),
                 ),
               ),
             ),
