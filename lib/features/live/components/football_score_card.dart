@@ -38,7 +38,7 @@ class FootballScoreCard extends StatelessWidget {
             height: height,
             child: Stack(
               children: [
-                liveMatch.isLive! ? Positioned(
+                liveMatch.isLive! ? const Positioned(
                   top: 18,
                   right: 18,
                   child: Badge(
@@ -47,7 +47,7 @@ class FootballScoreCard extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                ): Text(""),
+                ): const Text(""),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -56,7 +56,7 @@ class FootballScoreCard extends StatelessWidget {
                     children: [
                       Flexible(
                         flex: 1,
-                        child: Container(
+                        child: SizedBox(
                           width: 80,
                           child: Wrap(
                             direction: Axis.vertical,
@@ -65,18 +65,18 @@ class FootballScoreCard extends StatelessWidget {
                             runAlignment: WrapAlignment.center,
                             spacing: 5.0,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: 40,
                                 height: 40,
                                 child: CachedNetworkImage(
                                   imageUrl: team1Logo!,
-                                  placeholder: (context, url) => CircularProgressIndicator(),
+                                  placeholder: (context, url) => const CircularProgressIndicator(),
                                   fit: BoxFit.scaleDown,
                                 ),
                               ),
                               Text(
                                 liveMatch.team1!.getTeamName(),
-                                style: TextStyle(color: Colors.white, fontSize: 12),
+                                style: const TextStyle(color: Colors.white, fontSize: 12),
                               ),
                             ],
                           ),
@@ -84,12 +84,12 @@ class FootballScoreCard extends StatelessWidget {
                       ),
                       Flexible(
                         flex: 1,
-                        child: Container(
+                        child: SizedBox(
                           width: double.infinity,
                           child: Center(
                               child: Text(
                             liveMatch.team1!.teamScore.toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold),
@@ -98,52 +98,52 @@ class FootballScoreCard extends StatelessWidget {
                       ),
                       Flexible(
                         flex: 2,
-                        child: Container(
+                        child: SizedBox(
                             width: double.infinity,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   liveMatch.matchStatus.toString(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white, fontSize: 15,
                                       fontWeight: FontWeight.w300
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
-                                SizedBox(height: 5.0,),
+                                const SizedBox(height: 5.0,),
                                 Text(
                                   liveMatch.formattedMatchDate(),
-                                  style: TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                                 Text(
                                   liveMatch.formattedMatchTime(),
-                                  style: TextStyle( color: Colors.white, fontSize: 12,
+                                  style: const TextStyle( color: Colors.white, fontSize: 12,
                                       fontWeight: FontWeight.w300),
                                 ),
                                 isPenalty ?
                                 Container(
-                                  margin: EdgeInsets.only(top: 10.0),
+                                  margin: const EdgeInsets.only(top: 10.0),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text("Penalty: ", style: TextStyle(color: Colors.white),),
+                                      const Text("Penalty: ", style: TextStyle(color: Colors.white),),
                                       Text( "${liveMatch.team1!.teamPenalty.toString()}-${liveMatch.team2!.teamPenalty.toString()}"
-                                      , style: TextStyle(color: Colors.white),),
+                                      , style: const TextStyle(color: Colors.white),),
                                     ],
                                   ),
-                                ) : SizedBox(height: 0.0,),
+                                ) : const SizedBox(height: 0.0,),
                               ],
                             )),
                       ),
                       Flexible(
                         flex: 1,
-                        child: Container(
+                        child: SizedBox(
                           width: double.infinity,
                           child: Center(
                               child: Text(
                             liveMatch.team2!.teamScore.toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold),
@@ -152,7 +152,7 @@ class FootballScoreCard extends StatelessWidget {
                       ),
                       Flexible(
                         flex: 1,
-                        child: Container(
+                        child: SizedBox(
                           width: 80,
                           child: Wrap(
                             direction: Axis.vertical,
@@ -161,18 +161,18 @@ class FootballScoreCard extends StatelessWidget {
                             crossAxisAlignment: WrapCrossAlignment.center,
                             spacing: 5.0,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: 40,
                                 height: 40,
                                 child: CachedNetworkImage(
                                   imageUrl: team2Logo!,
-                                  placeholder: (context, url) => CircularProgressIndicator(),
+                                  placeholder: (context, url) => const CircularProgressIndicator(),
                                   fit: BoxFit.scaleDown,
                                 ),
                               ),
                               Text(
                                 liveMatch.team2!.getTeamName(),
-                                style: TextStyle(color: Colors.white, fontSize: 12),
+                                style: const TextStyle(color: Colors.white, fontSize: 12),
                               ),
                             ],
                           ),
