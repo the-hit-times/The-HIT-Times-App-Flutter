@@ -28,7 +28,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace 'com.thehittimestest.app'
+    namespace 'com.thehittimes.tht'
     compileSdkVersion 35
     ndkVersion flutter.ndkVersion
 
@@ -46,7 +46,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.thehittimestest.app"
+        applicationId "com.thehittimes.tht"
         minSdkVersion 21
         targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
