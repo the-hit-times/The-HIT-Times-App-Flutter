@@ -50,22 +50,21 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAnAL1_Knsybm5UqXq3Q-xPS81iLwDlgyw',
-    appId: '1:53611106398:android:5837f9ed6a3369544fe4cf',
-    messagingSenderId: '53611106398',
-    projectId: 'the-hit-times-v2',
-    databaseURL: 'https://the-hit-times-v2.firebaseio.com',
-    storageBucket: 'the-hit-times-v2.firebasestorage.app',
+    apiKey: 'AIzaSyC9gRznQApuNB2H36Rgm49cbs8mJOxQJnQ',
+    appId: '1:486918878604:android:f88857a47a3658e60e12a9',
+    messagingSenderId: '486918878604',
+    projectId: 'the-hit-times',
+    storageBucket: 'the-hit-times.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyApvaRthtn5fI4A-iNufZs0qCNZA7t2h54',
-    appId: '1:53611106398:ios:d73cc051be15a9a04fe4cf',
-    messagingSenderId: '53611106398',
-    projectId: 'the-hit-times-v2',
-    databaseURL: 'https://the-hit-times-v2.firebaseio.com',
-    storageBucket: 'the-hit-times-v2.firebasestorage.app',
-    androidClientId: '53611106398-mik3s4vcj1cujc466msftks3cbk2g7c0.apps.googleusercontent.com',
+    apiKey: 'AIzaSyD4xCrjwfYhIvvSpkNs7dfvZI5H0bleoPc',
+    appId: '1:486918878604:ios:53f0324c199b7f4e0e12a9',
+    messagingSenderId: '486918878604',
+    projectId: 'the-hit-times',
+    storageBucket: 'the-hit-times.firebasestorage.app',
+    iosClientId: '486918878604-6tg9bgd4in4h7ppeaupeqkf2uv6ptp55.apps.googleusercontent.com',
     iosBundleId: 'com.example.theHitTimesApp',
   );
+
 }

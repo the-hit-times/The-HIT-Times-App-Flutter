@@ -2,20 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>53611106398-mik3s4vcj1cujc466msftks3cbk2g7c0.apps.googleusercontent.com</string>
+	<key>CLIENT_ID</key>
+	<string>486918878604-6tg9bgd4in4h7ppeaupeqkf2uv6ptp55.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.486918878604-6tg9bgd4in4h7ppeaupeqkf2uv6ptp55</string>
 	<key>API_KEY</key>
-	<string>AIzaSyApvaRthtn5fI4A-iNufZs0qCNZA7t2h54</string>
+	<string>AIzaSyD4xCrjwfYhIvvSpkNs7dfvZI5H0bleoPc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>53611106398</string>
+	<string>486918878604</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.theHitTimesApp</string>
 	<key>PROJECT_ID</key>
-	<string>the-hit-times-v2</string>
+	<string>the-hit-times</string>
 	<key>STORAGE_BUCKET</key>
-	<string>the-hit-times-v2.firebasestorage.app</string>
+	<string>the-hit-times.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -27,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:53611106398:ios:d73cc051be15a9a04fe4cf</string>
-	<key>DATABASE_URL</key>
-	<string>https://the-hit-times-v2.firebaseio.com</string>
+	<string>1:486918878604:ios:53f0324c199b7f4e0e12a9</string>
 </dict>
 </plist>
