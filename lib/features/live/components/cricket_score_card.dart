@@ -7,11 +7,30 @@ class CricketScoreCard extends StatelessWidget {
   final Function? onTap;
   final Color backgroundColor;
   final double height;
-  const CricketScoreCard({super.key, required this.liveMatch, this.onTap, this.backgroundColor = Colors.black, this.height = 150.0});
+  const CricketScoreCard(
+      {super.key,
+      required this.liveMatch,
+      this.onTap,
+      this.backgroundColor = Colors.black,
+      this.height = 150.0});
 
-  TextSpan getTeamScore(String teamScore) {
-    String teamRuns = teamScore.split("/")[0];
-    String teamWickets = teamScore.split("/")[1];
+  TextSpan getTeamScore(String? teamScore) {
+    // Handle null or empty teamScore
+    if (teamScore == null || teamScore.isEmpty || teamScore == "null") {
+      return const TextSpan(
+        text: "0/0",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }
+
+    // Safe splitting with proper index checking
+    List<String> parts = teamScore.split("/");
+    String teamRuns = parts.isNotEmpty ? parts[0] : "0";
+    String teamWickets = parts.length > 1 ? parts[1] : "0";
 
     return TextSpan(
       children: [
@@ -43,13 +62,13 @@ class CricketScoreCard extends StatelessWidget {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final team1Logo = liveMatch.team1?.getTeamCricketLogo();
-    final team2Logo = liveMatch.team2?.getTeamCricketLogo();
-
-
+    // Safely get team logos with fallback
+    final team1Logo =
+        liveMatch.team1?.getTeamCricketLogo() ?? 'https://placeholder.com/logo';
+    final team2Logo =
+        liveMatch.team2?.getTeamCricketLogo() ?? 'https://placeholder.com/logo';
 
     return Material(
       color: backgroundColor,
@@ -57,11 +76,7 @@ class CricketScoreCard extends StatelessWidget {
       child: Ink(
         child: InkWell(
           borderRadius: BorderRadius.circular(5.0),
-          onTap: () {
-            if (onTap != null) {
-              onTap!();
-            }
-          },
+          onTap: onTap != null ? () => onTap!() : null,
           child: Container(
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -69,16 +84,17 @@ class CricketScoreCard extends StatelessWidget {
             height: height,
             child: Stack(
               children: [
-                liveMatch.isLive! ? const Positioned(
-                  top: 18,
-                  right: 18,
-                  child: Badge(
-                    label: Text(
-                      "LIVE",
-                      style: TextStyle(color: Colors.white),
+                if (liveMatch.isLive == true)
+                  const Positioned(
+                    top: 18,
+                    right: 18,
+                    child: Badge(
+                      label: Text(
+                        "LIVE",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
-                ): const Text(""),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -87,7 +103,7 @@ class CricketScoreCard extends StatelessWidget {
                     children: [
                       Flexible(
                         flex: 1,
-                        child: Container(
+                        child: SizedBox(
                           width: 80,
                           child: Wrap(
                             direction: Axis.vertical,
@@ -96,18 +112,22 @@ class CricketScoreCard extends StatelessWidget {
                             runAlignment: WrapAlignment.center,
                             spacing: 5.0,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: 40,
                                 height: 40,
                                 child: CachedNetworkImage(
-                                  imageUrl: team1Logo!,
-                                  placeholder: (context, url) => CircularProgressIndicator(),
+                                  imageUrl: team1Logo,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.sports_cricket),
                                   fit: BoxFit.scaleDown,
                                 ),
                               ),
                               Text(
-                                liveMatch.team1!.getTeamName(),
-                                style: TextStyle(color: Colors.white, fontSize: 12),
+                                liveMatch.team1?.getTeamName() ?? "Team 1",
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 12),
                               ),
                             ],
                           ),
@@ -119,36 +139,37 @@ class CricketScoreCard extends StatelessWidget {
                           width: double.infinity,
                           child: Center(
                               child: RichText(
-                                text: getTeamScore(
-                                  liveMatch.team1!.teamScore.toString()
-                                ),
-                              )
-                          ),
+                            text: getTeamScore(
+                                liveMatch.team1?.teamScore?.toString()),
+                          )),
                         ),
                       ),
                       Flexible(
                         flex: 2,
-                        child: Container(
+                        child: SizedBox(
                             width: double.infinity,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  liveMatch.matchStatus.toString(),
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 15,
-                                      fontWeight: FontWeight.w300
-                                  ),
+                                  liveMatch.matchStatus?.toString() ??
+                                      "Upcoming",
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w300),
                                   textAlign: TextAlign.center,
                                 ),
-                                SizedBox(height: 5.0,),
+                                const SizedBox(height: 5.0),
                                 Text(
-                                  liveMatch.formattedMatchDate(),
-                                  style: TextStyle(color: Colors.white),
+                                  liveMatch.formattedMatchDate() ?? "TBD",
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                                 Text(
-                                  liveMatch.formattedMatchTime(),
-                                  style: TextStyle( color: Colors.white, fontSize: 12,
+                                  liveMatch.formattedMatchTime() ?? "",
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.w300),
                                 ),
                               ],
@@ -159,11 +180,10 @@ class CricketScoreCard extends StatelessWidget {
                         child: SizedBox(
                           width: double.infinity,
                           child: Center(
-                              child:  RichText(
-                                text: getTeamScore(
-                                    liveMatch.team2!.teamScore.toString()
-                                ),
-                              )),
+                              child: RichText(
+                            text: getTeamScore(
+                                liveMatch.team2?.teamScore?.toString()),
+                          )),
                         ),
                       ),
                       Flexible(
@@ -177,18 +197,22 @@ class CricketScoreCard extends StatelessWidget {
                             crossAxisAlignment: WrapCrossAlignment.center,
                             spacing: 5.0,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: 40,
                                 height: 40,
                                 child: CachedNetworkImage(
-                                  imageUrl: team2Logo!,
-                                  placeholder: (context, url) => CircularProgressIndicator(),
+                                  imageUrl: team2Logo,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.sports_cricket),
                                   fit: BoxFit.scaleDown,
                                 ),
                               ),
                               Text(
-                                liveMatch.team2!.getTeamName(),
-                                style: TextStyle(color: Colors.white, fontSize: 12),
+                                liveMatch.team2?.getTeamName() ?? "Team 2",
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 12),
                               ),
                             ],
                           ),

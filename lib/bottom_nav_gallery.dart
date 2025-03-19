@@ -6,7 +6,7 @@ class NavigationIconView {
     required String title,
     required Color color,
     required TickerProvider vsync,
-  }) : _icon = icon,
+  })  : _icon = icon,
         _color = color,
         _title = title,
         item = BottomNavigationBarItem(
@@ -31,7 +31,8 @@ class NavigationIconView {
   final AnimationController controller;
   late CurvedAnimation _animation;
 
-  FadeTransition transition(BottomNavigationBarType type, BuildContext context) {
+  FadeTransition transition(
+      BottomNavigationBarType type, BuildContext context) {
     Color iconColor;
     if (type == BottomNavigationBarType.shifting) {
       iconColor = _color;
